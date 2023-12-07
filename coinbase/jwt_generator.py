@@ -9,7 +9,6 @@ from coinbase.constants import BASE_URL, REST_SERVICE, WS_SERVICE
 def build_jwt(key_var, secret_var, service, uri=None):
     private_key_bytes = secret_var.encode("utf-8")
     private_key = serialization.load_pem_private_key(private_key_bytes, password=None)
-    print(private_key)
 
     jwt_data = {
         "sub": key_var,

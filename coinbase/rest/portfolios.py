@@ -13,10 +13,8 @@ def get_portfolios(self, portfolio_type: Optional[str] = None, **kwargs):
 
     params = {"portfolio_type": portfolio_type}
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)
 

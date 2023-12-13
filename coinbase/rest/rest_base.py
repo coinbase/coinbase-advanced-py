@@ -10,25 +10,6 @@ from coinbase.__version__ import __version__
 from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, BASE_URL
 
 
-def prepare_params(params):
-    if params is None:
-        return None
-
-    def encode_value(key, value):
-        if isinstance(value, list):
-            return "&".join(f"{key}={v}" for v in value)
-        else:
-            return f"{key}={value}"
-
-    return "&".join(encode_value(key, value) for key, value in params.items())
-
-
-def encode(data):
-    if data is None:
-        return None
-    return json.dumps(data).encode("utf-8")
-
-
 def handle_exception(response):
     """Raises :class:`HTTPError`, if one occurred."""
 
@@ -95,21 +76,27 @@ class RESTBase(object):
     ):
         headers = self.set_headers(http_method, url_path)
 
-        params_string = prepare_params(params)
-        if params_string:
-            url_path = f"{url_path}?{params_string}"
+        if params is not None:
+            params = {key: value for key, value in params.items() if value is not None}
 
-        data_encoded = encode(data)
-        return self.send_request(http_method, url_path, headers, data=data_encoded)
+        if data is not None:
+            data = {key: value for key, value in data.items() if value is not None}
 
-    def send_request(self, http_method, url_path, headers, data=None):
+        return self.send_request(http_method, url_path, params, headers, data=data)
+
+    def send_request(self, http_method, url_path, params, headers, data=None):
         if data is None:
             data = {}
 
         url = f"https://{self.base_url}{url_path}"
 
         response = requests.request(
-            http_method, url, data=data, headers=headers, timeout=self.timeout
+            http_method,
+            url,
+            params=params,
+            json=data,
+            headers=headers,
+            timeout=self.timeout,
         )
         handle_exception(response)  # Raise an HTTPError for bad responses
 

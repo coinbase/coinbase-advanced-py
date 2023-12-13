@@ -21,9 +21,7 @@ def get_transaction_summary(
         "contract_expiry_type": contract_expiry_type,
     }
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)

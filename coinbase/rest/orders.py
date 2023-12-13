@@ -59,9 +59,13 @@ def market_order(
 
     https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder
     """
-    order_configuration = {
-        "market_market_ioc": {"quote_size": quote_size, "base_size": base_size}
+
+    market_market_ioc = {"quote_size": quote_size, "base_size": base_size}
+    filtered_market_market_ioc = {
+        key: value for key, value in market_market_ioc.items() if value is not None
     }
+
+    order_configuration = {"market_market_ioc": filtered_market_market_ioc}
 
     return create_order(
         self,
@@ -667,10 +671,8 @@ def list_orders(
         "retail_portfolio_id": retail_portfolio_id,
     }
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)
 
@@ -700,10 +702,8 @@ def get_fills(
         "cursor": cursor,
     }
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)
 

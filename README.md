@@ -1,19 +1,17 @@
 # Coinbase Advanced Trading API Python SDK
 
-This is a work in progress README.
-
 Welcome to the official Coinbase Advanced Trading API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced Trade API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome).
 
 ## Installation
 
 To install, please clone this git repo, cd into the root and run:
 ```bash
-pip install .
+pip3 install .
 ```
 
 ## Cloud API Keys
 
-This SDK uses the Coinbase Cloud API keys. To use this SDK, you will need to create a Coinbase Cloud API key and secret. You can do this by following the instructions [here](Todo--add link here).
+This SDK uses the Coinbase Cloud API keys. To use this SDK, you will need to create a Coinbase Cloud API key and secret. You can do this by following the instructions [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth#cloud-api-keys).
 Make sure to save your API key and secret in a safe place. You will not be able to retrieve your secret again.
 
 Optional: Set your API key and secret in your environment (make sure to put these in quotation marks). For example:
@@ -77,7 +75,7 @@ market_trades = client.get("/api/v3/brokerage/products/BTC-USD/ticker", params={
 
 portfolio = client.post("/api/v3/brokerage/portfolios", data={"name": "TestPortfolio"})
 ```
-Here we are calling the [GetMarketTrades](https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades) and [CreatePortfolio](Todo--add link) endpoints through the generic REST functions.
+Here we are calling the [GetMarketTrades](https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades) and [CreatePortfolio](https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createportfolio) endpoints through the generic REST functions.
 Once again, the built in way to query these through the SDK would be:
 ```python
 market_trades = client.get_market_trades("BTC-USD", 5)
@@ -88,7 +86,7 @@ portfolio = client.create_portfolio("TestPortfolio")
 ## Authentication
 Authentication of Cloud API Keys is handled automatically by the SDK when making a REST request.
 
-However, if you wish to handle this yourself, you must create a JWT token as detailed in the Cloud API docs [here](Todo--add link). You can use the built in `jwt_generator` to create your JWT token. For example:
+However, if you wish to handle this yourself, you must create a JWT token and attach it to your request as detailed in the Cloud API docs [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/rest-api-auth#making-requests). You can use the built in `jwt_generator` to create your JWT token. For example:
 ```python
 from coinbase import jwt_generator
 
@@ -114,7 +112,7 @@ api_secret = "-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIV
 
 jwt = jwt_generator.build_ws_jwt(api_key, api_secret)
 ```
-You can use this JWT to connect to the Websocket API by setting it in the "jwt" field of your subscription requests. See the docs [here](Todo--add link) for more details.
+You can use this JWT to connect to the Websocket API by setting it in the "jwt" field of your subscription requests. See the docs [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-overview#sending-messages-using-cloud-api-keys) for more details.
 
 ## Contributing
 

@@ -29,10 +29,8 @@ def get_products(
         "expiring_contract_status": expiring_contract_status,
     }
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)
 
@@ -62,10 +60,8 @@ def get_product_book(self, product_id: str, limit: Optional[int] = None, **kwarg
 
     params = {"product_id": product_id, "limit": limit}
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)
 
@@ -83,9 +79,7 @@ def get_best_bid_ask(self, product_ids: Optional[List[str]] = None, **kwargs):
         "product_ids": product_ids,
     }
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)

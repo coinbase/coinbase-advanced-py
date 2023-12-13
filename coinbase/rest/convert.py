@@ -23,11 +23,20 @@ def create_convert_quote(
         "from_account": from_account,
         "to_account": to_account,
         "amount": amount,
-        "trade_incentive_metadata": {
-            "user_incentive_id": user_incentive_id,
-            "code_val": code_val,
-        },
     }
+
+    trade_incentive_metadata = {
+        "user_incentive_id": user_incentive_id,
+        "code_val": code_val,
+    }
+    filtered_trade_incentive_metadata = {
+        key: value
+        for key, value in trade_incentive_metadata.items()
+        if value is not None
+    }
+
+    if filtered_trade_incentive_metadata:
+        data["trade_incentive_metadata"] = filtered_trade_incentive_metadata
 
     if kwargs:
         data.update(kwargs)

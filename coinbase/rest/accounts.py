@@ -14,10 +14,8 @@ def get_accounts(
     endpoint = f"{API_PREFIX}/accounts"
     params = {"limit": limit, "cursor": cursor}
 
-    # Filter out None values from the params dictionary
     if kwargs:
         params.update(kwargs)
-    params = {key: value for key, value in params.items() if value is not None}
 
     return self.get(endpoint, params=params)
 

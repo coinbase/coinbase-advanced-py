@@ -9,6 +9,7 @@ class RESTClient(RESTBase):
     from .market_data import get_candles, get_market_trades
     from .orders import (
         cancel_orders,
+        create_order,
         edit_order,
         get_fills,
         get_order,

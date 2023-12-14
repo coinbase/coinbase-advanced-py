@@ -14,6 +14,8 @@ pip3 install .
 This SDK uses the Coinbase Cloud API keys. To use this SDK, you will need to create a Coinbase Cloud API key and secret. You can do this by following the instructions [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth#cloud-api-keys).
 Make sure to save your API key and secret in a safe place. You will not be able to retrieve your secret again.
 
+WARNING: We do not recommend that you save your API secrets directly in your code outside of testing purposes. Best practice is to use a secrets manager and access your secrets that way. You should be careful about exposing your secrets publicly if posting code that leverages this library.
+
 Optional: Set your API key and secret in your environment (make sure to put these in quotation marks). For example:
 ```bash
 export COINBASE_API_KEY="organizations/{org_id}/apiKeys/{key_id}"
@@ -31,13 +33,14 @@ If you did not set your API key and secret in your environment, you can pass the
 ```python
 from coinbase.rest import RESTClient
 
-client = RESTClient(api_key="<YOUR_API_KEY>", api_secret="<YOUR_API_SECRET>")
+api_key = "organizations/{org_id}/apiKeys/{key_id}"
+api_secret = "-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n"
+
+client = RESTClient(api_key=api_key, api_secret=api_secret)
 ```
 You can also set a timeout in seconds for your REST requests like so:
 ```python
-from coinbase.rest import RESTClient
-
-client = RESTClient(api_key="<YOUR_API_KEY>", api_secret="<YOUR_API_SECRET>", timeout=5)
+client = RESTClient(api_key=api_key, api_secret=api_secret, timeout=5)
 ```
 
 ### Using the Client

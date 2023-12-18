@@ -33,10 +33,7 @@ def create_order(
         "retail_portfolio_id": retail_portfolio_id,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)
 
 
 # Market orders
@@ -625,11 +622,7 @@ def get_order(self, order_id: str, **kwargs):
     """
     endpoint = f"{API_PREFIX}/orders/historical/{order_id}"
 
-    params = {}
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, **kwargs)
 
 
 def list_orders(
@@ -671,10 +664,7 @@ def list_orders(
         "retail_portfolio_id": retail_portfolio_id,
     }
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def get_fills(
@@ -702,10 +692,7 @@ def get_fills(
         "cursor": cursor,
     }
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def edit_order(
@@ -728,10 +715,7 @@ def edit_order(
         "price": price,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)
 
 
 def preview_edit_order(
@@ -754,10 +738,7 @@ def preview_edit_order(
         "price": price,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)
 
 
 def cancel_orders(self, order_ids: List[str], **kwargs):
@@ -771,7 +752,4 @@ def cancel_orders(self, order_ids: List[str], **kwargs):
         "order_ids": order_ids,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)

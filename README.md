@@ -1,12 +1,14 @@
 # Coinbase Advanced Trading API Python SDK
+[![PyPI version](https://badge.fury.io/py/coinbase-advanced.svg)](https://badge.fury.io/py/coinbase-advanced)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/license/apache-2-0/)
+[![Code Style](https://img.shields.io/badge/code_style-black-black)](https://black.readthedocs.io/en/stable/)
 
 Welcome to the official Coinbase Advanced Trading API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced Trade API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome).
 
 ## Installation
 
-To install, please clone this git repo, cd into the root and run:
 ```bash
-pip3 install .
+pip3 install coinbase-advanced
 ```
 
 ## Cloud API Keys
@@ -52,14 +54,13 @@ from json import dumps
 accounts = client.get_accounts()
 print(dumps(accounts, indent=2))
 
-order = client.market_order_buy("clientOrderId", "BTC-USD", "1")
+order = client.market_order_buy(client_order_id="clientOrderId", product_id="BTC-USD", quote_size="1")
 print(dumps(order, indent=2))
 ```
 This code calls the `get_accounts` and `market_order_buy` endpoints.
 
 You can refer to the [Advanced Trade API Reference](https://docs.cloud.coinbase.com/advanced-trade-api/reference) for detailed information on each exposed endpoint.
-You can look at the following [mapping](Todo--add link here) to see which API hook corresponds to which endpoint.
-
+You can look in the `coinbase.rest` module to see the API hooks that are exposed.
 
 ### Passing in additional parameters
 You can use `kwargs` to pass in any additional parameters. For example:
@@ -79,11 +80,11 @@ market_trades = client.get("/api/v3/brokerage/products/BTC-USD/ticker", params={
 portfolio = client.post("/api/v3/brokerage/portfolios", data={"name": "TestPortfolio"})
 ```
 Here we are calling the [GetMarketTrades](https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades) and [CreatePortfolio](https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createportfolio) endpoints through the generic REST functions.
-Once again, the built in way to query these through the SDK would be:
+Once again, the built-in way to query these through the SDK would be:
 ```python
-market_trades = client.get_market_trades("BTC-USD", 5)
+market_trades = client.get_market_trades(product_id="BTC-USD", limit=5)
 
-portfolio = client.create_portfolio("TestPortfolio")
+portfolio = client.create_portfolio(name="TestPortfolio")
 ```
 
 ## Authentication
@@ -116,6 +117,9 @@ api_secret = "-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIV
 jwt = jwt_generator.build_ws_jwt(api_key, api_secret)
 ```
 You can use this JWT to connect to the Websocket API by setting it in the "jwt" field of your subscription requests. See the docs [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-overview#sending-messages-using-cloud-api-keys) for more details.
+
+## Changelog
+For a detailed list of changes, see the [Changelog](CHANGELOG.md).
 
 ## Contributing
 

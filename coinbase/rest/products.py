@@ -29,10 +29,7 @@ def get_products(
         "expiring_contract_status": expiring_contract_status,
     }
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def get_product(self, product_id: str, **kwargs):
@@ -43,11 +40,7 @@ def get_product(self, product_id: str, **kwargs):
     """
     endpoint = f"{API_PREFIX}/products/{product_id}"
 
-    params = {}
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, **kwargs)
 
 
 def get_product_book(self, product_id: str, limit: Optional[int] = None, **kwargs):
@@ -60,10 +53,7 @@ def get_product_book(self, product_id: str, limit: Optional[int] = None, **kwarg
 
     params = {"product_id": product_id, "limit": limit}
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def get_best_bid_ask(self, product_ids: Optional[List[str]] = None, **kwargs):
@@ -79,7 +69,4 @@ def get_best_bid_ask(self, product_ids: Optional[List[str]] = None, **kwargs):
         "product_ids": product_ids,
     }
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)

@@ -18,7 +18,13 @@ class ConvertTest(unittest.TestCase):
                 "https://api.coinbase.com/api/v3/brokerage/convert/quote",
                 json=expected_response,
             )
-            quote = client.create_convert_quote("from_account", "to_account", "100")
+            quote = client.create_convert_quote(
+                "from_account",
+                "to_account",
+                "100",
+                user_incentive_id="1234",
+                code_val="test_val",
+            )
 
             captured_request = m.request_history[0]
             captured_json = captured_request.json()
@@ -30,6 +36,10 @@ class ConvertTest(unittest.TestCase):
                     "from_account": "from_account",
                     "to_account": "to_account",
                     "amount": "100",
+                    "trade_incentive_metadata": {
+                        "user_incentive_id": "1234",
+                        "code_val": "test_val",
+                    },
                 },
             )
             self.assertEqual(quote, expected_response)

@@ -38,10 +38,7 @@ def create_convert_quote(
     if filtered_trade_incentive_metadata:
         data["trade_incentive_metadata"] = filtered_trade_incentive_metadata
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)
 
 
 def get_convert_trade(
@@ -59,10 +56,7 @@ def get_convert_trade(
         "to_account": to_account,
     }
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def commit_convert_trade(
@@ -80,7 +74,4 @@ def commit_convert_trade(
         "to_account": to_account,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)

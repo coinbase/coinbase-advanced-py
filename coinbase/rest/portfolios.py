@@ -13,10 +13,7 @@ def get_portfolios(self, portfolio_type: Optional[str] = None, **kwargs):
 
     params = {"portfolio_type": portfolio_type}
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def create_portfolio(self, name: str, **kwargs):
@@ -31,10 +28,7 @@ def create_portfolio(self, name: str, **kwargs):
         "name": name,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)
 
 
 def get_portfolio_breakdown(self, portfolio_uuid: str, **kwargs):
@@ -45,11 +39,7 @@ def get_portfolio_breakdown(self, portfolio_uuid: str, **kwargs):
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
-    params = {}
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, **kwargs)
 
 
 def move_portfolio_funds(
@@ -76,10 +66,7 @@ def move_portfolio_funds(
         "target_portfolio_id": target_portfolio_uuid,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.post(endpoint, data=data)
+    return self.post(endpoint, data=data, **kwargs)
 
 
 def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs):
@@ -94,10 +81,7 @@ def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs):
         "name": name,
     }
 
-    if kwargs:
-        data.update(kwargs)
-
-    return self.put(endpoint, data=data)
+    return self.put(endpoint, data=data, **kwargs)
 
 
 def delete_portfolio(self, portfolio_uuid: str, **kwargs):
@@ -108,8 +92,4 @@ def delete_portfolio(self, portfolio_uuid: str, **kwargs):
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
-    data = {}
-    if kwargs:
-        data.update(kwargs)
-
-    return self.delete(endpoint, data=data)
+    return self.delete(endpoint, **kwargs)

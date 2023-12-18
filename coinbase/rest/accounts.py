@@ -14,10 +14,7 @@ def get_accounts(
     endpoint = f"{API_PREFIX}/accounts"
     params = {"limit": limit, "cursor": cursor}
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def get_account(self, account_uuid: str, **kwargs):
@@ -28,8 +25,4 @@ def get_account(self, account_uuid: str, **kwargs):
     """
     endpoint = f"{API_PREFIX}/accounts/{account_uuid}"
 
-    params = {}
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, **kwargs)

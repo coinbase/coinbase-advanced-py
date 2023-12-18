@@ -51,20 +51,54 @@ class RESTBase(object):
         self.base_url = base_url
         self.timeout = timeout
 
-    def get(self, url_path, params: Optional[dict] = None):
+    def get(self, url_path, params: Optional[dict] = None, **kwargs):
+        params = params or {}
+
+        if kwargs:
+            params.update(kwargs)
+
         return self.prepare_and_send_request("GET", url_path, params, data=None)
 
     def post(
-        self, url_path, params: Optional[dict] = None, data: Optional[dict] = None
+        self,
+        url_path,
+        params: Optional[dict] = None,
+        data: Optional[dict] = None,
+        **kwargs,
     ):
+        data = data or {}
+
+        if kwargs:
+            data.update(kwargs)
+
         return self.prepare_and_send_request("POST", url_path, params, data)
 
-    def put(self, url_path, params: Optional[dict] = None, data: Optional[dict] = None):
+    def put(
+        self,
+        url_path,
+        params: Optional[dict] = None,
+        data: Optional[dict] = None,
+        **kwargs,
+    ):
+        data = data or {}
+
+        if kwargs:
+            data.update(kwargs)
+
         return self.prepare_and_send_request("PUT", url_path, params, data)
 
     def delete(
-        self, url_path, params: Optional[dict] = None, data: Optional[dict] = None
+        self,
+        url_path,
+        params: Optional[dict] = None,
+        data: Optional[dict] = None,
+        **kwargs,
     ):
+        data = data or {}
+
+        if kwargs:
+            data.update(kwargs)
+
         return self.prepare_and_send_request("DELETE", url_path, params, data)
 
     def prepare_and_send_request(

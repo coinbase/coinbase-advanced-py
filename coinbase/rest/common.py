@@ -9,8 +9,4 @@ def get_unix_time(self, **kwargs):
     """
     endpoint = f"{API_PREFIX}/time"
 
-    params = {}
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, **kwargs)

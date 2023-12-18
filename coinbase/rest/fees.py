@@ -21,7 +21,4 @@ def get_transaction_summary(
         "contract_expiry_type": contract_expiry_type,
     }
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)

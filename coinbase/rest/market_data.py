@@ -19,10 +19,7 @@ def get_candles(
         "granularity": granularity,
     }
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def get_market_trades(
@@ -42,7 +39,4 @@ def get_market_trades(
 
     params = {"limit": limit, "start": start, "end": end}
 
-    if kwargs:
-        params.update(kwargs)
-
-    return self.get(endpoint, params=params)
+    return self.get(endpoint, params=params, **kwargs)

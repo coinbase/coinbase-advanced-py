@@ -26,7 +26,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Coinbase",
     url="https://github.com/coinbase/coinbase-advanced-py",
-    keywords=["Coinbase", "Advanced Trade", "API"],
+    keywords=["Coinbase", "Advanced Trade", "API", "Advanced API"],
     packages=find_packages(exclude=("tests",)),
     install_requires=[req for req in requirements],
     extras_require={

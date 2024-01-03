@@ -1,3 +1,4 @@
+import secrets
 import time
 
 import jwt
@@ -25,7 +26,7 @@ def build_jwt(key_var, secret_var, service, uri=None):
         jwt_data,
         private_key,
         algorithm="ES256",
-        headers={"kid": key_var, "nonce": str(int(time.time()))},
+        headers={"kid": key_var, "nonce": secrets.token_hex()},
     )
 
     return jwt_token

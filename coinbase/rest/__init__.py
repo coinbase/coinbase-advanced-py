@@ -6,6 +6,14 @@ class RESTClient(RESTBase):
     from .common import get_unix_time
     from .convert import commit_convert_trade, create_convert_quote, get_convert_trade
     from .fees import get_transaction_summary
+    from .futures import (
+        cancel_pending_futures_sweep,
+        get_futures_balance_summary,
+        get_futures_position,
+        list_futures_positions,
+        list_futures_sweeps,
+        schedule_futures_sweep,
+    )
     from .market_data import get_candles, get_market_trades
     from .orders import (
         cancel_orders,

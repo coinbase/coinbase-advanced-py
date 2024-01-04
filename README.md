@@ -1,5 +1,5 @@
 # Coinbase Advanced Trading API Python SDK
-[![PyPI version](https://badge.fury.io/py/coinbase-advanced.svg)](https://badge.fury.io/py/coinbase-advanced)
+[![PyPI version](https://badge.fury.io/py/coinbase-advanced-py.svg)](https://badge.fury.io/py/coinbase-advanced-py)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/license/apache-2-0/)
 [![Code Style](https://img.shields.io/badge/code_style-black-black)](https://black.readthedocs.io/en/stable/)
 
@@ -8,7 +8,7 @@ Welcome to the official Coinbase Advanced API Python SDK. This python project wa
 ## Installation
 
 ```bash
-pip3 install coinbase-advanced
+pip3 install coinbase-advanced-py
 ```
 
 ## Cloud API Keys

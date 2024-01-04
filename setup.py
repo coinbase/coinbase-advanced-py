@@ -18,7 +18,7 @@ with open(os.path.join(root, "coinbase", "__version__.py")) as f:
     exec(f.read(), about)
 
 setup(
-    name="coinbase-advanced",
+    name="coinbase-advanced-py",
     version=about["__version__"],
     license="Apache 2.0",
     description="Coinbase Advanced Trade API Python SDK",

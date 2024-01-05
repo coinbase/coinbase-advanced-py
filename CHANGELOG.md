@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0] - 2024-JAN-3
+## [1.0.1] - 2024-JAN-3
 
 ### Added
 - Support for Futures API endpoints

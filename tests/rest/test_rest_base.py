@@ -1,4 +1,5 @@
 import unittest
+from io import StringIO
 
 from requests.exceptions import HTTPError
 from requests_mock import Mocker
@@ -176,3 +177,39 @@ class RestBaseTest(unittest.TestCase):
 
             with self.assertRaises(HTTPError):
                 client.get("/api/v3/brokerage/accounts")
+
+    def test_key_file_string(self):
+        try:
+            RESTClient(key_file="tests/test_api_key.json")
+        except Exception as e:
+            self.fail(f"An unexpected exception occurred: {e}")
+
+    def test_key_file_object(self):
+        try:
+            key_file_object = StringIO(
+                '{"name": "test-api-key-name","privateKey": "test-api-key-private-key"}'
+            )
+            RESTClient(key_file=key_file_object)
+        except Exception as e:
+            self.fail(f"An unexpected exception occurred: {e}")
+
+    def test_key_file_no_key(self):
+        with self.assertRaises(Exception):
+            key_file_object = StringIO('{"field_1": "value_1","field_2": "value_2"}')
+            RESTClient(key_file=key_file_object)
+
+    def test_key_file_multiple_key_inputs(self):
+        with self.assertRaises(Exception):
+            key_file_object = StringIO('{"field_1": "value_1","field_2": "value_2"}')
+            RESTClient(
+                api_key=TEST_API_KEY,
+                api_secret=TEST_API_SECRET,
+                key_file=key_file_object,
+            )
+
+    def test_key_file_invalid_json(self):
+        with self.assertRaises(Exception):
+            key_file_object = StringIO(
+                '"name": "test-api-key-name","privateKey": "test-api-key-private-key"'
+            )
+            RESTClient(key_file=key_file_object)

@@ -21,7 +21,7 @@ setup(
     name="coinbase-advanced-py",
     version=about["__version__"],
     license="Apache 2.0",
-    description="Coinbase Advanced Trade API Python SDK",
+    description="Coinbase Advanced API Python SDK",
     long_description=README,
     long_description_content_type="text/markdown",
     author="Coinbase",

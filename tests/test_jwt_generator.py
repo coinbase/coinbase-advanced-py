@@ -40,3 +40,8 @@ class JwtGeneratorTest(unittest.TestCase):
         self.assertEqual(decoded_data["aud"], [WS_SERVICE])
         self.assertNotIn("uri", decoded_data)
         self.assertEqual(decoded_header["kid"], TEST_API_KEY)
+
+    def test_build_rest_jwt_error(self):
+        with self.assertRaises(Exception):
+            uri = jwt_generator.format_jwt_uri("GET", "/api/v3/brokerage/accounts")
+            jwt_generator.build_rest_jwt(uri, TEST_API_KEY, "bad_secret")

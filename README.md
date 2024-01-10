@@ -1,4 +1,4 @@
-# Coinbase Advanced Trading API Python SDK
+# Coinbase Advanced API Python SDK
 [![PyPI version](https://badge.fury.io/py/coinbase-advanced-py.svg)](https://badge.fury.io/py/coinbase-advanced-py)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/license/apache-2-0/)
 [![Code Style](https://img.shields.io/badge/code_style-black-black)](https://black.readthedocs.io/en/stable/)
@@ -39,6 +39,15 @@ api_key = "organizations/{org_id}/apiKeys/{key_id}"
 api_secret = "-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n"
 
 client = RESTClient(api_key=api_key, api_secret=api_secret)
+```
+After creating your API key, a json file will be downloaded to your computer. It's possible to  pass in the path to this file as an argument:
+```python
+client = RESTClient(key_file="path/to/coinbase_cloud_api_key.json")
+```
+We also support passing a file-like object as the `key_file` argument:
+```python
+from io import StringIO
+client = RESTClient(key_file=StringIO('{"name": "key-name", "privateKey": "private-key"}'))
 ```
 You can also set a timeout in seconds for your REST requests like so:
 ```python

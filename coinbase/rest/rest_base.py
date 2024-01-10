@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Optional
+from typing import IO, Optional, Union
 
 import requests
 from requests.exceptions import HTTPError
@@ -17,10 +17,15 @@ def handle_exception(response):
     reason = response.reason
 
     if 400 <= response.status_code < 500:
-        http_error_msg = (
-            f"{response.status_code} Client Error: {reason} {response.text}"
-        )
-
+        if (
+            response.status_code == 403
+            and '"error_details":"Missing required scopes"' in response.text
+        ):
+            http_error_msg = f"{response.status_code} Client Error: Missing Required Scopes. Please verify your API keys include the necessary permissions."
+        else:
+            http_error_msg = (
+                f"{response.status_code} Client Error: {reason} {response.text}"
+            )
     elif 500 <= response.status_code < 600:
         http_error_msg = (
             f"{response.status_code} Server Error: {reason} {response.text}"
@@ -35,9 +40,25 @@ class RESTBase(object):
         self,
         api_key: Optional[str] = os.getenv(API_ENV_KEY),
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
+        key_file: Optional[Union[IO, str]] = None,
         base_url=BASE_URL,
         timeout=None,
     ):
+        if (api_key is not None or api_secret is not None) and key_file is not None:
+            raise Exception(f"Cannot specify both api_key and key_file in constructor")
+
+        if key_file is not None:
+            try:
+                if isinstance(key_file, str):
+                    with open(key_file, "r") as file:
+                        key_json = json.load(file)
+                else:
+                    key_json = json.load(key_file)
+                api_key = key_json["name"]
+                api_secret = key_json["privateKey"]
+            except json.JSONDecodeError as e:
+                raise Exception(f"Error decoding JSON: {e}")
+
         if api_key is None:
             raise Exception(
                 f"Must specify env var COINBASE_API_KEY or pass api_key in constructor"

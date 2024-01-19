@@ -1,0 +1,6 @@
+BASE_URL = "api.coinbase.com"
+API_PREFIX = "/api/v3/brokerage"
+REST_SERVICE = "retail_rest_api_proxy"
+WS_SERVICE = "public_websocket_api"
+API_ENV_KEY = "COINBASE_API_KEY"
+API_SECRET_ENV_KEY = "COINBASE_API_SECRET"

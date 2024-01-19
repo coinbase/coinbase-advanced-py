@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3] - 2024-JAN-19
+
+### Changed
+- JWT generation expiry updated to 2 minutes to be consistent with Advanced Trade docs
+
 ## [1.0.2] - 2024-JAN-10
 
 ### Added

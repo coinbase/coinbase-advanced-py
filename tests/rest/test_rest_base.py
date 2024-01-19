@@ -1,5 +1,4 @@
 import unittest
-from io import StringIO
 
 from requests.exceptions import HTTPError
 from requests_mock import Mocker
@@ -10,15 +9,8 @@ from tests.constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class RestBaseTest(unittest.TestCase):
-    def test_no_api_key(self):
-        with self.assertRaises(Exception):
-            RESTClient(None, None)
-
-        with self.assertRaises(Exception):
-            RESTClient("test_key", None)
-
     def test_get(self):
-        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
 
         expected_response = {"key_1": "value_1", "key_2": "value_2"}
 
@@ -51,7 +43,7 @@ class RestBaseTest(unittest.TestCase):
             self.assertEqual(accounts, expected_response)
 
     def test_post(self):
-        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
 
         expected_response = {"key_1": "value_1", "key_2": "value_2"}
 
@@ -85,7 +77,7 @@ class RestBaseTest(unittest.TestCase):
             self.assertEqual(portfolio, expected_response)
 
     def test_put(self):
-        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
 
         expected_response = {"key_1": "value_1", "key_2": "value_2"}
 
@@ -121,7 +113,7 @@ class RestBaseTest(unittest.TestCase):
             self.assertEqual(portfolio, expected_response)
 
     def test_delete(self):
-        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
 
         expected_response = {"key_1": "value_1", "key_2": "value_2"}
 
@@ -153,7 +145,7 @@ class RestBaseTest(unittest.TestCase):
             self.assertEqual(portfolio, expected_response)
 
     def test_client_error(self):
-        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
 
         with Mocker() as m:
             m.request(
@@ -166,7 +158,7 @@ class RestBaseTest(unittest.TestCase):
                 client.get("/api/v3/brokerage/accounts")
 
     def test_server_error(self):
-        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
 
         with Mocker() as m:
             m.request(
@@ -177,39 +169,3 @@ class RestBaseTest(unittest.TestCase):
 
             with self.assertRaises(HTTPError):
                 client.get("/api/v3/brokerage/accounts")
-
-    def test_key_file_string(self):
-        try:
-            RESTClient(key_file="tests/test_api_key.json")
-        except Exception as e:
-            self.fail(f"An unexpected exception occurred: {e}")
-
-    def test_key_file_object(self):
-        try:
-            key_file_object = StringIO(
-                '{"name": "test-api-key-name","privateKey": "test-api-key-private-key"}'
-            )
-            RESTClient(key_file=key_file_object)
-        except Exception as e:
-            self.fail(f"An unexpected exception occurred: {e}")
-
-    def test_key_file_no_key(self):
-        with self.assertRaises(Exception):
-            key_file_object = StringIO('{"field_1": "value_1","field_2": "value_2"}')
-            RESTClient(key_file=key_file_object)
-
-    def test_key_file_multiple_key_inputs(self):
-        with self.assertRaises(Exception):
-            key_file_object = StringIO('{"field_1": "value_1","field_2": "value_2"}')
-            RESTClient(
-                api_key=TEST_API_KEY,
-                api_secret=TEST_API_SECRET,
-                key_file=key_file_object,
-            )
-
-    def test_key_file_invalid_json(self):
-        with self.assertRaises(Exception):
-            key_file_object = StringIO(
-                '"name": "test-api-key-name","privateKey": "test-api-key-private-key"'
-            )
-            RESTClient(key_file=key_file_object)

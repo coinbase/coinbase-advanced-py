@@ -59,11 +59,11 @@ def move_portfolio_funds(
 
     data = {
         "funds": {
-            "amount": value,
+            "value": value,
             "currency": currency,
         },
-        "source_portfolio_id": source_portfolio_uuid,
-        "target_portfolio_id": target_portfolio_uuid,
+        "source_portfolio_uuid": source_portfolio_uuid,
+        "target_portfolio_uuid": target_portfolio_uuid,
     }
 
     return self.post(endpoint, data=data, **kwargs)

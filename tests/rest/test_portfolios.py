@@ -3,7 +3,8 @@ import unittest
 from requests_mock import Mocker
 
 from coinbase.rest import RESTClient
-from tests.constants import TEST_API_KEY, TEST_API_SECRET
+
+from ..constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class PortfoliosTest(unittest.TestCase):
@@ -83,9 +84,9 @@ class PortfoliosTest(unittest.TestCase):
             self.assertEqual(
                 captured_json,
                 {
-                    "funds": {"amount": "100", "currency": "USD"},
-                    "source_portfolio_id": "1234",
-                    "target_portfolio_id": "5678",
+                    "funds": {"value": "100", "currency": "USD"},
+                    "source_portfolio_uuid": "1234",
+                    "target_portfolio_uuid": "5678",
                 },
             )
             self.assertEqual(move, expected_response)

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.4] - 2024-JAN-29
+
+### Fixed
+- Fixed bug where `move_portfolio_funds` params were set incorrectly
+
 ## [1.0.3] - 2024-JAN-19
 
 ### Changed

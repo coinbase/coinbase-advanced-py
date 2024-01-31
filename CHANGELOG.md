@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - 2024-FEB-1 # TODO: Update this date
+## [1.1.0] - 2024-JAN-31
 
 ### Added
 - Initial release of WebSocket API client

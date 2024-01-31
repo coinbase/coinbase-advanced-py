@@ -6,7 +6,8 @@ import jwt
 
 from coinbase import jwt_generator
 from coinbase.constants import REST_SERVICE, WS_SERVICE
-from tests.constants import TEST_API_KEY, TEST_API_SECRET
+
+from .constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class JwtGeneratorTest(unittest.TestCase):

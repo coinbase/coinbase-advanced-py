@@ -2,7 +2,8 @@ import unittest
 from io import StringIO
 
 from coinbase.api_base import APIBase
-from tests.constants import TEST_API_KEY, TEST_API_SECRET
+
+from .constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class RestBaseTest(unittest.TestCase):

@@ -1,8 +1,23 @@
 import json
+import logging
 import os
 from typing import IO, Optional, Union
 
 from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY
+
+
+def get_logger(name):
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
+
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S"
+    )
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    return logger
 
 
 class APIBase(object):
@@ -12,7 +27,8 @@ class APIBase(object):
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
         key_file: Optional[Union[IO, str]] = None,
         base_url=None,
-        timeout=None,
+        timeout: Optional[int] = None,
+        verbose: Optional[bool] = False,
     ):
         if (api_key is not None or api_secret is not None) and key_file is not None:
             raise Exception(f"Cannot specify both api_key and key_file in constructor")

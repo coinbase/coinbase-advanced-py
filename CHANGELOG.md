@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2024-FEB-1 # TODO: Update this date
+
+### Added
+- Initial release of WebSocket API client
+- Verbose logging option for RESTClient
+
 ## [1.0.4] - 2024-JAN-29
 
 ### Fixed

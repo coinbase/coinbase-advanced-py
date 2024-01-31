@@ -5,7 +5,8 @@ from requests_mock import Mocker
 
 from coinbase.__version__ import __version__
 from coinbase.rest import RESTClient
-from tests.constants import TEST_API_KEY, TEST_API_SECRET
+
+from ..constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class RestBaseTest(unittest.TestCase):

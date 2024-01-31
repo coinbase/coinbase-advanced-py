@@ -1,4 +1,4 @@
-import json
+import logging
 import os
 from typing import IO, Optional, Union
 
@@ -6,9 +6,10 @@ import requests
 from requests.exceptions import HTTPError
 
 from coinbase import jwt_generator
-from coinbase.__version__ import __version__
-from coinbase.api_base import APIBase
-from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, BASE_URL
+from coinbase.api_base import APIBase, get_logger
+from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, BASE_URL, USER_AGENT
+
+logger = get_logger("coinbase.RESTClient")
 
 
 def handle_exception(response):
@@ -33,6 +34,7 @@ def handle_exception(response):
         )
 
     if http_error_msg:
+        logger.error(f"HTTP Error: {http_error_msg}")
         raise HTTPError(http_error_msg, response=response)
 
 
@@ -43,7 +45,8 @@ class RESTBase(APIBase):
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
         key_file: Optional[Union[IO, str]] = None,
         base_url=BASE_URL,
-        timeout=None,
+        timeout: Optional[int] = None,
+        verbose: Optional[bool] = False,
     ):
         super().__init__(
             api_key=api_key,
@@ -51,7 +54,10 @@ class RESTBase(APIBase):
             key_file=key_file,
             base_url=base_url,
             timeout=timeout,
+            verbose=verbose,
         )
+        if verbose:
+            logger.setLevel(logging.DEBUG)
 
     def get(self, url_path, params: Optional[dict] = None, **kwargs):
         params = params or {}
@@ -126,6 +132,8 @@ class RESTBase(APIBase):
 
         url = f"https://{self.base_url}{url_path}"
 
+        logger.debug(f"Sending {http_method} request to {url}")
+
         response = requests.request(
             http_method,
             url,
@@ -136,6 +144,8 @@ class RESTBase(APIBase):
         )
         handle_exception(response)  # Raise an HTTPError for bad responses
 
+        logger.debug(f"Raw response: {response.json()}")
+
         return response.json()
 
     def set_headers(self, method, path):
@@ -143,6 +153,6 @@ class RESTBase(APIBase):
         jwt = jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)
         return {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + jwt,
-            "User-Agent": "coinbase-advanced-py/" + __version__,
+            "Authorization": f"Bearer {jwt}",
+            "User-Agent": USER_AGENT,
         }

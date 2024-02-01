@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.1] - 2024-FEB-1
+
+### Added
+- Support for Perpetuals API endpoints
+
 ## [1.1.0] - 2024-JAN-31
 
 ### Added

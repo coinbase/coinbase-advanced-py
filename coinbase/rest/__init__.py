@@ -39,6 +39,12 @@ class RESTClient(RESTBase):
         stop_limit_order_gtd_buy,
         stop_limit_order_gtd_sell,
     )
+    from .perpetuals import (
+        allocate_portfolio,
+        get_perps_portfolio_summary,
+        get_perps_position,
+        list_perps_positions,
+    )
     from .portfolios import (
         create_portfolio,
         delete_portfolio,

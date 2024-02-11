@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives import serialization
 from coinbase.constants import BASE_URL, REST_SERVICE, WS_SERVICE
 
 
-def build_jwt(key_var, secret_var, service, uri=None):
+def build_jwt(key_var, secret_var, service, uri=None) -> str:
     try:
         private_key_bytes = secret_var.encode("utf-8")
         private_key = serialization.load_pem_private_key(

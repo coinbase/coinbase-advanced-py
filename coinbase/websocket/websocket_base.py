@@ -27,18 +27,57 @@ logger = get_logger("coinbase.WSClient")
 
 
 class WSClientException(Exception):
-    """Exception raised for errors in the WebSocket client."""
+    """
+    **WSClientException**
+    ________________________________________
+
+    -----------------------------------------
+
+    Exception raised for errors in the WebSocket client.
+    """
 
     pass
 
 
 class WSClientConnectionClosedException(Exception):
-    """Exception raised for unexpected closure in the WebSocket client."""
+    """
+    **WSClientConnectionClosedException**
+    ________________________________________
+
+    ----------------------------------------
+
+    Exception raised for unexpected closure in the WebSocket client.
+    """
 
     pass
 
 
 class WSBase(APIBase):
+    """
+    **WSBase Client**
+    _____________________________
+
+    Initialize using WSClient
+
+    __________
+
+    **Parameters**:
+
+    - **api_key | Optional (str)** - The API key
+    - **api_secret | Optional (str)** - The API key secret
+    - **key_file | Optional (IO | str)** - Path to API key file or file-like object
+    - **base_url | (str)** - The websocket base url. Default set to "wss://advanced-trade-ws.coinbase.com"
+    - **timeout | Optional (int)** - Set timeout in seconds for REST requests
+    - **max_size | Optional (int)** - Max size in bytes for messages received. Default set to (10 * 1024 * 1024)
+    - **on_message | Optional (Callable[[str], None])** - Function called when a message is received
+    - **on_open | Optional ([Callable[[], None]])** - Function called when a connection is opened
+    - **on_close | Optional ([Callable[[], None]])** - Function called when a connection is closed
+    - **retry | Optional (bool)** - Enables automatic reconnections. Default set to True
+    - **verbose | Optional (bool)** - Enables debug logging. Default set to False
+
+
+    """
+
     def __init__(
         self,
         api_key: Optional[str] = os.getenv(API_ENV_KEY),
@@ -89,6 +128,11 @@ class WSBase(APIBase):
 
     def open(self):
         """
+        **Open Websocket**
+        __________________
+
+        ------------------------
+
         Open the websocket client connection.
         """
         if not self.loop or self.loop.is_closed():
@@ -101,6 +145,11 @@ class WSBase(APIBase):
 
     async def open_async(self):
         """
+        **Open Websocket Async**
+        ________________________
+
+        ------------------------
+
         Open the websocket client connection asynchronously.
         """
         self._ensure_websocket_not_open()
@@ -135,6 +184,11 @@ class WSBase(APIBase):
 
     def close(self):
         """
+        **Close Websocket**
+        ___________________
+
+        ------------------------
+
         Close the websocket client connection.
         """
         if self.loop and not self.loop.is_closed():
@@ -151,6 +205,11 @@ class WSBase(APIBase):
 
     async def close_async(self):
         """
+        **Close Websocket Async**
+        _________________________
+
+        ------------------------
+
         Close the websocket client connection asynchronously.
         """
         self._ensure_websocket_open()
@@ -171,9 +230,15 @@ class WSBase(APIBase):
 
     def subscribe(self, product_ids: List[str], channels: List[str]):
         """
+        **Subscribe**
+        _____________
+
+        ------------------------
+
         Subscribe to a list of channels for a list of product ids.
-        :param product_ids: product ids to subscribe to
-        :param channels: channels to subscribe to
+
+        - **product_ids** - product ids to subscribe to
+        - **channels** - channels to subscribe to
         """
         if self.loop and not self.loop.is_closed():
             self._run_coroutine_threadsafe(self.subscribe_async(product_ids, channels))
@@ -182,9 +247,15 @@ class WSBase(APIBase):
 
     async def subscribe_async(self, product_ids: List[str], channels: List[str]):
         """
+        **Subscribe Async**
+        ___________________
+
+        ------------------------
+
         Async subscribe to a list of channels for a list of product ids.
-        :param product_ids: product ids to subscribe to
-        :param channels: channels to subscribe to
+
+        - **product_ids** - product ids to subscribe to
+        - **channels** - channels to subscribe to
         """
         self._ensure_websocket_open()
         for channel in channels:
@@ -221,9 +292,15 @@ class WSBase(APIBase):
 
     def unsubscribe(self, product_ids: List[str], channels: List[str]):
         """
+        **Unsubscribe**
+        _______________
+
+        ------------------------
+
         Unsubscribe to a list of channels for a list of product ids.
-        :param product_ids: product ids to unsubscribe from
-        :param channels: channels to unsubscribe from
+
+        - **product_ids** - product ids to unsubscribe from
+        - **channels** - channels to unsubscribe from
         """
         if self.loop and not self.loop.is_closed():
             self._run_coroutine_threadsafe(
@@ -234,9 +311,15 @@ class WSBase(APIBase):
 
     async def unsubscribe_async(self, product_ids: List[str], channels: List[str]):
         """
+        **Unsubscribe Async**
+        _____________________
+
+        ------------------------
+
         Async unsubscribe to a list of channels for a list of product ids.
-        :param product_ids: product ids to unsubscribe from
-        :param channels: channels to unsubscribe from
+
+        - **product_ids** - product ids to unsubscribe from
+        - **channels** - channels to unsubscribe from
         """
         self._ensure_websocket_open()
         for channel in channels:
@@ -273,6 +356,11 @@ class WSBase(APIBase):
 
     def unsubscribe_all(self):
         """
+        **Unsubscribe All**
+        ________________________
+
+        ------------------------
+
         Unsubscribe from all channels you are currently subscribed to.
         """
         if self.loop and not self.loop.is_closed():
@@ -282,6 +370,11 @@ class WSBase(APIBase):
 
     async def unsubscribe_all_async(self):
         """
+        **Unsubscribe All Async**
+        _________________________
+
+        ------------------------
+
         Async unsubscribe from all channels you are currently subscribed to.
         """
         for channel, product_ids in self.subscriptions.items():
@@ -289,21 +382,39 @@ class WSBase(APIBase):
 
     def sleep_with_exception_check(self, sleep: int):
         """
+        **Sleep with Exception Check**
+        ______________________________
+
+        ------------------------
+
         Sleep for a specified number of seconds and check for background exceptions.
-        :param sleep: number of seconds to sleep.
+
+        - **sleep** - number of seconds to sleep.
         """
         time.sleep(sleep)
         self.raise_background_exception()
 
     async def sleep_with_exception_check_async(self, sleep: int):
         """
+        **Sleep with Exception Check Async**
+        ____________________________________
+
+        ------------------------
+
         Async sleep for a specified number of seconds and check for background exceptions.
+
+        - **sleep** - number of seconds to sleep.
         """
         await asyncio.sleep(sleep)
         self.raise_background_exception()
 
     def run_forever_with_exception_check(self):
         """
+        **Run Forever with Exception Check**
+        ____________________________________
+
+        ------------------------
+
         Runs an endless loop, checking for background exceptions every second.
         """
         while True:
@@ -312,6 +423,11 @@ class WSBase(APIBase):
 
     async def run_forever_with_exception_check_async(self):
         """
+        **Run Forever with Exception Check Async**
+        __________________________________________
+
+        ------------------------
+
         Async runs an endless loop, checking for background exceptions every second.
         """
         while True:
@@ -320,6 +436,11 @@ class WSBase(APIBase):
 
     def raise_background_exception(self):
         """
+        **Raise Background Exception**
+        ______________________________
+
+        ------------------------
+
         Raise any background exceptions that occurred in the message handler.
         """
         if self._background_exception:
@@ -328,17 +449,29 @@ class WSBase(APIBase):
             raise exception_to_raise
 
     def _run_coroutine_threadsafe(self, coro):
+        """
+        :meta private:
+        """
         future = asyncio.run_coroutine_threadsafe(coro, self.loop)
         return future.result()
 
     def _is_websocket_open(self):
+        """
+        :meta private:
+        """
         return self.websocket and self.websocket.open
 
     async def _resubscribe(self):
+        """
+        :meta private:
+        """
         for channel, product_ids in self.subscriptions.items():
             await self.subscribe_async(list(product_ids), [channel])
 
     async def _retry_connection(self):
+        """
+        :meta private:
+        """
         self._retry_count = 0
 
         @backoff.on_exception(
@@ -362,6 +495,9 @@ class WSBase(APIBase):
         return await _retry_connect_and_resubscribe()
 
     async def _message_handler(self):
+        """
+        :meta private:
+        """
         self.handler_open = True
         while self._is_websocket_open():
             try:
@@ -411,6 +547,9 @@ class WSBase(APIBase):
     def _build_subscription_message(
         self, product_ids: List[str], channel: str, message_type: str
     ):
+        """
+        :meta private:
+        """
         return {
             "type": message_type,
             "product_ids": product_ids,
@@ -420,14 +559,23 @@ class WSBase(APIBase):
         }
 
     def _ensure_websocket_not_open(self):
+        """
+        :meta private:
+        """
         if self._is_websocket_open():
             raise WSClientException("WebSocket is already open.")
 
     def _ensure_websocket_open(self):
+        """
+        :meta private:
+        """
         if not self._is_websocket_open():
             raise WSClientException("WebSocket is closed or was never opened.")
 
     def _set_headers(self):
+        """
+        :meta private:
+        """
         if self._retry_count > 0:
             return {"x-cb-retry-counter": str(self._retry_count)}
         else:

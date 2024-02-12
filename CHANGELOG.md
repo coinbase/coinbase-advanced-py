@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.2] - 2024-FEB-9
+
+### Added
+- Detailed documentation for all exposed functions of the SDK
+- Support for PreviewOrder endpoint
+
 ## [1.1.1] - 2024-FEB-1
 
 ### Added

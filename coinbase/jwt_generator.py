@@ -8,6 +8,9 @@ from coinbase.constants import BASE_URL, REST_SERVICE, WS_SERVICE
 
 
 def build_jwt(key_var, secret_var, service, uri=None):
+    """
+    :meta private:
+    """
     try:
         private_key_bytes = secret_var.encode("utf-8")
         private_key = serialization.load_pem_private_key(
@@ -42,12 +45,59 @@ def build_jwt(key_var, secret_var, service, uri=None):
 
 
 def build_rest_jwt(uri, key_var, secret_var):
+    """
+    **Build REST JWT**
+    __________
+
+    **Description:**
+
+    Builds and returns a JWT token for connecting to the REST API.
+
+    __________
+
+    Parameters:
+
+    - **uri (str)** - Formatted URI for the endpoint (e.g. "GET api.coinbase.com/api/v3/brokerage/accounts") Can be generated using ``format_jwt_uri``
+    - **key_var (str)** - The API key
+    - **secret_var (str)** - The API key secret
+    """
     return build_jwt(key_var, secret_var, REST_SERVICE, uri=uri)
 
 
 def build_ws_jwt(key_var, secret_var):
+    """
+    **Build WebSocket JWT**
+    __________
+
+    **Description:**
+
+    Builds and returns a JWT token for connecting to the WebSocket API.
+
+    __________
+
+    Parameters:
+
+    - **key_var (str)** - The API key
+    - **secret_var (str)** - The API key secret
+    """
     return build_jwt(key_var, secret_var, WS_SERVICE)
 
 
 def format_jwt_uri(method, path):
+    """
+    **Format JWT URI**
+    __________
+
+    **Description:**
+
+    Formats method and path into valid URI for JWT generation.
+
+    __________
+
+    Parameters:
+
+    - **method (str)** - The REST request method. E.g. GET, POST, PUT, DELETE
+    - **path (str)** - The path of the endpoint. E.g. "/api/v3/brokerage/accounts"
+
+    """
     return f"{method} {BASE_URL}{path}"

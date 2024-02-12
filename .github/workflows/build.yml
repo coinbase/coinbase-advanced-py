@@ -13,7 +13,7 @@ jobs:
     - name: Install dependencies and format code
       run: |
         sudo apt-get install -y make
-        pip3 install black isort
+        pip3 install -r lint_requirements.txt
         make format
 
         if git diff --quiet; then
@@ -40,8 +40,8 @@ jobs:
       run: |
         python -m venv venv
         source venv/bin/activate
-        pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r test_requirements.txt
+        pip3 install --upgrade pip
+        pip3 install -r requirements.txt
+        pip3 install -r test_requirements.txt
 
         python -m unittest discover -v

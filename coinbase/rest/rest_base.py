@@ -13,8 +13,10 @@ logger = get_logger("coinbase.RESTClient")
 
 
 def handle_exception(response):
-    """Raises :class:`HTTPError`, if one occurred."""
+    """Raises :class:`HTTPError`, if one occurred.
 
+    :meta private:
+    """
     http_error_msg = ""
     reason = response.reason
 
@@ -39,6 +41,26 @@ def handle_exception(response):
 
 
 class RESTBase(APIBase):
+    """
+    **RESTClient**
+    _____________________________
+
+    Initialize using RESTClient
+
+    __________
+
+    **Parameters**:
+
+    - **api_key | Optional (str)** - The API key
+    - **api_secret | Optional (str)** - The API key secret
+    - **key_file | Optional (IO | str)** - Path to API key file or file-like object
+    - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com"
+    - **timeout | Optional (int)** - Set timeout in seconds for REST requests
+    - **verbose | Optional (bool)** - Enables debug logging. Default set to False
+
+
+    """
+
     def __init__(
         self,
         api_key: Optional[str] = os.getenv(API_ENV_KEY),
@@ -60,6 +82,20 @@ class RESTBase(APIBase):
             logger.setLevel(logging.DEBUG)
 
     def get(self, url_path, params: Optional[dict] = None, **kwargs):
+        """
+        **Authenticated GET Request**
+        _____________________________
+
+        __________
+
+        **Parameters:**
+
+        - **url_path | (str)** - the URL path
+        - **params | Optional ([dict])** - the query parameters
+
+
+        """
+
         params = params or {}
 
         if kwargs:
@@ -74,6 +110,18 @@ class RESTBase(APIBase):
         data: Optional[dict] = None,
         **kwargs,
     ):
+        """
+        **Authenticated POST Request**
+        ______________________________
+
+        __________
+
+         **Parameters:**
+
+        - **url_path | (str)** - the URL path
+        - **params | Optional ([dict])** - the query parameters
+        - **data | Optional ([dict])** - the request body
+        """
         data = data or {}
 
         if kwargs:
@@ -88,6 +136,18 @@ class RESTBase(APIBase):
         data: Optional[dict] = None,
         **kwargs,
     ):
+        """
+        **Authenticated PUT Request**
+        _____________________________
+
+        __________
+
+        **Parameters:**
+
+        - **url_path | (str)** - the URL path
+        - **params | Optional ([dict])** - the query parameters
+        - **data | Optional ([dict])** - the request body
+        """
         data = data or {}
 
         if kwargs:
@@ -102,6 +162,18 @@ class RESTBase(APIBase):
         data: Optional[dict] = None,
         **kwargs,
     ):
+        """
+        **Authenticated DELETE Request**
+        ________________________________
+
+        __________
+
+        **Parameters:**
+
+        - **url_path | (str)** - the URL path
+        - **params | Optional ([dict])** - the query parameters
+        - **data | Optional ([dict])** - the request body
+        """
         data = data or {}
 
         if kwargs:
@@ -116,6 +188,9 @@ class RESTBase(APIBase):
         params: Optional[dict] = None,
         data: Optional[dict] = None,
     ):
+        """
+        :meta private:
+        """
         headers = self.set_headers(http_method, url_path)
 
         if params is not None:
@@ -127,6 +202,9 @@ class RESTBase(APIBase):
         return self.send_request(http_method, url_path, params, headers, data=data)
 
     def send_request(self, http_method, url_path, params, headers, data=None):
+        """
+        :meta private:
+        """
         if data is None:
             data = {}
 
@@ -149,6 +227,9 @@ class RESTBase(APIBase):
         return response.json()
 
     def set_headers(self, method, path):
+        """
+        :meta private:
+        """
         uri = f"{method} {self.base_url}{path}"
         jwt = jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)
         return {

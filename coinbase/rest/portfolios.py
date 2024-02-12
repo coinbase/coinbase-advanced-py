@@ -5,9 +5,21 @@ from coinbase.constants import API_PREFIX
 
 def get_portfolios(self, portfolio_type: Optional[str] = None, **kwargs):
     """
+    **List Portfolios**
+    ___________________
+
+    [GET] https://api.coinbase.com/api/v3/brokerage/portfolios
+
+    __________
+
+    **Description:**
+
     Get a list of all portfolios of a user.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfolios
+    __________
+
+    **Read more on the official documentation:** `List Portfolios
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfolios>`_
     """
     endpoint = f"{API_PREFIX}/portfolios"
 
@@ -18,9 +30,21 @@ def get_portfolios(self, portfolio_type: Optional[str] = None, **kwargs):
 
 def create_portfolio(self, name: str, **kwargs):
     """
+    **Create Portfolio**
+    ____________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/portfolios
+
+    __________
+
+    **Description:**
+
     Create a portfolio.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createportfolio
+    __________
+
+    **Read more on the official documentation:** `Create Portfolio
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createportfolio>`_
     """
     endpoint = f"{API_PREFIX}/portfolios"
 
@@ -33,9 +57,21 @@ def create_portfolio(self, name: str, **kwargs):
 
 def get_portfolio_breakdown(self, portfolio_uuid: str, **kwargs):
     """
+    **Get Portfolio Breakdown**
+    ___________________________
+
+    [GET] https://api.coinbase.com/api/v3/brokerage/portfolios/{portfolio_uuid}
+
+    __________
+
+    **Description:**
+
     Get the breakdown of a portfolio by portfolio ID.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfoliobreakdown
+    __________
+
+    **Read more on the official documentation:** `Get Portfolio Breakdown
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfoliobreakdown>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
@@ -51,9 +87,21 @@ def move_portfolio_funds(
     **kwargs,
 ):
     """
+    **Move Portfolio Funds**
+    ________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/portfolios/move_funds
+
+    __________
+
+    **Description:**
+
     Transfer funds between portfolios.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_moveportfoliofunds
+    __________
+
+    **Read more on the official documentation:** `Move Portfolio Funds
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_moveportfoliofunds>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/move_funds"
 
@@ -71,9 +119,21 @@ def move_portfolio_funds(
 
 def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs):
     """
+    **Edit Portfolio**
+    __________________
+
+    [PUT] https://api.coinbase.com/api/v3/brokerage/portfolios/{portfolio_uuid}
+
+    __________
+
+    **Description:**
+
     Modify a portfolio by portfolio ID.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_editportfolio
+    __________
+
+    **Read more on the official documentation:** `Edit Portfolio
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_editportfolio>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
@@ -86,9 +146,21 @@ def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs):
 
 def delete_portfolio(self, portfolio_uuid: str, **kwargs):
     """
+    **Delete Portfolio**
+    ____________________
+
+    [DELETE] https://api.coinbase.com/api/v3/brokerage/portfolios/{portfolio_uuid}
+
+    __________
+
+    **Description:**
+
     Delete a portfolio by portfolio ID.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_deleteportfolio
+    __________
+
+    **Read more on the official documentation:** `Delete Portfolio
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_deleteportfolio>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 

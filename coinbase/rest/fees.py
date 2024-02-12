@@ -10,9 +10,20 @@ def get_transaction_summary(
     **kwargs,
 ):
     """
+    **Get Transactions Summary**
+    _____________________________
+
+    [GET] https://api.coinbase.com/api/v3/brokerage/transaction_summary
+
+    __________
+
+    **Description:**
+
     Get a summary of transactions with fee tiers, total volume, and fees.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_gettransactionsummary
+    __________
+
+    **Read more on the official documentation:** `Create Convert Quote <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createconvertquote>`_
     """
     endpoint = f"{API_PREFIX}/transaction_summary"
 

@@ -13,9 +13,20 @@ def create_convert_quote(
     **kwargs,
 ):
     """
+    **Create Convert Quote**
+    ________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/convert/quote
+
+    __________
+
+    **Description:**
+
     Create a convert quote with a specified source currency, target currency, and amount.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createconvertquote
+    __________
+
+    **Read more on the official documentation:** `Create Convert Quote <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createconvertquote>`_
     """
     endpoint = f"{API_PREFIX}/convert/quote"
 
@@ -45,9 +56,20 @@ def get_convert_trade(
     self, trade_id: str, from_account: str, to_account: str, **kwargs
 ):
     """
+    **Get Convert Trade**
+    _____________________
+
+    [GET] https://api.coinbase.com/api/v3/brokerage/convert/trade/{trade_id}
+
+    __________
+
+    **Description:**
+
     Gets a list of information about a convert trade with a specified trade ID, source currency, and target currency.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getconverttrade
+    __________
+
+    **Read more on the official documentation:** `Get Convert Trade <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getconverttrade>`_
     """
     endpoint = f"{API_PREFIX}/convert/trade/{trade_id}"
 
@@ -63,9 +85,20 @@ def commit_convert_trade(
     self, trade_id: str, from_account: str, to_account: str, **kwargs
 ):
     """
+    **Commit Convert Trade**
+    ________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/convert/trade/{trade_id}
+
+    __________
+
+    **Description:**
+
     Commits a convert trade with a specified trade ID, source currency, and target currency.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_commitconverttrade
+    __________
+
+    **Read more on the official documentation:** `Commit Convert Trade <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_commitconverttrade>`_
     """
     endpoint = f"{API_PREFIX}/convert/trade/{trade_id}"
 

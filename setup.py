@@ -10,6 +10,9 @@ with open(os.path.join(root, "requirements.txt"), "r") as fh:
 with open(os.path.join(root, "test_requirements.txt"), "r") as fh:
     test_requirements = fh.readlines()
 
+with open(os.path.join(root, "lint_requirements.txt"), "r") as fh:
+    lint_requirements = fh.readlines()
+
 README = open(os.path.join(root, "README.md"), "r").read()
 
 about = {}
@@ -31,6 +34,7 @@ setup(
     install_requires=[req for req in requirements],
     extras_require={
         "test": [test_req for test_req in test_requirements],
+        "lint": [lint_req for lint_req in lint_requirements],
     },
     classifiers=[
         "Intended Audience :: Developers",

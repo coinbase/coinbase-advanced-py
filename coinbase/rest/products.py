@@ -14,9 +14,21 @@ def get_products(
     **kwargs,
 ):
     """
+    **List Products**
+    _________________
+
+    [GET] https://api.coinbase.com/api/v3/brokerage/products
+
+    __________
+
+    **Description:**
+
     Get a list of the available currency pairs for trading.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproducts
+    __________
+
+    **Read more on the official documentation:** `List Products
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproducts>`_
     """
     endpoint = f"{API_PREFIX}/products"
 
@@ -34,9 +46,21 @@ def get_products(
 
 def get_product(self, product_id: str, **kwargs):
     """
+    **Get Product**
+    _______________
+
+    [GET] https://api.coinbase.com/api/v3/brokerage/products/{product_id}
+
+    __________
+
+    **Description:**
+
     Get information on a single product by product ID.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproduct
+    __________
+
+    **Read more on the official documentation:** `Get Product
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproduct>`_
     """
     endpoint = f"{API_PREFIX}/products/{product_id}"
 
@@ -45,9 +69,21 @@ def get_product(self, product_id: str, **kwargs):
 
 def get_product_book(self, product_id: str, limit: Optional[int] = None, **kwargs):
     """
+    **Get Product Book**
+    ____________________
+
+    [GET] https://api.coinbase.com/api/v3/brokerage/product_book
+
+    __________
+
+    **Description:**
+
     Get a list of bids/asks for a single product. The amount of detail shown can be customized with the limit parameter.
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook
+    __________
+
+    **Read more on the official documentation:** `Get Product Book
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook>`_
     """
     endpoint = f"{API_PREFIX}/product_book"
 
@@ -58,10 +94,21 @@ def get_product_book(self, product_id: str, limit: Optional[int] = None, **kwarg
 
 def get_best_bid_ask(self, product_ids: Optional[List[str]] = None, **kwargs):
     """
-    Get the best bid/ask for all products. A subset of all products can be returned instead by using the product_ids
-    input.
+    **Get Best Bid/Ask**
+    ____________________
 
-    https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getbestbidask
+    [GET] https://api.coinbase.com/api/v3/brokerage/best_bid_ask
+
+    __________
+
+    **Description:**
+
+    Get the best bid/ask for all products. A subset of all products can be returned instead by using the product_ids input.
+
+    __________
+
+    **Read more on the official documentation:** `Get Best Bid/Ask
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook>`_
     """
     endpoint = f"{API_PREFIX}/best_bid_ask"
 

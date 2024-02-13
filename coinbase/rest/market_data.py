@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
 
 
 def get_candles(
     self, product_id: str, start: str, end: str, granularity: str, **kwargs
-):
+) -> Dict[str, Any]:
     """
     **Get Product Candles**
     __________
@@ -41,7 +41,7 @@ def get_market_trades(
     start: Optional[str] = None,
     end: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Get Market Trades**
     _____________________

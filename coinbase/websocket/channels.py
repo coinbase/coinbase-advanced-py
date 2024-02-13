@@ -12,7 +12,7 @@ from coinbase.constants import (
 )
 
 
-def heartbeats(self, product_ids: List[str]):
+def heartbeats(self, product_ids: List[str]) -> None:
     """
     **Heartbeats Subscribe**
     ________________________
@@ -31,7 +31,7 @@ def heartbeats(self, product_ids: List[str]):
     self.subscribe(product_ids, [HEARTBEATS])
 
 
-async def heartbeats_async(self, product_ids: List[str]):
+async def heartbeats_async(self, product_ids: List[str]) -> None:
     """
     **Heartbeats Subscribe Async**
     ______________________________
@@ -50,7 +50,7 @@ async def heartbeats_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [HEARTBEATS])
 
 
-def heartbeats_unsubscribe(self, product_ids: List[str]):
+def heartbeats_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **Heartbeats Unsubscribe**
     __________________________
@@ -69,7 +69,7 @@ def heartbeats_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [HEARTBEATS])
 
 
-async def heartbeats_unsubscribe_async(self, product_ids: List[str]):
+async def heartbeats_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **Heartbeats Unsubscribe Async**
     ________________________________
@@ -88,7 +88,7 @@ async def heartbeats_unsubscribe_async(self, product_ids: List[str]):
     await self.unsubscribe_async(product_ids, [HEARTBEATS])
 
 
-def candles(self, product_ids: List[str]):
+def candles(self, product_ids: List[str]) -> None:
     """
     **Candles Subscribe**
     _____________________
@@ -107,7 +107,7 @@ def candles(self, product_ids: List[str]):
     self.subscribe(product_ids, [CANDLES])
 
 
-async def candles_async(self, product_ids: List[str]):
+async def candles_async(self, product_ids: List[str]) -> None:
     """
     **Candles Subscribe Async**
     ___________________________
@@ -126,7 +126,7 @@ async def candles_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [CANDLES])
 
 
-def candles_unsubscribe(self, product_ids: List[str]):
+def candles_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **Candles Unsubscribe**
     _______________________
@@ -145,7 +145,7 @@ def candles_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [CANDLES])
 
 
-async def candles_unsubscribe_async(self, product_ids: List[str]):
+async def candles_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **Candles Unsubscribe Async**
     _____________________________
@@ -164,7 +164,7 @@ async def candles_unsubscribe_async(self, product_ids: List[str]):
     await self.unsubscribe_async(product_ids, [CANDLES])
 
 
-def market_trades(self, product_ids: List[str]):
+def market_trades(self, product_ids: List[str]) -> None:
     """
     **Market Trades Subscribe**
     ___________________________
@@ -183,7 +183,7 @@ def market_trades(self, product_ids: List[str]):
     self.subscribe(product_ids, [MARKET_TRADES])
 
 
-async def market_trades_async(self, product_ids: List[str]):
+async def market_trades_async(self, product_ids: List[str]) -> None:
     """
     **Market Trades Subscribe Async**
     _________________________________
@@ -202,7 +202,7 @@ async def market_trades_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [MARKET_TRADES])
 
 
-def market_trades_unsubscribe(self, product_ids: List[str]):
+def market_trades_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **Market Trades Unsubscribe**
     _____________________________
@@ -221,7 +221,7 @@ def market_trades_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [MARKET_TRADES])
 
 
-async def market_trades_unsubscribe_async(self, product_ids: List[str]):
+async def market_trades_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **Market Trades Unsubscribe Async**
     ___________________________________
@@ -240,7 +240,7 @@ async def market_trades_unsubscribe_async(self, product_ids: List[str]):
     await self.unsubscribe_async(product_ids, [MARKET_TRADES])
 
 
-def status(self, product_ids: List[str]):
+def status(self, product_ids: List[str]) -> None:
     """
     **Status Subscribe**
     ____________________
@@ -259,7 +259,7 @@ def status(self, product_ids: List[str]):
     self.subscribe(product_ids, [STATUS])
 
 
-async def status_async(self, product_ids: List[str]):
+async def status_async(self, product_ids: List[str]) -> None:
     """
     **Status Subscribe Async**
     __________________________
@@ -278,7 +278,7 @@ async def status_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [STATUS])
 
 
-def status_unsubscribe(self, product_ids: List[str]):
+def status_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **Status Unsubscribe**
     ______________________
@@ -297,7 +297,7 @@ def status_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [STATUS])
 
 
-async def status_unsubscribe_async(self, product_ids: List[str]):
+async def status_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **Status Unsubscribe Async**
     ____________________________
@@ -316,7 +316,7 @@ async def status_unsubscribe_async(self, product_ids: List[str]):
     await self.unsubscribe_async(product_ids, [STATUS])
 
 
-def ticker(self, product_ids: List[str]):
+def ticker(self, product_ids: List[str]) -> None:
     """
     **Ticker Subscribe**
     ____________________
@@ -335,7 +335,7 @@ def ticker(self, product_ids: List[str]):
     self.subscribe(product_ids, [TICKER])
 
 
-async def ticker_async(self, product_ids: List[str]):
+async def ticker_async(self, product_ids: List[str]) -> None:
     """
     **Ticker Subscribe Async**
     __________________________
@@ -354,7 +354,7 @@ async def ticker_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [TICKER])
 
 
-def ticker_unsubscribe(self, product_ids: List[str]):
+def ticker_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **Ticker Unsubscribe**
     ______________________
@@ -373,7 +373,7 @@ def ticker_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [TICKER])
 
 
-async def ticker_unsubscribe_async(self, product_ids: List[str]):
+async def ticker_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **Ticker Unsubscribe Async**
     ____________________________
@@ -392,7 +392,7 @@ async def ticker_unsubscribe_async(self, product_ids: List[str]):
     await self.unsubscribe_async(product_ids, [TICKER])
 
 
-def ticker_batch(self, product_ids: List[str]):
+def ticker_batch(self, product_ids: List[str]) -> None:
     """
     **Ticker Batch Subscribe**
     __________________________
@@ -411,7 +411,7 @@ def ticker_batch(self, product_ids: List[str]):
     self.subscribe(product_ids, [TICKER_BATCH])
 
 
-async def ticker_batch_async(self, product_ids: List[str]):
+async def ticker_batch_async(self, product_ids: List[str]) -> None:
     """
     **Ticker Batch Subscribe Async**
     ________________________________
@@ -430,7 +430,7 @@ async def ticker_batch_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [TICKER_BATCH])
 
 
-def ticker_batch_unsubscribe(self, product_ids: List[str]):
+def ticker_batch_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **Ticker Batch Unsubscribe**
     ____________________________
@@ -449,7 +449,7 @@ def ticker_batch_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [TICKER_BATCH])
 
 
-async def ticker_batch_unsubscribe_async(self, product_ids: List[str]):
+async def ticker_batch_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **Ticker Batch Unsubscribe Async**
     __________________________________
@@ -468,7 +468,7 @@ async def ticker_batch_unsubscribe_async(self, product_ids: List[str]):
     await self.unsubscribe_async(product_ids, [TICKER_BATCH])
 
 
-def level2(self, product_ids: List[str]):
+def level2(self, product_ids: List[str]) -> None:
     """
     **Level2 Subscribe**
     ____________________
@@ -487,7 +487,7 @@ def level2(self, product_ids: List[str]):
     self.subscribe(product_ids, [LEVEL2])
 
 
-async def level2_async(self, product_ids: List[str]):
+async def level2_async(self, product_ids: List[str]) -> None:
     """
     **Level2 Subscribe Async**
     __________________________
@@ -506,7 +506,7 @@ async def level2_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [LEVEL2])
 
 
-def level2_unsubscribe(self, product_ids: List[str]):
+def level2_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **Level2 Unsubscribe**
     ______________________
@@ -525,7 +525,7 @@ def level2_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [LEVEL2])
 
 
-async def level2_unsubscribe_async(self, product_ids: List[str]):
+async def level2_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **Level2 Unsubscribe Async**
     ____________________________
@@ -544,7 +544,7 @@ async def level2_unsubscribe_async(self, product_ids: List[str]):
     await self.unsubscribe_async(product_ids, [LEVEL2])
 
 
-def user(self, product_ids: List[str]):
+def user(self, product_ids: List[str]) -> None:
     """
     **User Subscribe**
     __________________
@@ -563,7 +563,7 @@ def user(self, product_ids: List[str]):
     self.subscribe(product_ids, [USER])
 
 
-async def user_async(self, product_ids: List[str]):
+async def user_async(self, product_ids: List[str]) -> None:
     """
     **User Subscribe Async**
     ________________________
@@ -582,7 +582,7 @@ async def user_async(self, product_ids: List[str]):
     await self.subscribe_async(product_ids, [USER])
 
 
-def user_unsubscribe(self, product_ids: List[str]):
+def user_unsubscribe(self, product_ids: List[str]) -> None:
     """
     **User Unsubscribe**
     ____________________
@@ -601,7 +601,7 @@ def user_unsubscribe(self, product_ids: List[str]):
     self.unsubscribe(product_ids, [USER])
 
 
-async def user_unsubscribe_async(self, product_ids: List[str]):
+async def user_unsubscribe_async(self, product_ids: List[str]) -> None:
     """
     **User Unsubscribe Async**
     __________________________

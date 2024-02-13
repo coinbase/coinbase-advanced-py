@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
 
@@ -14,7 +14,7 @@ def create_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Create Order**
     ________________
@@ -61,7 +61,7 @@ def market_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Market Order**
     ________________
@@ -112,7 +112,7 @@ def market_order_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Create Market Order Buy**
     ____________________
@@ -154,7 +154,7 @@ def market_order_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Create Market Order Sell**
     _____________________
@@ -200,7 +200,7 @@ def limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Limit Order GTC**
     ___________________
@@ -253,7 +253,7 @@ def limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Limit Order GTC Buy**
     _______________________
@@ -300,7 +300,7 @@ def limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Limit Order GTC Sell**
     ________________________
@@ -350,7 +350,7 @@ def limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Limit Order GTD**
     ___________________
@@ -405,7 +405,7 @@ def limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Limit Order GTD Buy**
     _______________________
@@ -454,7 +454,7 @@ def limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Limit Order GTD Sell**
     ________________________
@@ -505,7 +505,7 @@ def stop_limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Stop-Limit Order GTC**
     ________________________
@@ -560,7 +560,7 @@ def stop_limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Stop-Limit Order GTC Buy**
     ____________________________
@@ -609,7 +609,7 @@ def stop_limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Stop-Limit Order GTC Sell**
     _____________________________
@@ -661,7 +661,7 @@ def stop_limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Stop-Limit Order GTD**
     ________________________
@@ -718,7 +718,7 @@ def stop_limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Stop-Limit Order GTD Buy**
     ____________________________
@@ -769,7 +769,7 @@ def stop_limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Stop-Limit Order GTD Sell**
     _____________________________
@@ -806,7 +806,7 @@ def stop_limit_order_gtd_sell(
     )
 
 
-def get_order(self, order_id: str, **kwargs):
+def get_order(self, order_id: str, **kwargs) -> Dict[str, Any]:
     """
     **Get Order**
     _____________
@@ -845,7 +845,7 @@ def list_orders(
     asset_filters: Optional[List[str]] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **List Orders**
     _______________
@@ -892,7 +892,7 @@ def get_fills(
     limit: Optional[int] = None,
     cursor: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **List Fills**
     ______________
@@ -929,7 +929,7 @@ def edit_order(
     size: Optional[str] = None,
     price: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Edit Order**
     ______________
@@ -963,7 +963,7 @@ def preview_edit_order(
     size: Optional[str] = None,
     price: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Edit Order**
     ______________________
@@ -991,7 +991,7 @@ def preview_edit_order(
     return self.post(endpoint, data=data, **kwargs)
 
 
-def cancel_orders(self, order_ids: List[str], **kwargs):
+def cancel_orders(self, order_ids: List[str], **kwargs) -> Dict[str, Any]:
     """
     **Cancel Orders**
     _________________
@@ -1029,7 +1029,7 @@ def preview_order(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Order**
     _________________
@@ -1081,7 +1081,7 @@ def preview_market_order(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Market Order**
     ________________________
@@ -1133,7 +1133,7 @@ def preview_market_order_buy(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Market Buy Order**
     ____________________________
@@ -1177,7 +1177,7 @@ def preview_market_order_sell(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Market Sell Order**
     _____________________________
@@ -1225,7 +1225,7 @@ def preview_limit_order_gtc(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Limit Order GTC**
     ___________________________
@@ -1279,7 +1279,7 @@ def preview_limit_order_gtc_buy(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Limit Order GTC Buy**
     _______________________________
@@ -1327,7 +1327,7 @@ def preview_limit_order_gtc_sell(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Limit Order GTC Sell**
     ________________________________
@@ -1378,7 +1378,7 @@ def preview_limit_order_gtd(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Limit Order GTD**
     ___________________________
@@ -1434,7 +1434,7 @@ def preview_limit_order_gtd_buy(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Limit Order GTD Buy**
     _______________________________
@@ -1484,7 +1484,7 @@ def preview_limit_order_gtd_sell(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Limit Order GTD Sell**
     ________________________________
@@ -1536,7 +1536,7 @@ def preview_stop_limit_order_gtc(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Stop-Limit Order GTC**
     ________________________________
@@ -1592,7 +1592,7 @@ def preview_stop_limit_order_gtc_buy(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Stop-Limit Order GTC Buy**
     ____________________________________
@@ -1642,7 +1642,7 @@ def preview_stop_limit_order_gtc_sell(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Stop-Limit Order GTC Sell**
     _____________________________________
@@ -1695,7 +1695,7 @@ def preview_stop_limit_order_gtd(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Stop-Limit Order GTD**
     ________________________________
@@ -1753,7 +1753,7 @@ def preview_stop_limit_order_gtd_buy(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Stop-Limit Order GTD Buy**
     ____________________________________
@@ -1805,7 +1805,7 @@ def preview_stop_limit_order_gtd_sell(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Preview Stop-Limit Order GTD Sell**
     _____________________________________

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
 
@@ -12,7 +12,7 @@ def get_products(
     contract_expiry_type: Optional[str] = None,
     expiring_contract_status: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **List Products**
     _________________
@@ -44,7 +44,7 @@ def get_products(
     return self.get(endpoint, params=params, **kwargs)
 
 
-def get_product(self, product_id: str, **kwargs):
+def get_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
     """
     **Get Product**
     _______________
@@ -67,7 +67,9 @@ def get_product(self, product_id: str, **kwargs):
     return self.get(endpoint, **kwargs)
 
 
-def get_product_book(self, product_id: str, limit: Optional[int] = None, **kwargs):
+def get_product_book(
+    self, product_id: str, limit: Optional[int] = None, **kwargs
+) -> Dict[str, Any]:
     """
     **Get Product Book**
     ____________________
@@ -92,7 +94,9 @@ def get_product_book(self, product_id: str, limit: Optional[int] = None, **kwarg
     return self.get(endpoint, params=params, **kwargs)
 
 
-def get_best_bid_ask(self, product_ids: Optional[List[str]] = None, **kwargs):
+def get_best_bid_ask(
+    self, product_ids: Optional[List[str]] = None, **kwargs
+) -> Dict[str, Any]:
     """
     **Get Best Bid/Ask**
     ____________________

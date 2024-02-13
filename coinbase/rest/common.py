@@ -1,7 +1,9 @@
+from typing import Any, Dict
+
 from coinbase.constants import API_PREFIX
 
 
-def get_unix_time(self, **kwargs):
+def get_unix_time(self, **kwargs) -> Dict[str, Any]:
     """
     **Get UNIX Time**
     _________________

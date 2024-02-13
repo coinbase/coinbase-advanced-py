@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
 
 
 def allocate_portfolio(
     self, portfolio_uuid: str, symbol: str, amount: str, currency: str, **kwargs
-):
+) -> Dict[str, Any]:
     """
     **Allocate Portfolio**
     ________________
@@ -36,7 +36,7 @@ def allocate_portfolio(
     return self.post(endpoint, data=data, **kwargs)
 
 
-def get_perps_portfolio_summary(self, portfolio_uuid: str, **kwargs):
+def get_perps_portfolio_summary(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
     """
     **Get Perpetuals Portfolio Summary**
     ________________
@@ -59,7 +59,7 @@ def get_perps_portfolio_summary(self, portfolio_uuid: str, **kwargs):
     return self.get(endpoint, **kwargs)
 
 
-def list_perps_positions(self, portfolio_uuid: str, **kwargs):
+def list_perps_positions(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
     """
     **List Perpetuals Positions**
     ________________
@@ -82,7 +82,9 @@ def list_perps_positions(self, portfolio_uuid: str, **kwargs):
     return self.get(endpoint, **kwargs)
 
 
-def get_perps_position(self, portfolio_uuid: str, symbol: str, **kwargs):
+def get_perps_position(
+    self, portfolio_uuid: str, symbol: str, **kwargs
+) -> Dict[str, Any]:
     """
     **Get Perpetuals Position**
     ________________

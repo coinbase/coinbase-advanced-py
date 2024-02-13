@@ -1,9 +1,11 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
 
 
-def get_portfolios(self, portfolio_type: Optional[str] = None, **kwargs):
+def get_portfolios(
+    self, portfolio_type: Optional[str] = None, **kwargs
+) -> Dict[str, Any]:
     """
     **List Portfolios**
     ___________________
@@ -28,7 +30,7 @@ def get_portfolios(self, portfolio_type: Optional[str] = None, **kwargs):
     return self.get(endpoint, params=params, **kwargs)
 
 
-def create_portfolio(self, name: str, **kwargs):
+def create_portfolio(self, name: str, **kwargs) -> Dict[str, Any]:
     """
     **Create Portfolio**
     ____________________
@@ -55,7 +57,7 @@ def create_portfolio(self, name: str, **kwargs):
     return self.post(endpoint, data=data, **kwargs)
 
 
-def get_portfolio_breakdown(self, portfolio_uuid: str, **kwargs):
+def get_portfolio_breakdown(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
     """
     **Get Portfolio Breakdown**
     ___________________________
@@ -85,7 +87,7 @@ def move_portfolio_funds(
     source_portfolio_uuid: str,
     target_portfolio_uuid: str,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Move Portfolio Funds**
     ________________________
@@ -117,7 +119,7 @@ def move_portfolio_funds(
     return self.post(endpoint, data=data, **kwargs)
 
 
-def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs):
+def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs) -> Dict[str, Any]:
     """
     **Edit Portfolio**
     __________________
@@ -144,7 +146,7 @@ def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs):
     return self.put(endpoint, data=data, **kwargs)
 
 
-def delete_portfolio(self, portfolio_uuid: str, **kwargs):
+def delete_portfolio(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
     """
     **Delete Portfolio**
     ____________________

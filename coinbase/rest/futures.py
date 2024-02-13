@@ -1,7 +1,9 @@
+from typing import Any, Dict
+
 from coinbase.constants import API_PREFIX
 
 
-def get_futures_balance_summary(self, **kwargs):
+def get_futures_balance_summary(self, **kwargs) -> Dict[str, Any]:
     """
     **Get Futures Balance Summary**
     _______________________________
@@ -24,7 +26,7 @@ def get_futures_balance_summary(self, **kwargs):
     return self.get(endpoint, **kwargs)
 
 
-def list_futures_positions(self, **kwargs):
+def list_futures_positions(self, **kwargs) -> Dict[str, Any]:
     """
     **List Futures Positions**
     __________________________
@@ -47,7 +49,7 @@ def list_futures_positions(self, **kwargs):
     return self.get(endpoint, **kwargs)
 
 
-def get_futures_position(self, product_id: str, **kwargs):
+def get_futures_position(self, product_id: str, **kwargs) -> Dict[str, Any]:
     """
     **Get Futures Position**
     _________________________
@@ -70,7 +72,7 @@ def get_futures_position(self, product_id: str, **kwargs):
     return self.get(endpoint, **kwargs)
 
 
-def schedule_futures_sweep(self, usd_amount: str, **kwargs):
+def schedule_futures_sweep(self, usd_amount: str, **kwargs) -> Dict[str, Any]:
     """
     **Schedule Futures Sweep**
     __________________________
@@ -95,7 +97,7 @@ def schedule_futures_sweep(self, usd_amount: str, **kwargs):
     return self.post(endpoint, data=data, **kwargs)
 
 
-def list_futures_sweeps(self, **kwargs):
+def list_futures_sweeps(self, **kwargs) -> Dict[str, Any]:
     """
     **List Futures Sweeps**
     _______________________
@@ -118,7 +120,7 @@ def list_futures_sweeps(self, **kwargs):
     return self.get(endpoint, **kwargs)
 
 
-def cancel_pending_futures_sweep(self, **kwargs):
+def cancel_pending_futures_sweep(self, **kwargs) -> Dict[str, Any]:
     """
     **Cancel Pending Futures Sweep**
     ________________________________

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
 
@@ -8,7 +8,7 @@ def get_transaction_summary(
     product_type: Optional[str] = None,
     contract_expiry_type: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Get Transactions Summary**
     _____________________________

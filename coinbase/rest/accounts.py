@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
 
 
 def get_accounts(
     self, limit: Optional[int] = None, cursor: Optional[str] = None, **kwargs
-):
+) -> Dict[str, Any]:
     """
     **List Accounts**
     _________________
@@ -28,7 +28,7 @@ def get_accounts(
     return self.get(endpoint, params=params, **kwargs)
 
 
-def get_account(self, account_uuid: str, **kwargs):
+def get_account(self, account_uuid: str, **kwargs) -> Dict[str, Any]:
     """
 
     **Get Account**

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
 
@@ -11,7 +11,7 @@ def create_convert_quote(
     user_incentive_id: Optional[str] = None,
     code_val: Optional[str] = None,
     **kwargs,
-):
+) -> Dict[str, Any]:
     """
     **Create Convert Quote**
     ________________________
@@ -54,7 +54,7 @@ def create_convert_quote(
 
 def get_convert_trade(
     self, trade_id: str, from_account: str, to_account: str, **kwargs
-):
+) -> Dict[str, Any]:
     """
     **Get Convert Trade**
     _____________________
@@ -83,7 +83,7 @@ def get_convert_trade(
 
 def commit_convert_trade(
     self, trade_id: str, from_account: str, to_account: str, **kwargs
-):
+) -> Dict[str, Any]:
     """
     **Commit Convert Trade**
     ________________________

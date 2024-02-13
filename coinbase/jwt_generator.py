@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives import serialization
 from coinbase.constants import BASE_URL, REST_SERVICE, WS_SERVICE
 
 
-def build_jwt(key_var, secret_var, service, uri=None):
+def build_jwt(key_var, secret_var, service, uri=None) -> str:
     """
     :meta private:
     """
@@ -44,7 +44,7 @@ def build_jwt(key_var, secret_var, service, uri=None):
     return jwt_token
 
 
-def build_rest_jwt(uri, key_var, secret_var):
+def build_rest_jwt(uri, key_var, secret_var) -> str:
     """
     **Build REST JWT**
     __________
@@ -64,7 +64,7 @@ def build_rest_jwt(uri, key_var, secret_var):
     return build_jwt(key_var, secret_var, REST_SERVICE, uri=uri)
 
 
-def build_ws_jwt(key_var, secret_var):
+def build_ws_jwt(key_var, secret_var) -> str:
     """
     **Build WebSocket JWT**
     __________
@@ -83,7 +83,7 @@ def build_ws_jwt(key_var, secret_var):
     return build_jwt(key_var, secret_var, WS_SERVICE)
 
 
-def format_jwt_uri(method, path):
+def format_jwt_uri(method, path) -> str:
     """
     **Format JWT URI**
     __________

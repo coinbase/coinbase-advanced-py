@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.3] - 2024-FEB-13
+
+### Added
+- Full MyPy annotations with return types for function definitions
+
 ## [1.1.2] - 2024-FEB-9
 
 ### Added

@@ -126,7 +126,7 @@ class WSBase(APIBase):
         self._background_exception = None
         self._retrying = False
 
-    def open(self):
+    def open(self) -> None:
         """
         **Open Websocket**
         __________________
@@ -143,7 +143,7 @@ class WSBase(APIBase):
 
         self._run_coroutine_threadsafe(self.open_async())
 
-    async def open_async(self):
+    async def open_async(self) -> None:
         """
         **Open Websocket Async**
         ________________________
@@ -182,7 +182,7 @@ class WSBase(APIBase):
             logger.error("Failed to establish WebSocket connection: %s", wse)
             raise WSClientException("Failed to establish WebSocket connection") from wse
 
-    def close(self):
+    def close(self) -> None:
         """
         **Close Websocket**
         ___________________
@@ -203,7 +203,7 @@ class WSBase(APIBase):
         else:
             raise WSClientException("Event loop is not running.")
 
-    async def close_async(self):
+    async def close_async(self) -> None:
         """
         **Close Websocket Async**
         _________________________
@@ -228,7 +228,7 @@ class WSBase(APIBase):
             logger.error("Failed to close WebSocket connection: %s", wse)
             raise WSClientException("Failed to close WebSocket connection.") from wse
 
-    def subscribe(self, product_ids: List[str], channels: List[str]):
+    def subscribe(self, product_ids: List[str], channels: List[str]) -> None:
         """
         **Subscribe**
         _____________
@@ -245,7 +245,9 @@ class WSBase(APIBase):
         else:
             raise WSClientException("Websocket Client is not open.")
 
-    async def subscribe_async(self, product_ids: List[str], channels: List[str]):
+    async def subscribe_async(
+        self, product_ids: List[str], channels: List[str]
+    ) -> None:
         """
         **Subscribe Async**
         ___________________
@@ -290,7 +292,7 @@ class WSBase(APIBase):
                     f"Failed to subscribe to {channel} channel for product ids {product_ids}."
                 ) from wse
 
-    def unsubscribe(self, product_ids: List[str], channels: List[str]):
+    def unsubscribe(self, product_ids: List[str], channels: List[str]) -> None:
         """
         **Unsubscribe**
         _______________
@@ -309,7 +311,9 @@ class WSBase(APIBase):
         else:
             raise WSClientException("Websocket Client is not open.")
 
-    async def unsubscribe_async(self, product_ids: List[str], channels: List[str]):
+    async def unsubscribe_async(
+        self, product_ids: List[str], channels: List[str]
+    ) -> None:
         """
         **Unsubscribe Async**
         _____________________
@@ -354,7 +358,7 @@ class WSBase(APIBase):
                     f"Failed to unsubscribe to {channel} channel for product ids {product_ids}."
                 ) from wse
 
-    def unsubscribe_all(self):
+    def unsubscribe_all(self) -> None:
         """
         **Unsubscribe All**
         ________________________
@@ -368,7 +372,7 @@ class WSBase(APIBase):
         else:
             raise WSClientException("Websocket Client is not open.")
 
-    async def unsubscribe_all_async(self):
+    async def unsubscribe_all_async(self) -> None:
         """
         **Unsubscribe All Async**
         _________________________
@@ -380,7 +384,7 @@ class WSBase(APIBase):
         for channel, product_ids in self.subscriptions.items():
             await self.unsubscribe_async(list(product_ids), [channel])
 
-    def sleep_with_exception_check(self, sleep: int):
+    def sleep_with_exception_check(self, sleep: int) -> None:
         """
         **Sleep with Exception Check**
         ______________________________
@@ -394,7 +398,7 @@ class WSBase(APIBase):
         time.sleep(sleep)
         self.raise_background_exception()
 
-    async def sleep_with_exception_check_async(self, sleep: int):
+    async def sleep_with_exception_check_async(self, sleep: int) -> None:
         """
         **Sleep with Exception Check Async**
         ____________________________________
@@ -408,7 +412,7 @@ class WSBase(APIBase):
         await asyncio.sleep(sleep)
         self.raise_background_exception()
 
-    def run_forever_with_exception_check(self):
+    def run_forever_with_exception_check(self) -> None:
         """
         **Run Forever with Exception Check**
         ____________________________________
@@ -421,7 +425,7 @@ class WSBase(APIBase):
             time.sleep(1)
             self.raise_background_exception()
 
-    async def run_forever_with_exception_check_async(self):
+    async def run_forever_with_exception_check_async(self) -> None:
         """
         **Run Forever with Exception Check Async**
         __________________________________________
@@ -434,7 +438,7 @@ class WSBase(APIBase):
             await asyncio.sleep(1)
             self.raise_background_exception()
 
-    def raise_background_exception(self):
+    def raise_background_exception(self) -> None:
         """
         **Raise Background Exception**
         ______________________________

@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import IO, Optional, Union
+from typing import IO, Any, Dict, Optional, Union
 
 import requests
 from requests.exceptions import HTTPError
@@ -81,7 +81,7 @@ class RESTBase(APIBase):
         if verbose:
             logger.setLevel(logging.DEBUG)
 
-    def get(self, url_path, params: Optional[dict] = None, **kwargs):
+    def get(self, url_path, params: Optional[dict] = None, **kwargs) -> Dict[str, Any]:
         """
         **Authenticated GET Request**
         _____________________________
@@ -109,7 +109,7 @@ class RESTBase(APIBase):
         params: Optional[dict] = None,
         data: Optional[dict] = None,
         **kwargs,
-    ):
+    ) -> Dict[str, Any]:
         """
         **Authenticated POST Request**
         ______________________________
@@ -135,7 +135,7 @@ class RESTBase(APIBase):
         params: Optional[dict] = None,
         data: Optional[dict] = None,
         **kwargs,
-    ):
+    ) -> Dict[str, Any]:
         """
         **Authenticated PUT Request**
         _____________________________
@@ -161,7 +161,7 @@ class RESTBase(APIBase):
         params: Optional[dict] = None,
         data: Optional[dict] = None,
         **kwargs,
-    ):
+    ) -> Dict[str, Any]:
         """
         **Authenticated DELETE Request**
         ________________________________

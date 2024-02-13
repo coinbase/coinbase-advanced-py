@@ -6,7 +6,7 @@
 Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome).
 This SDK also supports easy connection to the [Coinbase Advanced Trade WebSocket API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-overview).
 
-For thorough documentation of all available functions, refer to the following link: https://coinbase.github.io/coinbase-advanced-py/
+For thorough documentation of all available functions, refer to the following link: https://coinbase.github.io/coinbase-advanced-py
 
 ## Installation
 

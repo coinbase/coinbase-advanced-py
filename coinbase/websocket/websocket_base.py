@@ -8,6 +8,7 @@ from typing import IO, Callable, List, Optional, Union
 
 import backoff
 import websockets
+import ssl
 
 from coinbase import jwt_generator
 from coinbase.api_base import APIBase, get_logger
@@ -164,6 +165,7 @@ class WSBase(APIBase):
                 max_size=self.max_size,
                 user_agent_header=USER_AGENT,
                 extra_headers=headers,
+                ssl=ssl.SSLContext(),
             )
             logger.debug("Successfully connected to %s", self.base_url)
 

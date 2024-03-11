@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>coinbase.websocket.channels &mdash; Coinbase Advanced API Python SDK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Coinbase Advanced API Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../coinbase.rest.html">REST API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coinbase.websocket.html">Websocket API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jwt_generator.html">Authentication</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Coinbase Advanced API Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">coinbase.websocket.channels</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for coinbase.websocket.channels</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">coinbase.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CANDLES</span><span class="p">,</span>
+    <span class="n">HEARTBEATS</span><span class="p">,</span>
+    <span class="n">LEVEL2</span><span class="p">,</span>
+    <span class="n">MARKET_TRADES</span><span class="p">,</span>
+    <span class="n">STATUS</span><span class="p">,</span>
+    <span class="n">TICKER</span><span class="p">,</span>
+    <span class="n">TICKER_BATCH</span><span class="p">,</span>
+    <span class="n">USER</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="heartbeats">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.heartbeats">[docs]</a>
+<span class="k">def</span> <span class="nf">heartbeats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Heartbeats Subscribe**</span>
+<span class="sd">    ________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to heartbeats channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Heartbeats Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">HEARTBEATS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="heartbeats_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.heartbeats_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">heartbeats_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Heartbeats Subscribe Async**</span>
+<span class="sd">    ______________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to heartbeats channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Heartbeats Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">HEARTBEATS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="heartbeats_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.heartbeats_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">heartbeats_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Heartbeats Unsubscribe**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to heartbeats channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Heartbeats Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">HEARTBEATS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="heartbeats_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.heartbeats_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">heartbeats_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Heartbeats Unsubscribe Async**</span>
+<span class="sd">    ________________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to heartbeats channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Heartbeats Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">HEARTBEATS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="candles">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.candles">[docs]</a>
+<span class="k">def</span> <span class="nf">candles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Candles Subscribe**</span>
+<span class="sd">    _____________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to candles channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Candles Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">CANDLES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="candles_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.candles_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">candles_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Candles Subscribe Async**</span>
+<span class="sd">    ___________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to candles channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Candles Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">CANDLES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="candles_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.candles_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">candles_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Candles Unsubscribe**</span>
+<span class="sd">    _______________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to candles channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Candles Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">CANDLES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="candles_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.candles_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">candles_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Candles Unsubscribe Async**</span>
+<span class="sd">    _____________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to candles channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Candles Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">CANDLES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="market_trades">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.market_trades">[docs]</a>
+<span class="k">def</span> <span class="nf">market_trades</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Market Trades Subscribe**</span>
+<span class="sd">    ___________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to market_trades channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Market Trades Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">MARKET_TRADES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="market_trades_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.market_trades_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">market_trades_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Market Trades Subscribe Async**</span>
+<span class="sd">    _________________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to market_trades channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Market Trades Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">MARKET_TRADES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="market_trades_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.market_trades_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">market_trades_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Market Trades Unsubscribe**</span>
+<span class="sd">    _____________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to market_trades channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Market Trades Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">MARKET_TRADES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="market_trades_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.market_trades_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">market_trades_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Market Trades Unsubscribe Async**</span>
+<span class="sd">    ___________________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to market_trades channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Market Trades Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">MARKET_TRADES</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="status">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.status">[docs]</a>
+<span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Status Subscribe**</span>
+<span class="sd">    ____________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to status channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Status Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">STATUS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="status_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.status_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">status_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Status Subscribe Async**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to status channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Status Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">STATUS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="status_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.status_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">status_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Status Unsubscribe**</span>
+<span class="sd">    ______________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to status channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Status Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">STATUS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="status_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.status_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">status_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Status Unsubscribe Async**</span>
+<span class="sd">    ____________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to status channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Status Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">STATUS</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker">[docs]</a>
+<span class="k">def</span> <span class="nf">ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Subscribe**</span>
+<span class="sd">    ____________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to ticker channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">ticker_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Subscribe Async**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to ticker channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">ticker_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Unsubscribe**</span>
+<span class="sd">    ______________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to ticker channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">ticker_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Unsubscribe Async**</span>
+<span class="sd">    ____________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to ticker channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker_batch">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker_batch">[docs]</a>
+<span class="k">def</span> <span class="nf">ticker_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Batch Subscribe**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to ticker_batch channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Batch Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER_BATCH</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker_batch_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker_batch_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">ticker_batch_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Batch Subscribe Async**</span>
+<span class="sd">    ________________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to ticker_batch channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Batch Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER_BATCH</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker_batch_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker_batch_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">ticker_batch_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Batch Unsubscribe**</span>
+<span class="sd">    ____________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to ticker_batch channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Batch Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER_BATCH</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ticker_batch_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.ticker_batch_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">ticker_batch_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Ticker Batch Unsubscribe Async**</span>
+<span class="sd">    __________________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to ticker_batch channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Ticker Batch Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">TICKER_BATCH</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="level2">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.level2">[docs]</a>
+<span class="k">def</span> <span class="nf">level2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Level2 Subscribe**</span>
+<span class="sd">    ____________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to level2 channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Level2 Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">LEVEL2</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="level2_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.level2_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">level2_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Level2 Subscribe Async**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to level2 channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Level2 Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">LEVEL2</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="level2_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.level2_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">level2_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Level2 Unsubscribe**</span>
+<span class="sd">    ______________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to level2 channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Level2 Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">LEVEL2</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="level2_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.level2_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">level2_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Level2 Unsubscribe Async**</span>
+<span class="sd">    ____________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to level2 channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Level2 Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">LEVEL2</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="user">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.user">[docs]</a>
+<span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **User Subscribe**</span>
+<span class="sd">    __________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Subscribe to user channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `User Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">USER</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="user_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.user_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">user_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **User Subscribe Async**</span>
+<span class="sd">    ________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async subscribe to user channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `User Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">USER</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="user_unsubscribe">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.user_unsubscribe">[docs]</a>
+<span class="k">def</span> <span class="nf">user_unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **User Unsubscribe**</span>
+<span class="sd">    ____________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Unsubscribe to user channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `User Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">USER</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="user_unsubscribe_async">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.channels.user_unsubscribe_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">user_unsubscribe_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **User Unsubscribe Async**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Async unsubscribe to user channel for a list of products_ids.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `User Channel</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="p">[</span><span class="n">USER</span><span class="p">])</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Coinbase.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

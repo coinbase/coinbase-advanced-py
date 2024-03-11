@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>coinbase.rest.futures &mdash; Coinbase Advanced API Python SDK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Coinbase Advanced API Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../coinbase.rest.html">REST API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coinbase.websocket.html">Websocket API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jwt_generator.html">Authentication</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Coinbase Advanced API Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">coinbase.rest.futures</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for coinbase.rest.futures</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">coinbase.constants</span> <span class="kn">import</span> <span class="n">API_PREFIX</span>
+
+
+<div class="viewcode-block" id="get_futures_balance_summary">
+<a class="viewcode-back" href="../../../coinbase.rest.html#coinbase.rest.futures.get_futures_balance_summary">[docs]</a>
+<span class="k">def</span> <span class="nf">get_futures_balance_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Get Futures Balance Summary**</span>
+<span class="sd">    _______________________________</span>
+
+<span class="sd">    [GET] https://api.coinbase.com/api/v3/brokerage/cfm/balance_summary</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Get information on your balances related to `Coinbase Financial Markets &lt;https://www.coinbase.com/fcm&gt;`_ (CFM) futures trading.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Get Futures Balance Summary</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmbalancesummary&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">API_PREFIX</span><span class="si">}</span><span class="s2">/cfm/balance_summary&quot;</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="list_futures_positions">
+<a class="viewcode-back" href="../../../coinbase.rest.html#coinbase.rest.futures.list_futures_positions">[docs]</a>
+<span class="k">def</span> <span class="nf">list_futures_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **List Futures Positions**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    [GET] https://api.coinbase.com/api/v3/brokerage/cfm/positions</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Get a list of all open positions in CFM futures products.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `List Futures Positions</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmpositions&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">API_PREFIX</span><span class="si">}</span><span class="s2">/cfm/positions&quot;</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_futures_position">
+<a class="viewcode-back" href="../../../coinbase.rest.html#coinbase.rest.futures.get_futures_position">[docs]</a>
+<span class="k">def</span> <span class="nf">get_futures_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Get Futures Position**</span>
+<span class="sd">    _________________________</span>
+
+<span class="sd">    [GET] https://api.coinbase.com/api/v3/brokerage/cfm/positions/{product_id}</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Get the position of a specific CFM futures product.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Get Futures Position</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmposition&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">API_PREFIX</span><span class="si">}</span><span class="s2">/cfm/positions/</span><span class="si">{</span><span class="n">product_id</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="schedule_futures_sweep">
+<a class="viewcode-back" href="../../../coinbase.rest.html#coinbase.rest.futures.schedule_futures_sweep">[docs]</a>
+<span class="k">def</span> <span class="nf">schedule_futures_sweep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usd_amount</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Schedule Futures Sweep**</span>
+<span class="sd">    __________________________</span>
+
+<span class="sd">    [POST] https://api.coinbase.com/api/v3/brokerage/cfm/sweeps/schedule</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Schedule a sweep of funds from your CFTC-regulated futures account to your Coinbase Inc. USD Spot wallet.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Schedule Futures Sweep</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_schedulefcmsweep&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">API_PREFIX</span><span class="si">}</span><span class="s2">/cfm/sweeps/schedule&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;usd_amount&quot;</span><span class="p">:</span> <span class="n">usd_amount</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="list_futures_sweeps">
+<a class="viewcode-back" href="../../../coinbase.rest.html#coinbase.rest.futures.list_futures_sweeps">[docs]</a>
+<span class="k">def</span> <span class="nf">list_futures_sweeps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **List Futures Sweeps**</span>
+<span class="sd">    _______________________</span>
+
+<span class="sd">    [GET] https://api.coinbase.com/api/v3/brokerage/cfm/sweeps</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Get information on your pending and/or processing requests to sweep funds from your CFTC-regulated futures account to your Coinbase Inc. USD Spot wallet.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `List Futures Sweeps</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmsweeps&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">API_PREFIX</span><span class="si">}</span><span class="s2">/cfm/sweeps&quot;</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cancel_pending_futures_sweep">
+<a class="viewcode-back" href="../../../coinbase.rest.html#coinbase.rest.futures.cancel_pending_futures_sweep">[docs]</a>
+<span class="k">def</span> <span class="nf">cancel_pending_futures_sweep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Cancel Pending Futures Sweep**</span>
+<span class="sd">    ________________________________</span>
+
+<span class="sd">    [DELETE] https://api.coinbase.com/api/v3/brokerage/cfm/sweeps</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Description:**</span>
+
+<span class="sd">    Cancel your pending sweep of funds from your CFTC-regulated futures account to your Coinbase Inc. USD Spot wallet.</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Read more on the official documentation:** `Cancel Pending Futures Sweep</span>
+<span class="sd">    &lt;https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_cancelfcmsweep&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">API_PREFIX</span><span class="si">}</span><span class="s2">/cfm/sweeps&quot;</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Coinbase.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

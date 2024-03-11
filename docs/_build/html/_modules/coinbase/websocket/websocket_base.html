@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>coinbase.websocket.websocket_base &mdash; Coinbase Advanced API Python SDK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Coinbase Advanced API Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../coinbase.rest.html">REST API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../coinbase.websocket.html">Websocket API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jwt_generator.html">Authentication</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Coinbase Advanced API Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">coinbase.websocket.websocket_base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for coinbase.websocket.websocket_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">backoff</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+
+<span class="kn">from</span> <span class="nn">coinbase</span> <span class="kn">import</span> <span class="n">jwt_generator</span>
+<span class="kn">from</span> <span class="nn">coinbase.api_base</span> <span class="kn">import</span> <span class="n">APIBase</span><span class="p">,</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">coinbase.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">API_ENV_KEY</span><span class="p">,</span>
+    <span class="n">API_SECRET_ENV_KEY</span><span class="p">,</span>
+    <span class="n">SUBSCRIBE_MESSAGE_TYPE</span><span class="p">,</span>
+    <span class="n">UNSUBSCRIBE_MESSAGE_TYPE</span><span class="p">,</span>
+    <span class="n">USER_AGENT</span><span class="p">,</span>
+    <span class="n">WS_BASE_URL</span><span class="p">,</span>
+    <span class="n">WS_RETRY_BASE</span><span class="p">,</span>
+    <span class="n">WS_RETRY_FACTOR</span><span class="p">,</span>
+    <span class="n">WS_RETRY_MAX</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="s2">&quot;coinbase.WSClient&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="WSClientException">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.websocket_base.WSClientException">[docs]</a>
+<span class="k">class</span> <span class="nc">WSClientException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **WSClientException**</span>
+<span class="sd">    ________________________________________</span>
+
+<span class="sd">    -----------------------------------------</span>
+
+<span class="sd">    Exception raised for errors in the WebSocket client.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="WSClientConnectionClosedException">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.websocket_base.WSClientConnectionClosedException">[docs]</a>
+<span class="k">class</span> <span class="nc">WSClientConnectionClosedException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **WSClientConnectionClosedException**</span>
+<span class="sd">    ________________________________________</span>
+
+<span class="sd">    ----------------------------------------</span>
+
+<span class="sd">    Exception raised for unexpected closure in the WebSocket client.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="WSBase">
+<a class="viewcode-back" href="../../../coinbase.websocket.html#coinbase.websocket.websocket_base.WSBase">[docs]</a>
+<span class="k">class</span> <span class="nc">WSBase</span><span class="p">(</span><span class="n">APIBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **WSBase Client**</span>
+<span class="sd">    _____________________________</span>
+
+<span class="sd">    Initialize using WSClient</span>
+
+<span class="sd">    __________</span>
+
+<span class="sd">    **Parameters**:</span>
+
+<span class="sd">    - **api_key | Optional (str)** - The API key</span>
+<span class="sd">    - **api_secret | Optional (str)** - The API key secret</span>
+<span class="sd">    - **key_file | Optional (IO | str)** - Path to API key file or file-like object</span>
+<span class="sd">    - **base_url | (str)** - The websocket base url. Default set to &quot;wss://advanced-trade-ws.coinbase.com&quot;</span>
+<span class="sd">    - **timeout | Optional (int)** - Set timeout in seconds for REST requests</span>
+<span class="sd">    - **max_size | Optional (int)** - Max size in bytes for messages received. Default set to (10 * 1024 * 1024)</span>
+<span class="sd">    - **on_message | Optional (Callable[[str], None])** - Function called when a message is received</span>
+<span class="sd">    - **on_open | Optional ([Callable[[], None]])** - Function called when a connection is opened</span>
+<span class="sd">    - **on_close | Optional ([Callable[[], None]])** - Function called when a connection is closed</span>
+<span class="sd">    - **retry | Optional (bool)** - Enables automatic reconnections. Default set to True</span>
+<span class="sd">    - **verbose | Optional (bool)** - Enables debug logging. Default set to False</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">API_ENV_KEY</span><span class="p">),</span>
+        <span class="n">api_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">API_SECRET_ENV_KEY</span><span class="p">),</span>
+        <span class="n">key_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">IO</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="n">WS_BASE_URL</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+        <span class="n">on_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">on_open</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">on_close</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">retry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+            <span class="n">api_secret</span><span class="o">=</span><span class="n">api_secret</span><span class="p">,</span>
+            <span class="n">key_file</span><span class="o">=</span><span class="n">key_file</span><span class="p">,</span>
+            <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">on_message</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;on_message callback is required.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span> <span class="o">=</span> <span class="n">max_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_message</span> <span class="o">=</span> <span class="n">on_message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_open</span> <span class="o">=</span> <span class="n">on_open</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_close</span> <span class="o">=</span> <span class="n">on_close</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="n">retry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_retry_max_tries</span> <span class="o">=</span> <span class="n">WS_RETRY_MAX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_retry_base</span> <span class="o">=</span> <span class="n">WS_RETRY_BASE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_retry_factor</span> <span class="o">=</span> <span class="n">WS_RETRY_FACTOR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_background_exception</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_retrying</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Open Websocket**</span>
+<span class="sd">        __________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Open the websocket client connection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>  <span class="c1"># Create a new event loop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_coroutine_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">open_async</span><span class="p">())</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">open_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Open Websocket Async**</span>
+<span class="sd">        ________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Open the websocket client connection asynchronously.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_websocket_not_open</span><span class="p">()</span>
+
+        <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_headers</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Connecting to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websockets</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span>
+                <span class="n">open_timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+                <span class="n">max_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span>
+                <span class="n">user_agent_header</span><span class="o">=</span><span class="n">USER_AGENT</span><span class="p">,</span>
+                <span class="n">extra_headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Successfully connected to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_open</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">on_open</span><span class="p">()</span>
+
+            <span class="c1"># Start the message handler coroutine after establishing connection</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrying</span><span class="p">:</span>
+                <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_message_handler</span><span class="p">())</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span> <span class="k">as</span> <span class="n">toe</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Connection attempt timed out: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">toe</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;Connection attempt timed out&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">toe</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">websockets</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">WebSocketException</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">wse</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to establish WebSocket connection: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">wse</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;Failed to establish WebSocket connection&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">wse</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Close Websocket**</span>
+<span class="sd">        ___________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Close the websocket client connection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+            <span class="c1"># Schedule the asynchronous close</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_coroutine_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close_async</span><span class="p">())</span>
+            <span class="c1"># Stop the event loop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
+            <span class="c1"># Wait for the thread to finish</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="c1"># Close the event loop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;Event loop is not running.&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">close_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Close Websocket Async**</span>
+<span class="sd">        _________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Close the websocket client connection asynchronously.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_websocket_open</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Closing connection to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Connection closed to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_close</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">on_close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">websockets</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">WebSocketException</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">wse</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to close WebSocket connection: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">wse</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;Failed to close WebSocket connection.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">wse</span>
+
+    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">channels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Subscribe**</span>
+<span class="sd">        _____________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Subscribe to a list of channels for a list of product ids.</span>
+
+<span class="sd">        - **product_ids** - product ids to subscribe to</span>
+<span class="sd">        - **channels** - channels to subscribe to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_coroutine_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="n">channels</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;Websocket Client is not open.&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">subscribe_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">channels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Subscribe Async**</span>
+<span class="sd">        ___________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Async subscribe to a list of channels for a list of product ids.</span>
+
+<span class="sd">        - **product_ids** - product ids to subscribe to</span>
+<span class="sd">        - **channels** - channels to subscribe to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_websocket_open</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_subscription_message</span><span class="p">(</span>
+                    <span class="n">product_ids</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">SUBSCRIBE_MESSAGE_TYPE</span>
+                <span class="p">)</span>
+                <span class="n">json_message</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s2">&quot;Subscribing to channel </span><span class="si">%s</span><span class="s2"> for product IDs: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">channel</span><span class="p">,</span>
+                    <span class="n">product_ids</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">json_message</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Successfully subscribed&quot;</span><span class="p">)</span>
+
+                <span class="c1"># add to subscriptions map</span>
+                <span class="k">if</span> <span class="n">channel</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">product_ids</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">websockets</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">WebSocketException</span> <span class="k">as</span> <span class="n">wse</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed to subscribe to </span><span class="si">%s</span><span class="s2"> channel for product IDs </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">channel</span><span class="p">,</span>
+                    <span class="n">product_ids</span><span class="p">,</span>
+                    <span class="n">wse</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Failed to subscribe to </span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s2"> channel for product ids </span><span class="si">{</span><span class="n">product_ids</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span> <span class="kn">from</span> <span class="nn">wse</span>
+
+    <span class="k">def</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">channels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Unsubscribe**</span>
+<span class="sd">        _______________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Unsubscribe to a list of channels for a list of product ids.</span>
+
+<span class="sd">        - **product_ids** - product ids to unsubscribe from</span>
+<span class="sd">        - **channels** - channels to unsubscribe from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_coroutine_threadsafe</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="n">product_ids</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;Websocket Client is not open.&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">unsubscribe_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">channels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Unsubscribe Async**</span>
+<span class="sd">        _____________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Async unsubscribe to a list of channels for a list of product ids.</span>
+
+<span class="sd">        - **product_ids** - product ids to unsubscribe from</span>
+<span class="sd">        - **channels** - channels to unsubscribe from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_websocket_open</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_subscription_message</span><span class="p">(</span>
+                    <span class="n">product_ids</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">UNSUBSCRIBE_MESSAGE_TYPE</span>
+                <span class="p">)</span>
+                <span class="n">json_message</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s2">&quot;Unsubscribing from channel </span><span class="si">%s</span><span class="s2"> for product IDs: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">channel</span><span class="p">,</span>
+                    <span class="n">product_ids</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">json_message</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Successfully unsubscribed&quot;</span><span class="p">)</span>
+
+                <span class="c1"># remove from subscriptions map</span>
+                <span class="k">if</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">product_ids</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">websockets</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">WebSocketException</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">wse</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed to unsubscribe to </span><span class="si">%s</span><span class="s2"> channel for product IDs </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">channel</span><span class="p">,</span>
+                    <span class="n">product_ids</span><span class="p">,</span>
+                    <span class="n">wse</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Failed to unsubscribe to </span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s2"> channel for product ids </span><span class="si">{</span><span class="n">product_ids</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span> <span class="kn">from</span> <span class="nn">wse</span>
+
+    <span class="k">def</span> <span class="nf">unsubscribe_all</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Unsubscribe All**</span>
+<span class="sd">        ________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Unsubscribe from all channels you are currently subscribed to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_coroutine_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_all_async</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;Websocket Client is not open.&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">unsubscribe_all_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Unsubscribe All Async**</span>
+<span class="sd">        _________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Async unsubscribe from all channels you are currently subscribed to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">channel</span><span class="p">,</span> <span class="n">product_ids</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe_async</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">product_ids</span><span class="p">),</span> <span class="p">[</span><span class="n">channel</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">sleep_with_exception_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sleep</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Sleep with Exception Check**</span>
+<span class="sd">        ______________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Sleep for a specified number of seconds and check for background exceptions.</span>
+
+<span class="sd">        - **sleep** - number of seconds to sleep.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raise_background_exception</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">sleep_with_exception_check_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sleep</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Sleep with Exception Check Async**</span>
+<span class="sd">        ____________________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Async sleep for a specified number of seconds and check for background exceptions.</span>
+
+<span class="sd">        - **sleep** - number of seconds to sleep.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raise_background_exception</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">run_forever_with_exception_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Run Forever with Exception Check**</span>
+<span class="sd">        ____________________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Runs an endless loop, checking for background exceptions every second.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raise_background_exception</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run_forever_with_exception_check_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Run Forever with Exception Check Async**</span>
+<span class="sd">        __________________________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Async runs an endless loop, checking for background exceptions every second.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raise_background_exception</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">raise_background_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Raise Background Exception**</span>
+<span class="sd">        ______________________________</span>
+
+<span class="sd">        ------------------------</span>
+
+<span class="sd">        Raise any background exceptions that occurred in the message handler.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_exception</span><span class="p">:</span>
+            <span class="n">exception_to_raise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_exception</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_background_exception</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="n">exception_to_raise</span>
+
+    <span class="k">def</span> <span class="nf">_run_coroutine_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coro</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run_coroutine_threadsafe</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_is_websocket_open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span><span class="o">.</span><span class="n">open</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_resubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">channel</span><span class="p">,</span> <span class="n">product_ids</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribe_async</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">product_ids</span><span class="p">),</span> <span class="p">[</span><span class="n">channel</span><span class="p">])</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_retry_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+            <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+            <span class="n">WSClientException</span><span class="p">,</span>
+            <span class="n">max_tries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_retry_max_tries</span><span class="p">,</span>
+            <span class="n">base</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_retry_base</span><span class="p">,</span>
+            <span class="n">factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_retry_factor</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">_retry_connect_and_resubscribe</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Retrying connection attempt </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_websocket_open</span><span class="p">():</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_async</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Resubscribing to channels&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resubscribe</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">_retry_connect_and_resubscribe</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_message_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handler_open</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_websocket_open</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">websocket</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_message</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">on_message</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">websockets</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionClosedOK</span> <span class="k">as</span> <span class="n">cco</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Connection closed (OK): </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cco</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="n">websockets</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionClosedError</span> <span class="k">as</span> <span class="n">cce</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Connection closed (ERROR): </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cce</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_retrying</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Retrying connection&quot;</span><span class="p">)</span>
+                        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retry_connection</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_retrying</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">except</span> <span class="n">WSClientException</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                            <span class="s2">&quot;Connection closed unexpectedly. Retry attempts failed.&quot;</span>
+                        <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_background_exception</span> <span class="o">=</span> <span class="n">WSClientConnectionClosedException</span><span class="p">(</span>
+                            <span class="s2">&quot;Connection closed unexpectedly. Retry attempts failed.&quot;</span>
+                        <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_retrying</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Connection closed unexpectedly with error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cce</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_background_exception</span> <span class="o">=</span> <span class="n">WSClientConnectionClosedException</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Connection closed unexpectedly with error: </span><span class="si">{</span><span class="n">cce</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="p">(</span>
+                <span class="n">websockets</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">WebSocketException</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span>
+                <span class="n">WSClientException</span><span class="p">,</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Exception in message handler: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_background_exception</span> <span class="o">=</span> <span class="n">WSClientException</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Exception in message handler: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">_build_subscription_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">product_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">message_type</span><span class="p">,</span>
+            <span class="s2">&quot;product_ids&quot;</span><span class="p">:</span> <span class="n">product_ids</span><span class="p">,</span>
+            <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="p">,</span>
+            <span class="s2">&quot;jwt&quot;</span><span class="p">:</span> <span class="n">jwt_generator</span><span class="o">.</span><span class="n">build_ws_jwt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_secret</span><span class="p">),</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()),</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_websocket_not_open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_websocket_open</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;WebSocket is already open.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_websocket_open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_websocket_open</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">WSClientException</span><span class="p">(</span><span class="s2">&quot;WebSocket is closed or was never opened.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :meta private:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;x-cb-retry-counter&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_retry_count</span><span class="p">)}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Coinbase.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

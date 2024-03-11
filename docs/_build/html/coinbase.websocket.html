@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Websocket API Client &mdash; Coinbase Advanced API Python SDK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authentication" href="jwt_generator.html" />
+    <link rel="prev" title="REST API Client" href="coinbase.rest.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Coinbase Advanced API Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="coinbase.rest.html">REST API Client</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Websocket API Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#wsclient-constructor">WSClient Constructor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase"><code class="docutils literal notranslate"><span class="pre">WSBase()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#websocket-utils">WebSocket Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.open_async"><code class="docutils literal notranslate"><span class="pre">open_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.close_async"><code class="docutils literal notranslate"><span class="pre">close_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.subscribe"><code class="docutils literal notranslate"><span class="pre">subscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.subscribe_async"><code class="docutils literal notranslate"><span class="pre">subscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe"><code class="docutils literal notranslate"><span class="pre">unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe_all"><code class="docutils literal notranslate"><span class="pre">unsubscribe_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe_all_async"><code class="docutils literal notranslate"><span class="pre">unsubscribe_all_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.sleep_with_exception_check"><code class="docutils literal notranslate"><span class="pre">sleep_with_exception_check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.sleep_with_exception_check_async"><code class="docutils literal notranslate"><span class="pre">sleep_with_exception_check_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.run_forever_with_exception_check"><code class="docutils literal notranslate"><span class="pre">run_forever_with_exception_check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.run_forever_with_exception_check_async"><code class="docutils literal notranslate"><span class="pre">run_forever_with_exception_check_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSBase.raise_background_exception"><code class="docutils literal notranslate"><span class="pre">raise_background_exception()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-coinbase.websocket.channels">Channels</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.candles"><code class="docutils literal notranslate"><span class="pre">candles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.candles_async"><code class="docutils literal notranslate"><span class="pre">candles_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.candles_unsubscribe"><code class="docutils literal notranslate"><span class="pre">candles_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.candles_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">candles_unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.heartbeats"><code class="docutils literal notranslate"><span class="pre">heartbeats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.heartbeats_async"><code class="docutils literal notranslate"><span class="pre">heartbeats_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.heartbeats_unsubscribe"><code class="docutils literal notranslate"><span class="pre">heartbeats_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.heartbeats_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">heartbeats_unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.level2"><code class="docutils literal notranslate"><span class="pre">level2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.level2_async"><code class="docutils literal notranslate"><span class="pre">level2_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.level2_unsubscribe"><code class="docutils literal notranslate"><span class="pre">level2_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.level2_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">level2_unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.market_trades"><code class="docutils literal notranslate"><span class="pre">market_trades()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.market_trades_async"><code class="docutils literal notranslate"><span class="pre">market_trades_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.market_trades_unsubscribe"><code class="docutils literal notranslate"><span class="pre">market_trades_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.market_trades_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">market_trades_unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.status"><code class="docutils literal notranslate"><span class="pre">status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.status_async"><code class="docutils literal notranslate"><span class="pre">status_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.status_unsubscribe"><code class="docutils literal notranslate"><span class="pre">status_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.status_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">status_unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker"><code class="docutils literal notranslate"><span class="pre">ticker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker_async"><code class="docutils literal notranslate"><span class="pre">ticker_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker_batch"><code class="docutils literal notranslate"><span class="pre">ticker_batch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker_batch_async"><code class="docutils literal notranslate"><span class="pre">ticker_batch_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker_batch_unsubscribe"><code class="docutils literal notranslate"><span class="pre">ticker_batch_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker_batch_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">ticker_batch_unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker_unsubscribe"><code class="docutils literal notranslate"><span class="pre">ticker_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.ticker_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">ticker_unsubscribe_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.user"><code class="docutils literal notranslate"><span class="pre">user()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.user_async"><code class="docutils literal notranslate"><span class="pre">user_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.user_unsubscribe"><code class="docutils literal notranslate"><span class="pre">user_unsubscribe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.channels.user_unsubscribe_async"><code class="docutils literal notranslate"><span class="pre">user_unsubscribe_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSClientException"><code class="docutils literal notranslate"><span class="pre">WSClientException()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coinbase.websocket.websocket_base.WSClientConnectionClosedException"><code class="docutils literal notranslate"><span class="pre">WSClientConnectionClosedException()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jwt_generator.html">Authentication</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Coinbase Advanced API Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Websocket API Client</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/coinbase.websocket.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="websocket-api-client">
+<h1>Websocket API Client<a class="headerlink" href="#websocket-api-client" title="Link to this heading"></a></h1>
+<section id="wsclient-constructor">
+<h2>WSClient Constructor<a class="headerlink" href="#wsclient-constructor" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.</span></span><span class="sig-name descname"><span class="pre">WSBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IO</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wss://advanced-trade-ws.coinbase.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10485760</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_open</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_close</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/coinbase/websocket/websocket_base.html#WSBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase" title="Link to this definition"></a></dt>
+<dd><section id="wsbase-client">
+<h3><strong>WSBase Client</strong><a class="headerlink" href="#wsbase-client" title="Link to this heading"></a></h3>
+<p>Initialize using WSClient</p>
+<hr class="docutils" />
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>api_key | Optional (str)</strong> - The API key</p></li>
+<li><p><strong>api_secret | Optional (str)</strong> - The API key secret</p></li>
+<li><p><strong>key_file | Optional (IO | str)</strong> - Path to API key file or file-like object</p></li>
+<li><p><strong>base_url | (str)</strong> - The websocket base url. Default set to “wss://advanced-trade-ws.coinbase.com”</p></li>
+<li><p><strong>timeout | Optional (int)</strong> - Set timeout in seconds for REST requests</p></li>
+<li><p><strong>max_size | Optional (int)</strong> - Max size in bytes for messages received. Default set to (10 * 1024 * 1024)</p></li>
+<li><p><strong>on_message | Optional (Callable[[str], None])</strong> - Function called when a message is received</p></li>
+<li><p><strong>on_open | Optional ([Callable[[], None]])</strong> - Function called when a connection is opened</p></li>
+<li><p><strong>on_close | Optional ([Callable[[], None]])</strong> - Function called when a connection is closed</p></li>
+<li><p><strong>retry | Optional (bool)</strong> - Enables automatic reconnections. Default set to True</p></li>
+<li><p><strong>verbose | Optional (bool)</strong> - Enables debug logging. Default set to False</p></li>
+</ul>
+</section>
+</dd></dl>
+
+</section>
+<section id="websocket-utils">
+<h2>WebSocket Utils<a class="headerlink" href="#websocket-utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.open">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.open" title="Link to this definition"></a></dt>
+<dd><section id="open-websocket">
+<h3><strong>Open Websocket</strong><a class="headerlink" href="#open-websocket" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Open the websocket client connection.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.open_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">open_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.open_async" title="Link to this definition"></a></dt>
+<dd><section id="open-websocket-async">
+<h3><strong>Open Websocket Async</strong><a class="headerlink" href="#open-websocket-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Open the websocket client connection asynchronously.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.close">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.close" title="Link to this definition"></a></dt>
+<dd><section id="close-websocket">
+<h3><strong>Close Websocket</strong><a class="headerlink" href="#close-websocket" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Close the websocket client connection.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.close_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">close_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.close_async" title="Link to this definition"></a></dt>
+<dd><section id="close-websocket-async">
+<h3><strong>Close Websocket Async</strong><a class="headerlink" href="#close-websocket-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Close the websocket client connection asynchronously.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.subscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.subscribe" title="Link to this definition"></a></dt>
+<dd><section id="subscribe">
+<h3><strong>Subscribe</strong><a class="headerlink" href="#subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Subscribe to a list of channels for a list of product ids.</p>
+<ul class="simple">
+<li><p><strong>product_ids</strong> - product ids to subscribe to</p></li>
+<li><p><strong>channels</strong> - channels to subscribe to</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.subscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">subscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.subscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="subscribe-async">
+<h3><strong>Subscribe Async</strong><a class="headerlink" href="#subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Async subscribe to a list of channels for a list of product ids.</p>
+<ul class="simple">
+<li><p><strong>product_ids</strong> - product ids to subscribe to</p></li>
+<li><p><strong>channels</strong> - channels to subscribe to</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="unsubscribe">
+<h3><strong>Unsubscribe</strong><a class="headerlink" href="#unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Unsubscribe to a list of channels for a list of product ids.</p>
+<ul class="simple">
+<li><p><strong>product_ids</strong> - product ids to unsubscribe from</p></li>
+<li><p><strong>channels</strong> - channels to unsubscribe from</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="unsubscribe-async">
+<h3><strong>Unsubscribe Async</strong><a class="headerlink" href="#unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Async unsubscribe to a list of channels for a list of product ids.</p>
+<ul class="simple">
+<li><p><strong>product_ids</strong> - product ids to unsubscribe from</p></li>
+<li><p><strong>channels</strong> - channels to unsubscribe from</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.unsubscribe_all">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">unsubscribe_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe_all" title="Link to this definition"></a></dt>
+<dd><section id="unsubscribe-all">
+<h3><strong>Unsubscribe All</strong><a class="headerlink" href="#unsubscribe-all" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Unsubscribe from all channels you are currently subscribed to.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.unsubscribe_all_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">unsubscribe_all_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.unsubscribe_all_async" title="Link to this definition"></a></dt>
+<dd><section id="unsubscribe-all-async">
+<h3><strong>Unsubscribe All Async</strong><a class="headerlink" href="#unsubscribe-all-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Async unsubscribe from all channels you are currently subscribed to.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.sleep_with_exception_check">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">sleep_with_exception_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.sleep_with_exception_check" title="Link to this definition"></a></dt>
+<dd><section id="sleep-with-exception-check">
+<h3><strong>Sleep with Exception Check</strong><a class="headerlink" href="#sleep-with-exception-check" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Sleep for a specified number of seconds and check for background exceptions.</p>
+<ul class="simple">
+<li><p><strong>sleep</strong> - number of seconds to sleep.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.sleep_with_exception_check_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">sleep_with_exception_check_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.sleep_with_exception_check_async" title="Link to this definition"></a></dt>
+<dd><section id="sleep-with-exception-check-async">
+<h3><strong>Sleep with Exception Check Async</strong><a class="headerlink" href="#sleep-with-exception-check-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Async sleep for a specified number of seconds and check for background exceptions.</p>
+<ul class="simple">
+<li><p><strong>sleep</strong> - number of seconds to sleep.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.run_forever_with_exception_check">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">run_forever_with_exception_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.run_forever_with_exception_check" title="Link to this definition"></a></dt>
+<dd><section id="run-forever-with-exception-check">
+<h3><strong>Run Forever with Exception Check</strong><a class="headerlink" href="#run-forever-with-exception-check" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Runs an endless loop, checking for background exceptions every second.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.run_forever_with_exception_check_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">run_forever_with_exception_check_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.run_forever_with_exception_check_async" title="Link to this definition"></a></dt>
+<dd><section id="run-forever-with-exception-check-async">
+<h3><strong>Run Forever with Exception Check Async</strong><a class="headerlink" href="#run-forever-with-exception-check-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Async runs an endless loop, checking for background exceptions every second.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSBase.raise_background_exception">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.WSBase.</span></span><span class="sig-name descname"><span class="pre">raise_background_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coinbase.websocket.websocket_base.WSBase.raise_background_exception" title="Link to this definition"></a></dt>
+<dd><section id="raise-background-exception">
+<h3><strong>Raise Background Exception</strong><a class="headerlink" href="#raise-background-exception" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Raise any background exceptions that occurred in the message handler.</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-coinbase.websocket.channels">
+<span id="channels"></span><h2>Channels<a class="headerlink" href="#module-coinbase.websocket.channels" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.candles">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">candles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#candles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.candles" title="Link to this definition"></a></dt>
+<dd><section id="candles-subscribe">
+<h3><strong>Candles Subscribe</strong><a class="headerlink" href="#candles-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to candles channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel">Candles Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.candles_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">candles_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#candles_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.candles_async" title="Link to this definition"></a></dt>
+<dd><section id="candles-subscribe-async">
+<h3><strong>Candles Subscribe Async</strong><a class="headerlink" href="#candles-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to candles channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel">Candles Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.candles_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">candles_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#candles_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.candles_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="candles-unsubscribe">
+<h3><strong>Candles Unsubscribe</strong><a class="headerlink" href="#candles-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to candles channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel">Candles Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.candles_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">candles_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#candles_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.candles_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="candles-unsubscribe-async">
+<h3><strong>Candles Unsubscribe Async</strong><a class="headerlink" href="#candles-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to candles channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#candles-channel">Candles Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.heartbeats">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">heartbeats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#heartbeats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.heartbeats" title="Link to this definition"></a></dt>
+<dd><section id="heartbeats-subscribe">
+<h3><strong>Heartbeats Subscribe</strong><a class="headerlink" href="#heartbeats-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to heartbeats channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel">Heartbeats Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.heartbeats_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">heartbeats_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#heartbeats_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.heartbeats_async" title="Link to this definition"></a></dt>
+<dd><section id="heartbeats-subscribe-async">
+<h3><strong>Heartbeats Subscribe Async</strong><a class="headerlink" href="#heartbeats-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to heartbeats channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel">Heartbeats Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.heartbeats_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">heartbeats_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#heartbeats_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.heartbeats_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="heartbeats-unsubscribe">
+<h3><strong>Heartbeats Unsubscribe</strong><a class="headerlink" href="#heartbeats-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to heartbeats channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel">Heartbeats Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.heartbeats_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">heartbeats_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#heartbeats_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.heartbeats_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="heartbeats-unsubscribe-async">
+<h3><strong>Heartbeats Unsubscribe Async</strong><a class="headerlink" href="#heartbeats-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to heartbeats channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#heartbeats-channel">Heartbeats Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.level2">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">level2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#level2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.level2" title="Link to this definition"></a></dt>
+<dd><section id="level2-subscribe">
+<h3><strong>Level2 Subscribe</strong><a class="headerlink" href="#level2-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to level2 channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel">Level2 Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.level2_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">level2_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#level2_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.level2_async" title="Link to this definition"></a></dt>
+<dd><section id="level2-subscribe-async">
+<h3><strong>Level2 Subscribe Async</strong><a class="headerlink" href="#level2-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to level2 channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel">Level2 Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.level2_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">level2_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#level2_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.level2_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="level2-unsubscribe">
+<h3><strong>Level2 Unsubscribe</strong><a class="headerlink" href="#level2-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to level2 channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel">Level2 Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.level2_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">level2_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#level2_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.level2_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="level2-unsubscribe-async">
+<h3><strong>Level2 Unsubscribe Async</strong><a class="headerlink" href="#level2-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to level2 channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#level2-channel">Level2 Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.market_trades">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">market_trades</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#market_trades"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.market_trades" title="Link to this definition"></a></dt>
+<dd><section id="market-trades-subscribe">
+<h3><strong>Market Trades Subscribe</strong><a class="headerlink" href="#market-trades-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to market_trades channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel">Market Trades Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.market_trades_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">market_trades_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#market_trades_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.market_trades_async" title="Link to this definition"></a></dt>
+<dd><section id="market-trades-subscribe-async">
+<h3><strong>Market Trades Subscribe Async</strong><a class="headerlink" href="#market-trades-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to market_trades channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel">Market Trades Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.market_trades_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">market_trades_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#market_trades_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.market_trades_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="market-trades-unsubscribe">
+<h3><strong>Market Trades Unsubscribe</strong><a class="headerlink" href="#market-trades-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to market_trades channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel">Market Trades Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.market_trades_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">market_trades_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#market_trades_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.market_trades_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="market-trades-unsubscribe-async">
+<h3><strong>Market Trades Unsubscribe Async</strong><a class="headerlink" href="#market-trades-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to market_trades channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#market-trades-channel">Market Trades Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.status">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.status" title="Link to this definition"></a></dt>
+<dd><section id="status-subscribe">
+<h3><strong>Status Subscribe</strong><a class="headerlink" href="#status-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to status channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel">Status Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.status_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">status_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#status_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.status_async" title="Link to this definition"></a></dt>
+<dd><section id="status-subscribe-async">
+<h3><strong>Status Subscribe Async</strong><a class="headerlink" href="#status-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to status channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel">Status Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.status_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">status_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#status_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.status_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="status-unsubscribe">
+<h3><strong>Status Unsubscribe</strong><a class="headerlink" href="#status-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to status channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel">Status Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.status_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">status_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#status_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.status_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="status-unsubscribe-async">
+<h3><strong>Status Unsubscribe Async</strong><a class="headerlink" href="#status-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to status channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#status-channel">Status Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker" title="Link to this definition"></a></dt>
+<dd><section id="ticker-subscribe">
+<h3><strong>Ticker Subscribe</strong><a class="headerlink" href="#ticker-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to ticker channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel">Ticker Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker_async" title="Link to this definition"></a></dt>
+<dd><section id="ticker-subscribe-async">
+<h3><strong>Ticker Subscribe Async</strong><a class="headerlink" href="#ticker-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to ticker channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel">Ticker Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker_batch">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker_batch" title="Link to this definition"></a></dt>
+<dd><section id="ticker-batch-subscribe">
+<h3><strong>Ticker Batch Subscribe</strong><a class="headerlink" href="#ticker-batch-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to ticker_batch channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel">Ticker Batch Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker_batch_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker_batch_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker_batch_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker_batch_async" title="Link to this definition"></a></dt>
+<dd><section id="ticker-batch-subscribe-async">
+<h3><strong>Ticker Batch Subscribe Async</strong><a class="headerlink" href="#ticker-batch-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to ticker_batch channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel">Ticker Batch Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker_batch_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker_batch_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker_batch_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker_batch_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="ticker-batch-unsubscribe">
+<h3><strong>Ticker Batch Unsubscribe</strong><a class="headerlink" href="#ticker-batch-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to ticker_batch channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel">Ticker Batch Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker_batch_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker_batch_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker_batch_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker_batch_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="ticker-batch-unsubscribe-async">
+<h3><strong>Ticker Batch Unsubscribe Async</strong><a class="headerlink" href="#ticker-batch-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to ticker_batch channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-batch-channel">Ticker Batch Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="ticker-unsubscribe">
+<h3><strong>Ticker Unsubscribe</strong><a class="headerlink" href="#ticker-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to ticker channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel">Ticker Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.ticker_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">ticker_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#ticker_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.ticker_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="ticker-unsubscribe-async">
+<h3><strong>Ticker Unsubscribe Async</strong><a class="headerlink" href="#ticker-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to ticker channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#ticker-channel">Ticker Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.user">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.user" title="Link to this definition"></a></dt>
+<dd><section id="user-subscribe">
+<h3><strong>User Subscribe</strong><a class="headerlink" href="#user-subscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Subscribe to user channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel">User Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.user_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">user_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#user_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.user_async" title="Link to this definition"></a></dt>
+<dd><section id="user-subscribe-async">
+<h3><strong>User Subscribe Async</strong><a class="headerlink" href="#user-subscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async subscribe to user channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel">User Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.user_unsubscribe">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">user_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#user_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.user_unsubscribe" title="Link to this definition"></a></dt>
+<dd><section id="user-unsubscribe">
+<h3><strong>User Unsubscribe</strong><a class="headerlink" href="#user-unsubscribe" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Unsubscribe to user channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel">User Channel</a></p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.channels.user_unsubscribe_async">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coinbase.websocket.channels.</span></span><span class="sig-name descname"><span class="pre">user_unsubscribe_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/coinbase/websocket/channels.html#user_unsubscribe_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.channels.user_unsubscribe_async" title="Link to this definition"></a></dt>
+<dd><section id="user-unsubscribe-async">
+<h3><strong>User Unsubscribe Async</strong><a class="headerlink" href="#user-unsubscribe-async" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p><strong>Description:</strong></p>
+<p>Async unsubscribe to user channel for a list of products_ids.</p>
+<hr class="docutils" />
+<p><strong>Read more on the official documentation:</strong> <a class="reference external" href="https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels#user-channel">User Channel</a></p>
+</section>
+</dd></dl>
+
+</section>
+<section id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSClientException">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.</span></span><span class="sig-name descname"><span class="pre">WSClientException</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/coinbase/websocket/websocket_base.html#WSClientException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.websocket_base.WSClientException" title="Link to this definition"></a></dt>
+<dd><section id="wsclientexception">
+<h3><strong>WSClientException</strong><a class="headerlink" href="#wsclientexception" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Exception raised for errors in the WebSocket client.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coinbase.websocket.websocket_base.WSClientConnectionClosedException">
+<span class="sig-prename descclassname"><span class="pre">coinbase.websocket.websocket_base.</span></span><span class="sig-name descname"><span class="pre">WSClientConnectionClosedException</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/coinbase/websocket/websocket_base.html#WSClientConnectionClosedException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coinbase.websocket.websocket_base.WSClientConnectionClosedException" title="Link to this definition"></a></dt>
+<dd><section id="wsclientconnectionclosedexception">
+<h3><strong>WSClientConnectionClosedException</strong><a class="headerlink" href="#wsclientconnectionclosedexception" title="Link to this heading"></a></h3>
+<hr class="docutils" />
+<p>Exception raised for unexpected closure in the WebSocket client.</p>
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="coinbase.rest.html" class="btn btn-neutral float-left" title="REST API Client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="jwt_generator.html" class="btn btn-neutral float-right" title="Authentication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Coinbase.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

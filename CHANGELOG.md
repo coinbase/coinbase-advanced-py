@@ -59,4 +59,4 @@
 ## [1.0.0] - 2023-DEC-18
 
 ### Added
-- Initial release of the Coinbase Advanced Trading API Pyth
+- Initial release of the Coinbase Advanced Trading API Python SDK

@@ -1,0 +1,47 @@
+name: Build and Test
+
+on: [push]
+
+jobs:
+  format-code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install dependencies and format code
+      run: |
+        sudo apt-get install -y make
+        pip3 install -r lint_requirements.txt
+        make format
+
+        if git diff --quiet; then
+          echo "No code formatting changes detected."
+        else
+          echo "Code formatting changes detected. Please run 'make format' locally and commit the changes."
+          git diff --exit-code
+          exit 1
+        fi
+
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies and run tests
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip3 install --upgrade pip
+        pip3 install -r requirements.txt
+        pip3 install -r test_requirements.txt
+
+        python -m unittest discover -v

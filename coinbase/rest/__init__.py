@@ -27,6 +27,9 @@ class RESTClient(RESTBase):
         limit_order_gtd,
         limit_order_gtd_buy,
         limit_order_gtd_sell,
+        limit_order_ioc,
+        limit_order_ioc_buy,
+        limit_order_ioc_sell,
         list_orders,
         market_order,
         market_order_buy,
@@ -38,6 +41,9 @@ class RESTClient(RESTBase):
         preview_limit_order_gtd,
         preview_limit_order_gtd_buy,
         preview_limit_order_gtd_sell,
+        preview_limit_order_ioc,
+        preview_limit_order_ioc_buy,
+        preview_limit_order_ioc_sell,
         preview_market_order,
         preview_market_order_buy,
         preview_market_order_sell,
@@ -55,6 +61,7 @@ class RESTClient(RESTBase):
         stop_limit_order_gtd_buy,
         stop_limit_order_gtd_sell,
     )
+    from .payments import get_payment_method, list_payment_methods
     from .perpetuals import (
         allocate_portfolio,
         get_perps_portfolio_summary,

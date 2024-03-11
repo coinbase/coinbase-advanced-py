@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0] - 2024-MAR-11
+
+### Added
+- Support for limit IOC order types
+- Support for payments endpoints
+
+### Changed
+- get_unix_time() no longer requires authentication
+- Log message when subscribing or unsubscribing via WSClient
+
+### Fixed
+- Unsubscribe_all() no longer sends message if not subscribed to any channel
+
 ## [1.1.3] - 2024-FEB-13
 
 ### Added

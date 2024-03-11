@@ -81,9 +81,11 @@ class RESTBase(APIBase):
         if verbose:
             logger.setLevel(logging.DEBUG)
 
-    def get(self, url_path, params: Optional[dict] = None, **kwargs) -> Dict[str, Any]:
+    def get(
+        self, url_path, params: Optional[dict] = None, public=False, **kwargs
+    ) -> Dict[str, Any]:
         """
-        **Authenticated GET Request**
+        **GET Request**
         _____________________________
 
         __________
@@ -92,6 +94,7 @@ class RESTBase(APIBase):
 
         - **url_path | (str)** - the URL path
         - **params | Optional ([dict])** - the query parameters
+        - **public | (bool)** - flag indicating whether to treat endpoint as public
 
 
         """
@@ -101,7 +104,9 @@ class RESTBase(APIBase):
         if kwargs:
             params.update(kwargs)
 
-        return self.prepare_and_send_request("GET", url_path, params, data=None)
+        return self.prepare_and_send_request(
+            "GET", url_path, params, data=None, public=public
+        )
 
     def post(
         self,
@@ -187,11 +192,12 @@ class RESTBase(APIBase):
         url_path,
         params: Optional[dict] = None,
         data: Optional[dict] = None,
+        public=False,
     ):
         """
         :meta private:
         """
-        headers = self.set_headers(http_method, url_path)
+        headers = self.set_headers(http_method, url_path, public)
 
         if params is not None:
             params = {key: value for key, value in params.items() if value is not None}
@@ -226,14 +232,20 @@ class RESTBase(APIBase):
 
         return response.json()
 
-    def set_headers(self, method, path):
+    def set_headers(self, method, path, public):
         """
         :meta private:
         """
         uri = f"{method} {self.base_url}{path}"
-        jwt = jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)
+
         return {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {jwt}",
             "User-Agent": USER_AGENT,
+            "Content-Type": "application/json",
+            **(
+                {
+                    "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)}",
+                }
+                if not public
+                else {}
+            ),
         }

@@ -186,6 +186,149 @@ def market_order_sell(
     )
 
 
+# Limit IOC Orders
+def limit_order_ioc(
+    self,
+    client_order_id: str,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Limit IOC Order**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Limit Order with a IOC time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+
+    sor_limit_ioc = {"base_size": base_size, "limit_price": limit_price}
+
+    order_configuration = {"sor_limit_ioc": sor_limit_ioc}
+
+    return create_order(
+        self,
+        client_order_id,
+        product_id,
+        side,
+        order_configuration,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def limit_order_ioc_buy(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Limit IOC Order Buy**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Buy Limit Order with a IOC time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+
+    return limit_order_ioc(
+        self,
+        client_order_id,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def limit_order_ioc_sell(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Limit IOC Order Sell**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Sell Limit Order with a IOC time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+
+    return limit_order_ioc(
+        self,
+        client_order_id,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
 # Limit GTC orders
 def limit_order_gtc(
     self,
@@ -1200,6 +1343,149 @@ def preview_market_order_sell(
         product_id,
         "SELL",
         base_size=base_size,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        **kwargs,
+    )
+
+
+# Preview Limit IOC orders
+def preview_limit_order_ioc(
+    self,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Limit Order IOC**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order IOC request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    order_configuration = {
+        "sor_limit_ioc": {"base_size": base_size, "limit_price": limit_price}
+    }
+
+    return preview_order(
+        self,
+        product_id,
+        side,
+        order_configuration,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        **kwargs,
+    )
+
+
+def preview_limit_order_ioc_buy(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Limit Order IOC Buy**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order IOC buy request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_limit_order_ioc(
+        self,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        **kwargs,
+    )
+
+
+def preview_limit_order_ioc_sell(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Limit Order IOC Sell**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order IOC sell request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_limit_order_ioc(
+        self,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
         commission_rate=commission_rate,
         is_max=is_max,
         tradable_balance=tradable_balance,

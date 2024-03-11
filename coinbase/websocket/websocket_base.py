@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+import ssl
 import threading
 import time
 from typing import IO, Callable, List, Optional, Union
@@ -164,6 +165,7 @@ class WSBase(APIBase):
                 max_size=self.max_size,
                 user_agent_header=USER_AGENT,
                 extra_headers=headers,
+                ssl=ssl.SSLContext() if self.base_url.startswith("wss://") else None,
             )
             logger.debug("Successfully connected to %s", self.base_url)
 
@@ -275,7 +277,7 @@ class WSBase(APIBase):
 
                 await self.websocket.send(json_message)
 
-                logger.debug("Successfully subscribed")
+                logger.debug("Successfully sent subscription message.")
 
                 # add to subscriptions map
                 if channel not in self.subscriptions:
@@ -341,7 +343,7 @@ class WSBase(APIBase):
 
                 await self.websocket.send(json_message)
 
-                logger.debug("Successfully unsubscribed")
+                logger.debug("Successfully sent unsubscribe message.")
 
                 # remove from subscriptions map
                 if channel in self.subscriptions:
@@ -382,7 +384,8 @@ class WSBase(APIBase):
         Async unsubscribe from all channels you are currently subscribed to.
         """
         for channel, product_ids in self.subscriptions.items():
-            await self.unsubscribe_async(list(product_ids), [channel])
+            if product_ids:
+                await self.unsubscribe_async(list(product_ids), [channel])
 
     def sleep_with_exception_check(self, sleep: int) -> None:
         """
@@ -470,7 +473,8 @@ class WSBase(APIBase):
         :meta private:
         """
         for channel, product_ids in self.subscriptions.items():
-            await self.subscribe_async(list(product_ids), [channel])
+            if product_ids:
+                await self.subscribe_async(list(product_ids), [channel])
 
     async def _retry_connection(self):
         """

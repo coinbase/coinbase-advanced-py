@@ -140,6 +140,102 @@ class OrdersTest(unittest.TestCase):
             )
             self.assertEqual(order, expected_response)
 
+    def test_limit_order_ioc(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.limit_order_ioc(
+                "client_order_id_1", "product_id_1", "BUY", "1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_limit_order_ioc_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.limit_order_ioc_buy(
+                "client_order_id_1", "product_id_1", "1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_limit_order_ioc_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.limit_order_ioc_sell(
+                "client_order_id_1", "product_id_1", "1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
     def test_limit_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 
@@ -898,6 +994,99 @@ class OrdersTest(unittest.TestCase):
                     "product_id": "product_id_1",
                     "side": "SELL",
                     "order_configuration": {"market_market_ioc": {"base_size": "1"}},
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_limit_order_ioc(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_limit_order_ioc("product_id_1", "BUY", "1", "100")
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_limit_order_ioc_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_limit_order_ioc_buy("product_id_1", "1", "100")
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_limit_order_ioc_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_limit_order_ioc_sell("product_id_1", "1", "100")
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
+                    },
                     "is_max": False,
                     "skip_fcm_risk_check": False,
                 },

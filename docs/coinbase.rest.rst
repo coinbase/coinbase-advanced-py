@@ -50,6 +50,14 @@ Orders
    :undoc-members:
    :show-inheritance:
 
+Payments
+-------------------------------
+
+.. automodule:: coinbase.rest.payments
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Portfolios
 -------------------------------
 

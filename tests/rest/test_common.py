@@ -22,6 +22,8 @@ class TimeTest(unittest.TestCase):
             time = client.get_unix_time()
 
             captured_request = m.request_history[0]
+            captured_headers = captured_request.headers
 
             self.assertEqual(captured_request.query, "")
             self.assertEqual(time, expected_response)
+            self.assertNotIn("Authorization", captured_headers)

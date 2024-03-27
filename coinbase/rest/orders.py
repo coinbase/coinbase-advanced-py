@@ -1171,6 +1171,7 @@ def preview_order(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1205,6 +1206,7 @@ def preview_order(
         "skip_fcm_risk_check": skip_fcm_risk_check,
         "leverage": leverage,
         "margin_type": margin_type,
+        "retail_portfolio_id": retail_portfolio_id,
     }
 
     return self.post(endpoint, data=data, **kwargs)
@@ -1223,6 +1225,7 @@ def preview_market_order(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1261,6 +1264,7 @@ def preview_market_order(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1275,6 +1279,7 @@ def preview_market_order_buy(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1305,6 +1310,7 @@ def preview_market_order_buy(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1319,6 +1325,7 @@ def preview_market_order_sell(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1349,6 +1356,7 @@ def preview_market_order_sell(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1366,6 +1374,7 @@ def preview_limit_order_ioc(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1400,6 +1409,7 @@ def preview_limit_order_ioc(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1415,6 +1425,7 @@ def preview_limit_order_ioc_buy(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1446,6 +1457,7 @@ def preview_limit_order_ioc_buy(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1461,6 +1473,7 @@ def preview_limit_order_ioc_sell(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1492,6 +1505,7 @@ def preview_limit_order_ioc_sell(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1510,6 +1524,7 @@ def preview_limit_order_gtc(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1548,6 +1563,7 @@ def preview_limit_order_gtc(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1564,6 +1580,7 @@ def preview_limit_order_gtc_buy(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1596,6 +1613,7 @@ def preview_limit_order_gtc_buy(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1612,6 +1630,7 @@ def preview_limit_order_gtc_sell(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1644,6 +1663,7 @@ def preview_limit_order_gtc_sell(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1663,6 +1683,7 @@ def preview_limit_order_gtd(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1702,6 +1723,7 @@ def preview_limit_order_gtd(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1719,6 +1741,7 @@ def preview_limit_order_gtd_buy(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1752,6 +1775,7 @@ def preview_limit_order_gtd_buy(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1769,6 +1793,7 @@ def preview_limit_order_gtd_sell(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1802,6 +1827,7 @@ def preview_limit_order_gtd_sell(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1821,6 +1847,7 @@ def preview_stop_limit_order_gtc(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1860,6 +1887,7 @@ def preview_stop_limit_order_gtc(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1877,6 +1905,7 @@ def preview_stop_limit_order_gtc_buy(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1910,6 +1939,7 @@ def preview_stop_limit_order_gtc_buy(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1927,6 +1957,7 @@ def preview_stop_limit_order_gtc_sell(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -1960,6 +1991,7 @@ def preview_stop_limit_order_gtc_sell(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1980,6 +2012,7 @@ def preview_stop_limit_order_gtd(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -2020,6 +2053,7 @@ def preview_stop_limit_order_gtd(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -2038,6 +2072,7 @@ def preview_stop_limit_order_gtd_buy(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -2072,6 +2107,7 @@ def preview_stop_limit_order_gtd_buy(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -2090,6 +2126,7 @@ def preview_stop_limit_order_gtd_sell(
     skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -2124,5 +2161,6 @@ def preview_stop_limit_order_gtd_sell(
         skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )

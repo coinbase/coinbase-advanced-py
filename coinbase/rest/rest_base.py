@@ -78,6 +78,7 @@ class RESTBase(APIBase):
             timeout=timeout,
             verbose=verbose,
         )
+        self.session = requests.Session()
         if verbose:
             logger.setLevel(logging.DEBUG)
 
@@ -218,7 +219,7 @@ class RESTBase(APIBase):
 
         logger.debug(f"Sending {http_method} request to {url}")
 
-        response = requests.request(
+        response = self.session.request(
             http_method,
             url,
             params=params,

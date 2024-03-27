@@ -563,7 +563,6 @@ class WSBase(APIBase):
             "product_ids": product_ids,
             "channel": channel,
             "jwt": jwt_generator.build_ws_jwt(self.api_key, self.api_secret),
-            "timestamp": int(time.time()),
         }
 
     def _ensure_websocket_not_open(self):

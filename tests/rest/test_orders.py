@@ -888,6 +888,7 @@ class OrdersTest(unittest.TestCase):
                 skip_fcm_risk_check=False,
                 leverage="5",
                 margin_type="CROSS",
+                retail_portfolio_id="portfolio_id_1",
             )
 
             captured_request = m.request_history[0]
@@ -906,6 +907,7 @@ class OrdersTest(unittest.TestCase):
                     "skip_fcm_risk_check": False,
                     "leverage": "5",
                     "margin_type": "CROSS",
+                    "retail_portfolio_id": "portfolio_id_1",
                 },
             )
             self.assertEqual(preview, expected_response)

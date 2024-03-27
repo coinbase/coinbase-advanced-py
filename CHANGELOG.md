@@ -6,7 +6,8 @@
 - `retail_portfolio_id` to all `preview_order` methods
 
 ### Changed
-- Requests are now made via request.Sessions()
+- Requests now made via request.Sessions() to reduce latency by reusing existing HTTP connection
+- Timestamp no longer needed for websocket signing
 
 ## [1.2.0] - 2024-MAR-11
 

@@ -1,0 +1,13 @@
+{
+   "name": "test-api-key-name",
+   "privateKey": "test-api-key-private-key",
+   "nickname": "TestApiKey",
+   "scopes": [
+      "rat#view",
+      "rat#trade",
+      "rat#transfer"
+   ],
+   "allowedIps": [],
+   "keyType": "TRADING_KEY",
+   "enabled": true
+}

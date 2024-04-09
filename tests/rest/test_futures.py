@@ -8,6 +8,38 @@ from ..constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class FuturesTest(unittest.TestCase):
+    def test_close_position(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {
+            "client_order_id": "client_order_id_1",
+            "product_id": "product_id_1",
+        }
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/close_position",
+                json=expected_response,
+            )
+            closedOrder = client.close_position(
+                "client_order_id_1", "product_id_1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "size": "100",
+                },
+            )
+            self.assertEqual(closedOrder, expected_response)
+
     def test_get_futures_balance_summary(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 

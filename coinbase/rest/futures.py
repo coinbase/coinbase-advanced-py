@@ -1,6 +1,32 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+
+
+def close_position(
+    self, client_order_id: str, product_id: str, size: Optional[str] = None, **kwargs
+) -> Dict[str, Any]:
+    """
+    **Close Position**
+    _________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/close_position
+
+    __________
+
+    **Description:**
+
+    Places an order to close any open positions for a specified ``product_id``.
+
+    __________
+
+    **Read more on the official documentation:** `Close Position
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_closeposition>`_
+    """
+    endpoint = f"{API_PREFIX}/orders/close_position"
+    data = {"client_order_id": client_order_id, "product_id": product_id, "size": size}
+
+    return self.post(endpoint, data=data, **kwargs)
 
 
 def get_futures_balance_summary(self, **kwargs) -> Dict[str, Any]:

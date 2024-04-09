@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives import serialization
 from coinbase.constants import BASE_URL, REST_SERVICE, WS_SERVICE
 
 
-def build_jwt(key_var, secret_var, service, uri=None) -> str:
+def build_jwt(key_var, secret_var, uri=None) -> str:
     """
     :meta private:
     """
@@ -28,7 +28,6 @@ def build_jwt(key_var, secret_var, service, uri=None) -> str:
         "iss": "coinbase-cloud",
         "nbf": int(time.time()),
         "exp": int(time.time()) + 120,
-        "aud": [service],
     }
 
     if uri:
@@ -61,7 +60,7 @@ def build_rest_jwt(uri, key_var, secret_var) -> str:
     - **key_var (str)** - The API key
     - **secret_var (str)** - The API key secret
     """
-    return build_jwt(key_var, secret_var, REST_SERVICE, uri=uri)
+    return build_jwt(key_var, secret_var, uri=uri)
 
 
 def build_ws_jwt(key_var, secret_var) -> str:
@@ -80,7 +79,7 @@ def build_ws_jwt(key_var, secret_var) -> str:
     - **key_var (str)** - The API key
     - **secret_var (str)** - The API key secret
     """
-    return build_jwt(key_var, secret_var, WS_SERVICE)
+    return build_jwt(key_var, secret_var)
 
 
 def format_jwt_uri(method, path) -> str:

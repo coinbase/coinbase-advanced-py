@@ -8,6 +8,7 @@ class RESTClient(RESTBase):
     from .fees import get_transaction_summary
     from .futures import (
         cancel_pending_futures_sweep,
+        close_position,
         get_futures_balance_summary,
         get_futures_position,
         list_futures_positions,

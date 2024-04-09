@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.2] - 2024-APR-9
+
+### Added
+- Support for ClosePosition endpoint
+
+### Changed
+- Audience no longer included in JWT generation
+
 ## [1.2.1] - 2024-MAR-27
 
 ### Added

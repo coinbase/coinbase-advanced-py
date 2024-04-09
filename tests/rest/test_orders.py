@@ -864,7 +864,7 @@ class OrdersTest(unittest.TestCase):
             self.assertEqual(captured_json, {"order_ids": ["order_id_1", "order_id_2"]})
             self.assertEqual(order, expected_response)
 
-    def test_cancel_position(self):
+    def test_close_position(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 
         expected_response = {

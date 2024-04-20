@@ -212,7 +212,7 @@ class RESTBase(APIBase):
         """
         :meta private:
         """
-        if data is None:
+        if data is None and http_method != "GET" and http_method != "DELETE":
             data = {}
 
         url = f"https://{self.base_url}{url_path}"
@@ -240,6 +240,7 @@ class RESTBase(APIBase):
         uri = f"{method} {self.base_url}{path}"
 
         return {
+            "CB-VERSION": "2024-04-02",
             "User-Agent": USER_AGENT,
             "Content-Type": "application/json",
             **(

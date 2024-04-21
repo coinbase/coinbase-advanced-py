@@ -3,7 +3,7 @@ import logging
 import os
 from typing import IO, Optional, Union
 
-from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY
+from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, CB_2FA_TOKEN_ENV_KEY
 
 
 def get_logger(name):
@@ -26,6 +26,7 @@ class APIBase(object):
         api_key: Optional[str] = os.getenv(API_ENV_KEY),
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
         key_file: Optional[Union[IO, str]] = None,
+        cb_2fa_token: Optional[str] = os.getenv(CB_2FA_TOKEN_ENV_KEY),
         base_url=None,
         timeout: Optional[int] = None,
         verbose: Optional[bool] = False,
@@ -55,5 +56,6 @@ class APIBase(object):
             )
         self.api_key = api_key
         self.api_secret = bytes(api_secret, encoding="utf8").decode("unicode_escape")
+        self.cb_2fa_token = cb_2fa_token
         self.base_url = base_url
         self.timeout = timeout

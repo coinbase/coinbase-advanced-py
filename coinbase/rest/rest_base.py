@@ -7,7 +7,7 @@ from requests.exceptions import HTTPError
 
 from coinbase import jwt_generator
 from coinbase.api_base import APIBase, get_logger
-from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, BASE_URL, USER_AGENT
+from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, CB_2FA_TOKEN_ENV_KEY, BASE_URL, USER_AGENT
 
 logger = get_logger("coinbase.RESTClient")
 
@@ -54,6 +54,7 @@ class RESTBase(APIBase):
     - **api_key | Optional (str)** - The API key
     - **api_secret | Optional (str)** - The API key secret
     - **key_file | Optional (IO | str)** - Path to API key file or file-like object
+    - **cb_2fa_token | Optional (str)** - The 2FA token required for some send transactions
     - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com"
     - **timeout | Optional (int)** - Set timeout in seconds for REST requests
     - **verbose | Optional (bool)** - Enables debug logging. Default set to False
@@ -66,6 +67,7 @@ class RESTBase(APIBase):
         api_key: Optional[str] = os.getenv(API_ENV_KEY),
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
         key_file: Optional[Union[IO, str]] = None,
+        cb_2fa_token: Optional[str] = os.getenv(CB_2FA_TOKEN_ENV_KEY),
         base_url=BASE_URL,
         timeout: Optional[int] = None,
         verbose: Optional[bool] = False,
@@ -74,6 +76,7 @@ class RESTBase(APIBase):
             api_key=api_key,
             api_secret=api_secret,
             key_file=key_file,
+            cb_2fa_token=cb_2fa_token,
             base_url=base_url,
             timeout=timeout,
             verbose=verbose,
@@ -247,6 +250,13 @@ class RESTBase(APIBase):
                     "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)}",
                 }
                 if not public
+                else {}
+            ),
+            **(
+                {
+                    "CB-2FA-TOKEN": self.cb_2fa_token,
+                }
+                if self.cb_2fa_token
                 else {}
             ),
         }

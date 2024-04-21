@@ -2,6 +2,7 @@ from coinbase.__version__ import __version__
 
 API_ENV_KEY = "COINBASE_API_KEY"
 API_SECRET_ENV_KEY = "COINBASE_API_SECRET"
+CB_2FA_TOKEN_ENV_KEY = "CB_2FA_TOKEN"
 USER_AGENT = f"coinbase-advanced-py/{__version__}"
 
 # REST Constants

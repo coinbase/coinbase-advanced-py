@@ -19,11 +19,16 @@ class AccountsTest(unittest.TestCase):
                 "https://api.coinbase.com/api/v3/brokerage/accounts",
                 json=expected_response,
             )
-            accounts = client.get_accounts(limit=2, cursor="abcd")
+            accounts = client.get_accounts(
+                limit=2, cursor="abcd", retail_portfolio_id="portfolio1"
+            )
 
             captured_request = m.request_history[0]
 
-            self.assertEqual(captured_request.query, "limit=2&cursor=abcd")
+            self.assertEqual(
+                captured_request.query,
+                "limit=2&cursor=abcd&retail_portfolio_id=portfolio1",
+            )
             self.assertEqual(accounts, expected_response)
 
     def test_get_account(self):

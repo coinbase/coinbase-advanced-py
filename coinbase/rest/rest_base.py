@@ -1,5 +1,6 @@
 import logging
 import os
+from multiprocessing import AuthenticationError
 from typing import IO, Any, Dict, Optional, Union
 
 import requests
@@ -198,6 +199,11 @@ class RESTBase(APIBase):
         """
         :meta private:
         """
+        if not self.is_authenticated and not public:
+            raise AuthenticationError(
+                "Unauthenticated request to private endpoint. If you wish to access private endpoints, you must provide your API key and secret when initializing the RESTClient."
+            )
+
         headers = self.set_headers(http_method, url_path, public)
 
         if params is not None:
@@ -246,7 +252,7 @@ class RESTBase(APIBase):
                 {
                     "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)}",
                 }
-                if not public
+                if self.is_authenticated
                 else {}
             ),
         }

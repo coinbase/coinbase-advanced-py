@@ -4,7 +4,11 @@ from coinbase.constants import API_PREFIX
 
 
 def get_accounts(
-    self, limit: Optional[int] = None, cursor: Optional[str] = None, **kwargs
+    self,
+    limit: Optional[int] = None,
+    cursor: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
 ) -> Dict[str, Any]:
     """
     **List Accounts**
@@ -23,7 +27,11 @@ def get_accounts(
 
     """
     endpoint = f"{API_PREFIX}/accounts"
-    params = {"limit": limit, "cursor": cursor}
+    params = {
+        "limit": limit,
+        "cursor": cursor,
+        "retail_portfolio_id": retail_portfolio_id,
+    }
 
     return self.get(endpoint, params=params, **kwargs)
 

@@ -473,6 +473,102 @@ class OrdersTest(unittest.TestCase):
             )
             self.assertEqual(order, expected_response)
 
+    def test_limit_order_fok(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.limit_order_fok(
+                "client_order_id_1", "product_id_1", "BUY", "1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_limit_order_fok_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.limit_order_fok_buy(
+                "client_order_id_1", "product_id_1", "1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_limit_order_fok_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.limit_order_fok_sell(
+                "client_order_id_1", "product_id_1", "1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
     def test_stop_limit_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 
@@ -727,6 +823,246 @@ class OrdersTest(unittest.TestCase):
                             "stop_price": "90",
                             "end_time": "2022-01-01T00:00:00Z",
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
+                        }
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_trigger_bracket_order_gtc(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.trigger_bracket_order_gtc(
+                "client_order_id_1",
+                "product_id_1",
+                "BUY",
+                "1",
+                "100",
+                "90",
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtc": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                        }
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_trigger_bracket_order_gtc_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.trigger_bracket_order_gtc_buy(
+                "client_order_id_1", "product_id_1", "1", "100", "90"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtc": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                        }
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_trigger_bracket_order_gtc_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.trigger_bracket_order_gtc_sell(
+                "client_order_id_1", "product_id_1", "1", "100", "90"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "trigger_bracket_gtc": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                        }
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_trigger_bracket_order_gtd(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.trigger_bracket_order_gtd(
+                "client_order_id_1",
+                "product_id_1",
+                "BUY",
+                "1",
+                "100",
+                "90",
+                "2022-01-01T00:00:00Z",
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtd": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                            "end_time": "2022-01-01T00:00:00Z",
+                        }
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_trigger_bracket_order_gtd_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.trigger_bracket_order_gtd_buy(
+                "client_order_id_1",
+                "product_id_1",
+                "1",
+                "100",
+                "90",
+                "2022-01-01T00:00:00Z",
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtd": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                            "end_time": "2022-01-01T00:00:00Z",
+                        }
+                    },
+                },
+            )
+            self.assertEqual(order, expected_response)
+
+    def test_trigger_bracket_order_gtd_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json=expected_response,
+            )
+            order = client.trigger_bracket_order_gtd_sell(
+                "client_order_id_1",
+                "product_id_1",
+                "1",
+                "100",
+                "90",
+                "2022-01-01T00:00:00Z",
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "trigger_bracket_gtd": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                            "end_time": "2022-01-01T00:00:00Z",
                         }
                     },
                 },
@@ -1334,6 +1670,99 @@ class OrdersTest(unittest.TestCase):
             )
             self.assertEqual(preview, expected_response)
 
+    def test_preview_limit_order_fok(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_limit_order_fok("product_id_1", "BUY", "1", "100")
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_limit_order_fok_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_limit_order_fok_buy("product_id_1", "1", "100")
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_limit_order_fok_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_limit_order_fok_sell("product_id_1", "1", "100")
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
     def test_preview_stop_limit_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 
@@ -1586,6 +2015,244 @@ class OrdersTest(unittest.TestCase):
                             "stop_price": "90",
                             "end_time": "2022-01-01T00:00:00Z",
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
+                        }
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_trigger_bracket_order_gtc(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_trigger_bracket_order_gtc(
+                "product_id_1",
+                "BUY",
+                "1",
+                "100",
+                "90",
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtc": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                        }
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_trigger_bracket_order_gtc_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_trigger_bracket_order_gtc_buy(
+                "product_id_1", "1", "100", "90"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtc": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                        }
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_trigger_bracket_gtc_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_trigger_bracket_order_gtc_sell(
+                "product_id_1", "1", "100", "90"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "trigger_bracket_gtc": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                        }
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_trigger_bracket_order_gtd(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_trigger_bracket_order_gtd(
+                "product_id_1",
+                "BUY",
+                "1",
+                "100",
+                "90",
+                "2022-01-01T00:00:00Z",
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtd": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                            "end_time": "2022-01-01T00:00:00Z",
+                        }
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_trigger_bracket_order_gtd_buy(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_trigger_bracket_order_gtd_buy(
+                "product_id_1",
+                "1",
+                "100",
+                "90",
+                "2022-01-01T00:00:00Z",
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "BUY",
+                    "order_configuration": {
+                        "trigger_bracket_gtd": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                            "end_time": "2022-01-01T00:00:00Z",
+                        }
+                    },
+                    "is_max": False,
+                    "skip_fcm_risk_check": False,
+                },
+            )
+            self.assertEqual(preview, expected_response)
+
+    def test_preview_trigger_bracket_gtd_sell(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"order_id": "1234"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/preview",
+                json=expected_response,
+            )
+            preview = client.preview_trigger_bracket_order_gtd_sell(
+                "product_id_1", "1", "100", "90", "2022-01-01T00:00:00Z"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "product_id": "product_id_1",
+                    "side": "SELL",
+                    "order_configuration": {
+                        "trigger_bracket_gtd": {
+                            "base_size": "1",
+                            "limit_price": "100",
+                            "stop_trigger_price": "90",
+                            "end_time": "2022-01-01T00:00:00Z",
                         }
                     },
                     "is_max": False,

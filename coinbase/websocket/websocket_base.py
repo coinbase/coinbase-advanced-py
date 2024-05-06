@@ -5,6 +5,7 @@ import os
 import ssl
 import threading
 import time
+from multiprocessing import AuthenticationError
 from typing import IO, Callable, List, Optional, Union
 
 import backoff
@@ -18,6 +19,7 @@ from coinbase.constants import (
     SUBSCRIBE_MESSAGE_TYPE,
     UNSUBSCRIBE_MESSAGE_TYPE,
     USER_AGENT,
+    WS_AUTH_CHANNELS,
     WS_BASE_URL,
     WS_RETRY_BASE,
     WS_RETRY_FACTOR,
@@ -264,8 +266,14 @@ class WSBase(APIBase):
         self._ensure_websocket_open()
         for channel in channels:
             try:
+                if not self.is_authenticated and channel in WS_AUTH_CHANNELS:
+                    raise AuthenticationError(
+                        "Unauthenticated request to private channel."
+                    )
+
+                is_public = False if channel in WS_AUTH_CHANNELS else True
                 message = self._build_subscription_message(
-                    product_ids, channel, SUBSCRIBE_MESSAGE_TYPE
+                    product_ids, channel, SUBSCRIBE_MESSAGE_TYPE, is_public
                 )
                 json_message = json.dumps(message)
 
@@ -330,8 +338,13 @@ class WSBase(APIBase):
         self._ensure_websocket_open()
         for channel in channels:
             try:
+                if not self.is_authenticated and channel in WS_AUTH_CHANNELS:
+                    raise AuthenticationError(
+                        "Unauthenticated request to private channel. If you wish to access private channels, you must provide your API key and secret when initializing the WSClient."
+                    )
+                is_public = False if channel in WS_AUTH_CHANNELS else True
                 message = self._build_subscription_message(
-                    product_ids, channel, UNSUBSCRIBE_MESSAGE_TYPE
+                    product_ids, channel, UNSUBSCRIBE_MESSAGE_TYPE, is_public
                 )
                 json_message = json.dumps(message)
 
@@ -553,7 +566,7 @@ class WSBase(APIBase):
                 break
 
     def _build_subscription_message(
-        self, product_ids: List[str], channel: str, message_type: str
+        self, product_ids: List[str], channel: str, message_type: str, public: bool
     ):
         """
         :meta private:
@@ -562,7 +575,13 @@ class WSBase(APIBase):
             "type": message_type,
             "product_ids": product_ids,
             "channel": channel,
-            "jwt": jwt_generator.build_ws_jwt(self.api_key, self.api_secret),
+            **(
+                {
+                    "jwt": jwt_generator.build_ws_jwt(self.api_key, self.api_secret),
+                }
+                if self.is_authenticated
+                else {}
+            ),
         }
 
     def _ensure_websocket_not_open(self):

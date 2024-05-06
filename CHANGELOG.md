@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.0] - 2024-MAY-6
+
+### Added
+- Support for limit Fill-or-Kill (FOK) order types
+- Support for trigger bracket orders
+- Support for public endpoints in RESTClient and public channels in WSClient that do not require authentication
+- `retail_portfolio_id` to `get_accounts` method
+
+### Changed
+- "Coinbase Cloud" now referred to as "Coinbase Developer Platform (CDP)"
+
 ## [1.2.2] - 2024-APR-9
 
 ### Added

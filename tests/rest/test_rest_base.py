@@ -61,6 +61,31 @@ class RestBaseTest(unittest.TestCase):
                 captured_request = m.request_history[0]
                 captured_headers = captured_request.headers
 
+                self.assertIn("Authorization", captured_headers)
+                self.assertTrue("User-Agent" in captured_headers)
+                self.assertEqual(
+                    captured_headers["User-Agent"],
+                    "coinbase-advanced-py/" + __version__,
+                )
+
+    def test_get_public_unauthenticated(self):
+        client = RESTClient()
+
+        with Mocker() as m:
+            expected_response = {"iso": "2022-01-01T00:00:00Z", "epoch": 1640995200}
+
+            with Mocker() as m:
+                m.request(
+                    "GET",
+                    "https://api.coinbase.com/api/v3/brokerage/time",
+                    json=expected_response,
+                )
+
+                client.get("/api/v3/brokerage/time", public=True)
+
+                captured_request = m.request_history[0]
+                captured_headers = captured_request.headers
+
                 self.assertNotIn("Authorization", captured_headers)
                 self.assertTrue("User-Agent" in captured_headers)
                 self.assertEqual(

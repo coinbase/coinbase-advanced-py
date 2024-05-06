@@ -30,3 +30,5 @@ TICKER = "ticker"
 TICKER_BATCH = "ticker_batch"
 LEVEL2 = "level2"
 USER = "user"
+
+WS_AUTH_CHANNELS = {USER}

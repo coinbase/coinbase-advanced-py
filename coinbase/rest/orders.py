@@ -633,6 +633,149 @@ def limit_order_gtd_sell(
     )
 
 
+# Limit FOK Orders
+def limit_order_fok(
+    self,
+    client_order_id: str,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Limit FOK Order**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Limit Order with a FOK time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+
+    limit_limit_fok = {"base_size": base_size, "limit_price": limit_price}
+
+    order_configuration = {"limit_limit_fok": limit_limit_fok}
+
+    return create_order(
+        self,
+        client_order_id,
+        product_id,
+        side,
+        order_configuration,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def limit_order_fok_buy(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Limit FOK Order Buy**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Buy Limit Order with a FOK time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+
+    return limit_order_fok(
+        self,
+        client_order_id,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def limit_order_fok_sell(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Limit FOK Order Sell**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Sell Limit Order with a FOK time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+
+    return limit_order_fok(
+        self,
+        client_order_id,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
 # Stop-Limit GTC orders
 def stop_limit_order_gtc(
     self,
@@ -941,6 +1084,310 @@ def stop_limit_order_gtd_sell(
         stop_price=stop_price,
         end_time=end_time,
         stop_direction=stop_direction,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+# Trigger Bracket GTC orders
+def trigger_bracket_order_gtc(
+    self,
+    client_order_id: str,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Trigger Bracket Order GTC**
+    ________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Trigger Bracket order with a GTC time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtc": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+        }
+    }
+
+    return create_order(
+        self,
+        client_order_id,
+        product_id,
+        side,
+        order_configuration,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtc_buy(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Trigger Bracket Order GTC Buy**
+    ____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a BUY Trigger Bracket order with a GTC time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtc(
+        self,
+        client_order_id,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtc_sell(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Trigger Bracket Order GTC Sell**
+    _____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a SELL Trigger Bracket order with a GTC time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtc(
+        self,
+        client_order_id,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+# Trigger Bracket GTD orders
+def trigger_bracket_order_gtd(
+    self,
+    client_order_id: str,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Trigger Bracket Order GTD**
+    ________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Trigger Bracket order with a GTD time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtd": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+            "end_time": end_time,
+        }
+    }
+
+    return create_order(
+        self,
+        client_order_id,
+        product_id,
+        side,
+        order_configuration,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtd_buy(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Trigger Bracket Order GTD Buy**
+    ____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a BUY Trigger Bracket order with a GTD time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtd(
+        self,
+        client_order_id,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtd_sell(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Trigger Bracket Order GTD Sell**
+    _____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a SELL Trigger Bracket order with a GTD time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtd(
+        self,
+        client_order_id,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
         self_trade_prevention_id=self_trade_prevention_id,
         leverage=leverage,
         margin_type=margin_type,
@@ -1832,6 +2279,154 @@ def preview_limit_order_gtd_sell(
     )
 
 
+def preview_limit_order_fok(
+    self,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Limit Order FOK**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order FOK request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    order_configuration = {
+        "limit_limit_fok": {"base_size": base_size, "limit_price": limit_price}
+    }
+
+    return preview_order(
+        self,
+        product_id,
+        side,
+        order_configuration,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_limit_order_fok_buy(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Limit Order FOK Buy**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order FOK buy request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_limit_order_fok(
+        self,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_limit_order_fok_sell(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Limit Order FOK Sell**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order FOK sell request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_limit_order_fok(
+        self,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
 # Preview Stop-Limit GTC orders
 def preview_stop_limit_order_gtc(
     self,
@@ -2155,6 +2750,328 @@ def preview_stop_limit_order_gtd_sell(
         stop_price=stop_price,
         end_time=end_time,
         stop_direction=stop_direction,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+# Preview Trigger Bracket GTC orders
+def preview_trigger_bracket_order_gtc(
+    self,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Trigger Bracket Order GTC**
+    ________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTC order request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtc": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+        }
+    }
+
+    return preview_order(
+        self,
+        product_id,
+        side,
+        order_configuration,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtc_buy(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Trigger Bracket Order GTC Buy**
+    ____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTC order buy request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtc(
+        self,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtc_sell(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Trigger Bracket Order GTC Sell**
+    _____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTC order sell request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtc(
+        self,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+# Preview Trigger Bracket GTD orders
+def preview_trigger_bracket_order_gtd(
+    self,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Trigger Bracket Order GTD**
+    ________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTD order request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtd": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+            "end_time": end_time,
+        }
+    }
+
+    return preview_order(
+        self,
+        product_id,
+        side,
+        order_configuration,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtd_buy(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Trigger Bracket Order GTD Buy**
+    ____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTD order buy request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtd(
+        self,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
+        commission_rate=commission_rate,
+        is_max=is_max,
+        tradable_balance=tradable_balance,
+        skip_fcm_risk_check=skip_fcm_risk_check,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtd_sell(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    commission_rate: Optional[str] = None,
+    is_max: Optional[bool] = False,
+    tradable_balance: Optional[str] = None,
+    skip_fcm_risk_check: Optional[bool] = False,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> Dict[str, Any]:
+    """
+    **Preview Trigger Bracket Order GTD Sell**
+    _____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTD order sell request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtd(
+        self,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
         commission_rate=commission_rate,
         is_max=is_max,
         tradable_balance=tradable_balance,

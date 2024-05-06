@@ -3,7 +3,6 @@ from .rest_base import RESTBase
 
 class RESTClient(RESTBase):
     from .accounts import get_account, get_accounts
-    from .common import get_unix_time
     from .convert import commit_convert_trade, create_convert_quote, get_convert_trade
     from .fees import get_transaction_summary
     from .futures import (
@@ -22,6 +21,9 @@ class RESTClient(RESTBase):
         edit_order,
         get_fills,
         get_order,
+        limit_order_fok,
+        limit_order_fok_buy,
+        limit_order_fok_sell,
         limit_order_gtc,
         limit_order_gtc_buy,
         limit_order_gtc_sell,
@@ -36,6 +38,9 @@ class RESTClient(RESTBase):
         market_order_buy,
         market_order_sell,
         preview_edit_order,
+        preview_limit_order_fok,
+        preview_limit_order_fok_buy,
+        preview_limit_order_fok_sell,
         preview_limit_order_gtc,
         preview_limit_order_gtc_buy,
         preview_limit_order_gtc_sell,
@@ -55,12 +60,24 @@ class RESTClient(RESTBase):
         preview_stop_limit_order_gtd,
         preview_stop_limit_order_gtd_buy,
         preview_stop_limit_order_gtd_sell,
+        preview_trigger_bracket_order_gtc,
+        preview_trigger_bracket_order_gtc_buy,
+        preview_trigger_bracket_order_gtc_sell,
+        preview_trigger_bracket_order_gtd,
+        preview_trigger_bracket_order_gtd_buy,
+        preview_trigger_bracket_order_gtd_sell,
         stop_limit_order_gtc,
         stop_limit_order_gtc_buy,
         stop_limit_order_gtc_sell,
         stop_limit_order_gtd,
         stop_limit_order_gtd_buy,
         stop_limit_order_gtd_sell,
+        trigger_bracket_order_gtc,
+        trigger_bracket_order_gtc_buy,
+        trigger_bracket_order_gtc_sell,
+        trigger_bracket_order_gtd,
+        trigger_bracket_order_gtd_buy,
+        trigger_bracket_order_gtd_sell,
     )
     from .payments import get_payment_method, list_payment_methods
     from .perpetuals import (
@@ -78,3 +95,11 @@ class RESTClient(RESTBase):
         move_portfolio_funds,
     )
     from .products import get_best_bid_ask, get_product, get_product_book, get_products
+    from .public import (
+        get_public_candles,
+        get_public_market_trades,
+        get_public_product,
+        get_public_product_book,
+        get_public_products,
+        get_unix_time,
+    )

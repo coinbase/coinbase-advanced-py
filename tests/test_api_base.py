@@ -9,9 +9,6 @@ from .constants import TEST_API_KEY, TEST_API_SECRET
 class RestBaseTest(unittest.TestCase):
     def test_no_api_key(self):
         with self.assertRaises(Exception):
-            APIBase(None, None)
-
-        with self.assertRaises(Exception):
             APIBase("test_key", None)
 
     def test_key_api_key_vars(self):

@@ -50,14 +50,6 @@ Orders
    :undoc-members:
    :show-inheritance:
 
-Payments
--------------------------------
-
-.. automodule:: coinbase.rest.payments
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Portfolios
 -------------------------------
 
@@ -90,7 +82,7 @@ Fees
    :undoc-members:
    :show-inheritance:
 
-Convert
+Converts
 ----------------------------
 
 .. automodule:: coinbase.rest.convert
@@ -98,10 +90,18 @@ Convert
    :undoc-members:
    :show-inheritance:
 
-Common
+Public
 ---------------------------
 
-.. automodule:: coinbase.rest.common
+.. automodule:: coinbase.rest.public
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Payments
+-------------------------------
+
+.. automodule:: coinbase.rest.payments
    :members:
    :undoc-members:
    :show-inheritance:

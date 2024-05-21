@@ -8,11 +8,14 @@ class RESTClient(RESTBase):
     from .futures import (
         cancel_pending_futures_sweep,
         close_position,
+        get_current_margin_window,
         get_futures_balance_summary,
         get_futures_position,
+        get_intraday_margin_setting,
         list_futures_positions,
         list_futures_sweeps,
         schedule_futures_sweep,
+        set_intraday_margin_setting,
     )
     from .market_data import get_candles, get_market_trades
     from .orders import (
@@ -82,9 +85,11 @@ class RESTClient(RESTBase):
     from .payments import get_payment_method, list_payment_methods
     from .perpetuals import (
         allocate_portfolio,
+        get_perps_portfolio_balances,
         get_perps_portfolio_summary,
         get_perps_position,
         list_perps_positions,
+        opt_in_or_out_multi_asset_collateral,
     )
     from .portfolios import (
         create_portfolio,

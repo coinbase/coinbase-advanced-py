@@ -23,7 +23,7 @@ def get_accounts(
 
     __________
 
-    **Read more on the official documentation:** `List Accounts <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccounts>`_
+    **Read more on the official documentation:** `List Accounts <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccounts>`_
 
     """
     endpoint = f"{API_PREFIX}/accounts"
@@ -51,7 +51,7 @@ def get_account(self, account_uuid: str, **kwargs) -> Dict[str, Any]:
 
     __________
 
-    **Read more on the official documentation:** `Get Account <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccount>`_
+    **Read more on the official documentation:** `Get Account <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccount>`_
     """
     endpoint = f"{API_PREFIX}/accounts/{account_uuid}"
 

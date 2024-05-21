@@ -96,3 +96,50 @@ class PerpetualsTest(unittest.TestCase):
 
             self.assertEqual(captured_request.query, "")
             self.assertEqual(portfolios, expected_response)
+
+    def test_get_perps_portfolio_balances(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"key_1": "value_1", "key_2": "value_2"}
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/intx/balances/test_uuid",
+                json=expected_response,
+            )
+            portfolios = client.get_perps_portfolio_balances(portfolio_uuid="test_uuid")
+
+            captured_request = m.request_history[0]
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(portfolios, expected_response)
+
+    def test_opt_in_or_out_multi_asset_collateral(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"key_1": "value_1", "key_2": "value_2"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/intx/multi_asset_collateral",
+                json=expected_response,
+            )
+            response = client.opt_in_or_out_multi_asset_collateral(
+                portfolio_uuid="test_uuid",
+                multi_asset_collateral_enabled=True,
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "portfolio_uuid": "test_uuid",
+                    "multi_asset_collateral_enabled": True,
+                },
+            )
+            self.assertEqual(response, expected_response)

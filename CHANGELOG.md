@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0] - 2024-MAY-21
+
+### Added
+- Support for market order buys in base currency with `base_size` in the `market_order_buy` and `preview_market_order_buy` methods
+- Support for the following Futures Intraday Leverage API endpoints:
+    - GetCurrentMarginWindow
+    - GetIntradayMarginSetting 
+    - SetIntradayMarginSetting
+- Support for the following Perpetual Futures Trading API endpoints:
+    - Get Perpetuals Portfolio Asset Balances
+    - Opt-In Multi Asset Collateral
+
 ## [1.3.0] - 2024-MAY-6
 
 ### Added

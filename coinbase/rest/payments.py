@@ -17,7 +17,7 @@ def list_payment_methods(self, **kwargs) -> Dict[str, Any]:
 
     __________
 
-    **Read more on the official documentation:** `List Payment Methods <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getpaymentmethods>`_
+    **Read more on the official documentation:** `List Payment Methods <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpaymentmethods>`_
     """
 
     endpoint = f"{API_PREFIX}/payment_methods"
@@ -39,7 +39,7 @@ def get_payment_method(self, payment_method_id: str, **kwargs) -> Dict[str, Any]
 
     __________
 
-    **Read more on the official documentation:** `Get Payment Method <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getpaymentmethod>`_
+    **Read more on the official documentation:** `Get Payment Method <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpaymentmethod>`_
     """
 
     endpoint = f"{API_PREFIX}/payment_methods/{payment_method_id}"

@@ -28,7 +28,7 @@ def get_products(
     __________
 
     **Read more on the official documentation:** `List Products
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproducts>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproducts>`_
     """
     endpoint = f"{API_PREFIX}/products"
 
@@ -60,7 +60,7 @@ def get_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
     __________
 
     **Read more on the official documentation:** `Get Product
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproduct>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproduct>`_
     """
     endpoint = f"{API_PREFIX}/products/{product_id}"
 
@@ -85,7 +85,7 @@ def get_product_book(
     __________
 
     **Read more on the official documentation:** `Get Product Book
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproductbook>`_
     """
     endpoint = f"{API_PREFIX}/product_book"
 
@@ -112,7 +112,7 @@ def get_best_bid_ask(
     __________
 
     **Read more on the official documentation:** `Get Best Bid/Ask
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproductbook>`_
     """
     endpoint = f"{API_PREFIX}/best_bid_ask"
 

@@ -149,3 +149,68 @@ class FuturesTest(unittest.TestCase):
 
             self.assertEqual(captured_request.query, "")
             self.assertEqual(delete, expected_response)
+
+    def test_get_intraday_margin_setting(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"key_1": "value_1", "key_2": "value_2"}
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/cfm/intraday/margin_setting",
+                json=expected_response,
+            )
+            intraday_margin_setting = client.get_intraday_margin_setting()
+
+            captured_request = m.request_history[0]
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(intraday_margin_setting, expected_response)
+
+    def test_get_current_margin_window(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"key_1": "value_1", "key_2": "value_2"}
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/cfm/intraday/current_margin_window",
+                json=expected_response,
+            )
+            margin_window = client.get_current_margin_window("MARGIN_PROFILE_TYPE_1")
+
+            captured_request = m.request_history[0]
+
+            self.assertEqual(
+                captured_request.query, "margin_profile_type=margin_profile_type_1"
+            )
+            self.assertEqual(margin_window, expected_response)
+
+    def test_set_intraday_margin_setting(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {"key_1": "value_1", "key_2": "value_2"}
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/cfm/intraday/margin_setting",
+                json=expected_response,
+            )
+            setting = client.set_intraday_margin_setting("setting_1")
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+
+            self.assertEqual(
+                captured_json,
+                {
+                    "setting": "setting_1",
+                },
+            )
+
+            self.assertEqual(setting, expected_response)

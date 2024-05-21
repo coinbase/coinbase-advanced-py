@@ -3,8 +3,8 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/license/apache-2-0/)
 [![Code Style](https://img.shields.io/badge/code_style-black-black)](https://black.readthedocs.io/en/stable/)
 
-Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome).
-This SDK also supports easy connection to the [Coinbase Advanced Trade WebSocket API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-overview).
+Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome).
+This SDK also supports easy connection to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview).
 
 For thorough documentation of all available functions, refer to the following link: https://coinbase.github.io/coinbase-advanced-py
 
@@ -18,7 +18,7 @@ pip3 install coinbase-advanced-py
 ___
 ## Coinbase Developer Platform (CDP) API Keys
 
-This SDK uses Cloud Developer Platform (CDP) API keys. To use this SDK, you will need to create a CDP API key and secret by following the instructions [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth#cloud-api-keys).
+This SDK uses Cloud Developer Platform (CDP) API keys. To use this SDK, you will need to create a CDP API key and secret by following the instructions [here](https://docs.cdp.coinbase.com/advanced-trade/docs/auth).
 Make sure to save your API key and secret in a safe place. You will not be able to retrieve your secret again.
 
 WARNING: We do not recommend that you save your API secrets directly in your code outside of testing purposes. Best practice is to use a secrets manager and access your secrets that way. You should be careful about exposing your secrets publicly if posting code that leverages this library.
@@ -74,7 +74,7 @@ print(dumps(order, indent=2))
 ```
 This code calls the `get_accounts` and `market_order_buy` endpoints.
 
-Refer to the [Advanced API Reference](https://docs.cloud.coinbase.com/advanced-trade-api/reference) for detailed information on each exposed endpoint.
+Refer to the [Advanced API Reference](https://docs.cdp.coinbase.com/advanced-trade/reference) for detailed information on each exposed endpoint.
 Look in the `coinbase.rest` module to see the API hooks that are exposed.
 
 ### Passing in additional parameters
@@ -94,7 +94,7 @@ market_trades = client.get("/api/v3/brokerage/products/BTC-USD/ticker", params={
 
 portfolio = client.post("/api/v3/brokerage/portfolios", data={"name": "TestPortfolio"})
 ```
-Here we are calling the [GetMarketTrades](https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades) and [CreatePortfolio](https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createportfolio) endpoints through the generic REST functions.
+Here we are calling the [GetMarketTrades](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getmarkettrades) and [CreatePortfolio](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createportfolio) endpoints through the generic REST functions.
 Once again, the built-in way to query these through the SDK would be:
 ```python
 market_trades = client.get_market_trades(product_id="BTC-USD", limit=5)
@@ -104,8 +104,8 @@ portfolio = client.create_portfolio(name="TestPortfolio")
 
 ___
 ## WebSocket API Client
-We offer a WebSocket API client that allows you to connect to the [Coinbase Advanced Trade WebSocket API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-overview).
-Refer to the [Advanced Trade WebSocket Channels](https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels) page for detailed information on each offered channel.
+We offer a WebSocket API client that allows you to connect to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview).
+Refer to the [Advanced Trade WebSocket Channels](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels) page for detailed information on each offered channel.
 
 In your code, import the WSClient class and instantiate it. The WSClient requires an API key and secret to be passed in as arguments. You can also use a key file or environment variables as described in the RESTClient instructions above.
 
@@ -241,7 +241,7 @@ ___
 ## Authentication
 Authentication of CDP API Keys is handled automatically by the SDK when making a REST request or sending a WebSocket message.
 
-However, if you wish to handle this yourself, you must create a JWT token and attach it to your request as detailed in the API docs [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/rest-api-auth#making-requests). Use the built in `jwt_generator` to create your JWT token. For example:
+However, if you wish to handle this yourself, you must create a JWT token and attach it to your request as detailed in the API docs [here](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-auth#making-requests). Use the built in `jwt_generator` to create your JWT token. For example:
 ```python
 from coinbase import jwt_generator
 
@@ -267,7 +267,7 @@ api_secret = "-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIV
 
 jwt = jwt_generator.build_ws_jwt(api_key, api_secret)
 ```
-Use this JWT to connect to the Websocket API by setting it in the "jwt" field of your subscription requests. See the docs [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-overview#sending-messages-using-cloud-api-keys) for more details.
+Use this JWT to connect to the Websocket API by setting it in the "jwt" field of your subscription requests. See the docs [here](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview#sending-messages-with-cdp-keys) for more details.
 
 ___
 ## Accessing public endpoints without authentication
@@ -283,9 +283,9 @@ To do so, simply initialize the clients without providing any API keys as argume
 
 ### REST Client
 
-In the REST client, here is an example calling [Get Public Products](https://docs.cloud.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpublicproducts). 
+In the REST client, here is an example calling [Get Public Products](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpublicproducts). 
 It does _not_ require authentication and is the public counterpart to 
-[Get Products](https://docs.cloud.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproducts), which _does_ require authentication.
+[Get Products](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproducts), which _does_ require authentication.
 
 Both endpoints return the same data.
 
@@ -298,13 +298,13 @@ client = RESTClient()
 public_products = client.get_public_products()
 print(public_products)
 ```
-_Full list of all public REST endpoints [here](https://docs.cloud.coinbase.com/advanced-trade/docs/rest-api-overview#public-endpoints)_
+_Full list of all public REST endpoints [here](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-overview#public-endpoints)_
 
-_Rate limit details for REST endpoints [here](https://docs.cloud.coinbase.com/advanced-trade/docs/rest-api-rate-limits)_
+_Rate limit details for REST endpoints [here](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-rate-limits)_
 
 ### Websocket Client
 
-In the Websocket client, here is an example subscribing to the [ticker](https://docs.cloud.coinbase.com/advanced-trade/docs/ws-channels#ticker-channel) channel. 
+In the Websocket client, here is an example subscribing to the [ticker](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#ticker-channel) channel. 
 Unlike the REST client, Websocket channels handle both authenticated and unauthenticated requests. 
 At the moment, most channels in the Websocket client are public and can be used without keys.
 
@@ -326,9 +326,9 @@ client.ticker_unsubscribe(product_ids=["BTC-USD"])
 client.close()
 ```
 
-_Full list of all public Websocket channels [here](https://docs.cloud.coinbase.com/advanced-trade/docs/ws-channels)_
+_Full list of all public Websocket channels [here](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels)_
 
-_Rate limit details for Websocket channels [here](https://docs.cloud.coinbase.com/advanced-trade/docs/ws-rate-limits)_
+_Rate limit details for Websocket channels [here](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-rate-limits)_
 
 
 ___
@@ -340,4 +340,4 @@ ___
 
 If you've found a bug within this project, open an issue on this repo and add the "bug" label to it.
 If you would like to request a new feature, open an issue on this repo and add the "enhancement" label to it.
-Direct concerns or questions on the API to the [Advanced API Developer Forum](https://forums.coinbasecloud.dev/c/advanced-trade-api/20).
+Direct concerns or questions on the API to the [Advanced API Discord](https://discord.com/channels/1220414409550336183/1220464268743278613) (use this [invite link](https://discord.com/invite/cdp) if it's your first time accessing the Discord).

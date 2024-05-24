@@ -20,7 +20,7 @@ class JwtGeneratorTest(unittest.TestCase):
         decoded_header = json.loads(header_bytes.decode("utf-8"))
 
         self.assertEqual(decoded_data["sub"], TEST_API_KEY)
-        self.assertEqual(decoded_data["iss"], "coinbase-cloud")
+        self.assertEqual(decoded_data["iss"], "cdp")
         self.assertEqual(decoded_data["uri"], uri)
         self.assertEqual(decoded_header["kid"], TEST_API_KEY)
 
@@ -32,7 +32,7 @@ class JwtGeneratorTest(unittest.TestCase):
         decoded_header = json.loads(header_bytes.decode("utf-8"))
 
         self.assertEqual(decoded_data["sub"], TEST_API_KEY)
-        self.assertEqual(decoded_data["iss"], "coinbase-cloud")
+        self.assertEqual(decoded_data["iss"], "cdp")
         self.assertNotIn("uri", decoded_data)
         self.assertEqual(decoded_header["kid"], TEST_API_KEY)
 

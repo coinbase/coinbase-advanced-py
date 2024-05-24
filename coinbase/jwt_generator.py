@@ -25,7 +25,7 @@ def build_jwt(key_var, secret_var, uri=None) -> str:
 
     jwt_data = {
         "sub": key_var,
-        "iss": "coinbase-cloud",
+        "iss": "cdp",
         "nbf": int(time.time()),
         "exp": int(time.time()) + 120,
     }

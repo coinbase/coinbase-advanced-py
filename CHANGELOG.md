@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.1] - 2024-MAY-24
+
+### Changed
+- `iss` on the signed JWT changed from `coinbase-cloud` to `cdp`
+
 ## [1.4.0] - 2024-MAY-21
 
 ### Added

@@ -1125,14 +1125,18 @@ class OrdersTest(unittest.TestCase):
                 json=expected_response,
             )
             orders = client.get_fills(
-                order_id="1234", product_id="product_id_1", limit=2, cursor="abc"
+                order_id="1234",
+                product_id="product_id_1",
+                retail_portfolio_id="portfolio_id_1",
+                limit=2,
+                cursor="abc",
             )
 
             captured_request = m.request_history[0]
 
             self.assertEqual(
                 captured_request.query,
-                "order_id=1234&product_id=product_id_1&limit=2&cursor=abc",
+                "order_id=1234&product_id=product_id_1&retail_portfolio_id=portfolio_id_1&limit=2&cursor=abc",
             )
             self.assertEqual(orders, expected_response)
 

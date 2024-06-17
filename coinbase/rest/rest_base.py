@@ -204,7 +204,7 @@ class RESTBase(APIBase):
                 "Unauthenticated request to private endpoint. If you wish to access private endpoints, you must provide your API key and secret when initializing the RESTClient."
             )
 
-        headers = self.set_headers(http_method, url_path, public)
+        headers = self.set_headers(http_method, url_path)
 
         if params is not None:
             params = {key: value for key, value in params.items() if value is not None}
@@ -239,7 +239,7 @@ class RESTBase(APIBase):
 
         return response.json()
 
-    def set_headers(self, method, path, public):
+    def set_headers(self, method, path):
         """
         :meta private:
         """

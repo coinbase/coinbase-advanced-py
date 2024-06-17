@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.2] - 2024-JUN-17
+
+### Added
+- `retail_portfolio_id` to the `get_fills` method.
+- `get_tradability_status` to the `get_product` and `get_products` method.
+
 ## [1.4.1] - 2024-MAY-24
 
 ### Changed

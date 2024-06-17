@@ -23,7 +23,10 @@ class ProductsTest(unittest.TestCase):
 
             captured_request = m.request_history[0]
 
-            self.assertEqual(captured_request.query, "limit=2&product_type=spot")
+            self.assertEqual(
+                captured_request.query,
+                "limit=2&product_type=spot&get_tradability_status=false",
+            )
             self.assertEqual(products, expected_response)
 
     def test_get_product(self):
@@ -41,7 +44,7 @@ class ProductsTest(unittest.TestCase):
 
             captured_request = m.request_history[0]
 
-            self.assertEqual(captured_request.query, "")
+            self.assertEqual(captured_request.query, "get_tradability_status=false")
             self.assertEqual(product, expected_response)
 
     def test_get_product_book(self):

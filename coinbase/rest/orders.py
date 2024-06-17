@@ -1481,6 +1481,7 @@ def get_fills(
     product_id: Optional[str] = None,
     start_sequence_timestamp: Optional[str] = None,
     end_sequence_timestamp: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     limit: Optional[int] = None,
     cursor: Optional[str] = None,
     **kwargs,
@@ -1508,6 +1509,7 @@ def get_fills(
         "product_id": product_id,
         "start_sequence_timestamp": start_sequence_timestamp,
         "end_sequence_timestamp": end_sequence_timestamp,
+        "retail_portfolio_id": retail_portfolio_id,
         "limit": limit,
         "cursor": cursor,
     }

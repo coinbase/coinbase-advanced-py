@@ -11,6 +11,7 @@ def get_products(
     product_ids: Optional[List[str]] = None,
     contract_expiry_type: Optional[str] = None,
     expiring_contract_status: Optional[str] = None,
+    get_tradability_status: Optional[bool] = False,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -39,12 +40,15 @@ def get_products(
         "product_ids": product_ids,
         "contract_expiry_type": contract_expiry_type,
         "expiring_contract_status": expiring_contract_status,
+        "get_tradability_status": get_tradability_status,
     }
 
     return self.get(endpoint, params=params, **kwargs)
 
 
-def get_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
+def get_product(
+    self, product_id: str, get_tradability_status: Optional[bool] = False, **kwargs
+) -> Dict[str, Any]:
     """
     **Get Product**
     _______________
@@ -64,7 +68,11 @@ def get_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/products/{product_id}"
 
-    return self.get(endpoint, **kwargs)
+    params = {
+        "get_tradability_status": get_tradability_status,
+    }
+
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def get_product_book(

@@ -48,7 +48,7 @@ client = RESTClient(api_key=api_key, api_secret=api_secret)
 ```
 After creating your API key, a json file will be downloaded to your computer. It's possible to  pass in the path to this file as an argument:
 ```python
-client = RESTClient(key_file="path/to/coinbase_cloud_api_key.json")
+client = RESTClient(key_file="path/to/cdp_api_key.json")
 ```
 We also support passing a file-like object as the `key_file` argument:
 ```python

@@ -7,6 +7,7 @@ def get_transaction_summary(
     self,
     product_type: Optional[str] = None,
     contract_expiry_type: Optional[str] = None,
+    product_venue: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -30,6 +31,7 @@ def get_transaction_summary(
     params = {
         "product_type": product_type,
         "contract_expiry_type": contract_expiry_type,
+        "product_venue": product_venue,
     }
 
     return self.get(endpoint, params=params, **kwargs)

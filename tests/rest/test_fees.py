@@ -20,13 +20,13 @@ class FeesTest(unittest.TestCase):
                 json=expected_response,
             )
             summary = client.get_transaction_summary(
-                "product_type", "contract_expiry_type"
+                "product_type", "contract_expiry_type", "product_venue"
             )
 
             captured_request = m.request_history[0]
 
             self.assertEqual(
                 captured_request.query,
-                "product_type=product_type&contract_expiry_type=contract_expiry_type",
+                "product_type=product_type&contract_expiry_type=contract_expiry_type&product_venue=product_venue",
             )
             self.assertEqual(summary, expected_response)

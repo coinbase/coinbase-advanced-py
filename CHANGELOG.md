@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.3] - 2024-JUL-22
+
+### Added
+- - `order_ids`, `time_in_forces` and `sort_by` parameters in List Orders
+  - `trade_ids` and `sort_by` in List Fills
+
+### Changed
+- `skip_fcm_risk_check` parameter removed from various Orders methods.
+- `product_id` and `order_type` has been replaced by `product_ids` and `order_types` in List Orders
+- `order_id` and `product_id` has been replaced by `order_ids` and `product_ids` in List Fills
+
 ## [1.4.2] - 2024-JUN-17
 
 ### Added

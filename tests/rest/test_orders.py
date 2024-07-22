@@ -1099,7 +1099,7 @@ class OrdersTest(unittest.TestCase):
                 json=expected_response,
             )
             orders = client.list_orders(
-                product_id="product_id_1",
+                product_ids=["product_id_1", "product_id_2"],
                 order_status="OPEN",
                 limit=2,
                 product_type="SPOT",
@@ -1109,7 +1109,7 @@ class OrdersTest(unittest.TestCase):
 
             self.assertEqual(
                 captured_request.query,
-                "product_id=product_id_1&order_status=open&limit=2&product_type=spot",
+                "product_ids=product_id_1&product_ids=product_id_2&order_status=open&limit=2&product_type=spot",
             )
             self.assertEqual(orders, expected_response)
 
@@ -1125,8 +1125,8 @@ class OrdersTest(unittest.TestCase):
                 json=expected_response,
             )
             orders = client.get_fills(
-                order_id="1234",
-                product_id="product_id_1",
+                order_ids=["1234"],
+                product_ids=["product_id_1"],
                 retail_portfolio_id="portfolio_id_1",
                 limit=2,
                 cursor="abc",
@@ -1136,7 +1136,7 @@ class OrdersTest(unittest.TestCase):
 
             self.assertEqual(
                 captured_request.query,
-                "order_id=1234&product_id=product_id_1&retail_portfolio_id=portfolio_id_1&limit=2&cursor=abc",
+                "order_ids=1234&product_ids=product_id_1&retail_portfolio_id=portfolio_id_1&limit=2&cursor=abc",
             )
             self.assertEqual(orders, expected_response)
 
@@ -1225,7 +1225,6 @@ class OrdersTest(unittest.TestCase):
                 commission_rate="0.005",
                 is_max=False,
                 tradable_balance="100",
-                skip_fcm_risk_check=False,
                 leverage="5",
                 margin_type="CROSS",
                 retail_portfolio_id="portfolio_id_1",
@@ -1244,7 +1243,6 @@ class OrdersTest(unittest.TestCase):
                     "commission_rate": {"value": "0.005"},
                     "is_max": False,
                     "tradable_balance": "100",
-                    "skip_fcm_risk_check": False,
                     "leverage": "5",
                     "margin_type": "CROSS",
                     "retail_portfolio_id": "portfolio_id_1",
@@ -1277,7 +1275,6 @@ class OrdersTest(unittest.TestCase):
                     "side": "BUY",
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1307,7 +1304,6 @@ class OrdersTest(unittest.TestCase):
                     "side": "BUY",
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1337,7 +1333,6 @@ class OrdersTest(unittest.TestCase):
                     "side": "SELL",
                     "order_configuration": {"market_market_ioc": {"base_size": "1"}},
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1368,7 +1363,6 @@ class OrdersTest(unittest.TestCase):
                         "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1399,7 +1393,6 @@ class OrdersTest(unittest.TestCase):
                         "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1430,7 +1423,6 @@ class OrdersTest(unittest.TestCase):
                         "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1471,7 +1463,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1511,7 +1502,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1551,7 +1541,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1593,7 +1582,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1631,7 +1619,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1669,7 +1656,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1700,7 +1686,6 @@ class OrdersTest(unittest.TestCase):
                         "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1731,7 +1716,6 @@ class OrdersTest(unittest.TestCase):
                         "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1762,7 +1746,6 @@ class OrdersTest(unittest.TestCase):
                         "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1805,7 +1788,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1847,7 +1829,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1889,7 +1870,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1934,7 +1914,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1978,7 +1957,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2022,7 +2000,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2063,7 +2040,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2100,7 +2076,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2137,7 +2112,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2180,7 +2154,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2222,7 +2195,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2260,7 +2232,6 @@ class OrdersTest(unittest.TestCase):
                         }
                     },
                     "is_max": False,
-                    "skip_fcm_risk_check": False,
                 },
             )
             self.assertEqual(preview, expected_response)

@@ -118,6 +118,7 @@ class WSBase(APIBase):
         self.websocket = None
         self.loop = None
         self.thread = None
+        self._ws_task = None
 
         self.retry = retry
         self._retry_max_tries = WS_RETRY_MAX
@@ -176,7 +177,7 @@ class WSBase(APIBase):
 
             # Start the message handler coroutine after establishing connection
             if not self._retrying:
-                asyncio.create_task(self._message_handler())
+                self._task = asyncio.create_task(self._message_handler())
         except asyncio.TimeoutError as toe:
             self.websocket = None
             logger.error("Connection attempt timed out: %s", toe)

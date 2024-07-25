@@ -118,7 +118,7 @@ class WSBase(APIBase):
         self.websocket = None
         self.loop = None
         self.thread = None
-        self._ws_task = None
+        self._task = None
 
         self.retry = retry
         self._retry_max_tries = WS_RETRY_MAX

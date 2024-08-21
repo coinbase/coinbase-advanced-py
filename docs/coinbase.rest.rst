@@ -100,6 +100,7 @@ Orders
 .. autofunction:: coinbase.rest.RESTClient.preview_trigger_bracket_order_gtd
 .. autofunction:: coinbase.rest.RESTClient.preview_trigger_bracket_order_gtd_buy
 .. autofunction:: coinbase.rest.RESTClient.preview_trigger_bracket_order_gtd_sell
+.. autofunction:: coinbase.rest.RESTClient.close_position
 
 Portfolios
 -------------------------------
@@ -114,7 +115,6 @@ Portfolios
 Futures
 ----------------------------
 
-.. autofunction:: coinbase.rest.RESTClient.close_position
 .. autofunction:: coinbase.rest.RESTClient.get_futures_balance_summary
 .. autofunction:: coinbase.rest.RESTClient.list_futures_positions
 .. autofunction:: coinbase.rest.RESTClient.get_futures_position

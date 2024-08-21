@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.5.0] - 2024-AUG-21
+## [1.5.0] - 2024-AUG-21 
 
 ### Added
 - `get_all_products` parameter to `get_products` and `get_public_products`

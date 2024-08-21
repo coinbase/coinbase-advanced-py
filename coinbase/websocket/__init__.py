@@ -3,7 +3,7 @@ from .websocket_base import WSBase, WSClientConnectionClosedException, WSClientE
 
 class WSClient(WSBase):
     """
-    **WSBase Client**
+    **WSClient**
     _____________________________
 
     Initialize using WSClient

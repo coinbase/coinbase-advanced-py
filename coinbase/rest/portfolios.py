@@ -57,7 +57,9 @@ def create_portfolio(self, name: str, **kwargs) -> Dict[str, Any]:
     return self.post(endpoint, data=data, **kwargs)
 
 
-def get_portfolio_breakdown(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
+def get_portfolio_breakdown(
+    self, portfolio_uuid: str, currency: Optional[str] = None, **kwargs
+) -> Dict[str, Any]:
     """
     **Get Portfolio Breakdown**
     ___________________________
@@ -77,7 +79,8 @@ def get_portfolio_breakdown(self, portfolio_uuid: str, **kwargs) -> Dict[str, An
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
-    return self.get(endpoint, **kwargs)
+    params = {"currency": currency}
+    return self.get(endpoint, params=params, **kwargs)
 
 
 def move_portfolio_funds(

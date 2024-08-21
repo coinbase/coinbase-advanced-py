@@ -20,14 +20,14 @@ class MarketDataTest(unittest.TestCase):
                 json=expected_response,
             )
             candles = client.get_candles(
-                "product_id_1", "1640995200", "1641081600", "FIVE_MINUTE"
+                "product_id_1", "1640995200", "1641081600", "FIVE_MINUTE", 2
             )
 
             captured_request = m.request_history[0]
 
             self.assertEqual(
                 captured_request.query,
-                "start=1640995200&end=1641081600&granularity=five_minute",
+                "start=1640995200&end=1641081600&granularity=five_minute&limit=2",
             )
             self.assertEqual(candles, expected_response)
 

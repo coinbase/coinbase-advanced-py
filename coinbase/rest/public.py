@@ -26,7 +26,11 @@ def get_unix_time(self, **kwargs) -> Dict[str, Any]:
 
 
 def get_public_product_book(
-    self, product_id: str, limit: Optional[int] = None, **kwargs
+    self,
+    product_id: str,
+    limit: Optional[int] = None,
+    aggregation_price_increment: Optional[str] = None,
+    **kwargs,
 ) -> Dict[str, Any]:
     """
     **Get Public Product Book**
@@ -52,7 +56,11 @@ def get_public_product_book(
 
     endpoint = f"{API_PREFIX}/market/product_book"
 
-    params = {"product_id": product_id, "limit": limit}
+    params = {
+        "product_id": product_id,
+        "limit": limit,
+        "aggregation_price_increment": aggregation_price_increment,
+    }
 
     return self.get(endpoint, params=params, public=True, **kwargs)
 
@@ -65,6 +73,7 @@ def get_public_products(
     product_ids: Optional[List[str]] = None,
     contract_expiry_type: Optional[str] = None,
     expiring_contract_status: Optional[str] = None,
+    get_all_products: bool = False,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -99,6 +108,7 @@ def get_public_products(
         "product_ids": product_ids,
         "contract_expiry_type": contract_expiry_type,
         "expiring_contract_status": expiring_contract_status,
+        "get_all_products": get_all_products,
     }
 
     return self.get(endpoint, params=params, public=True, **kwargs)
@@ -134,7 +144,13 @@ def get_public_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
 
 
 def get_public_candles(
-    self, product_id: str, start: str, end: str, granularity: str, **kwargs
+    self,
+    product_id: str,
+    start: str,
+    end: str,
+    granularity: str,
+    limit: Optional[int] = None,
+    **kwargs,
 ) -> Dict[str, Any]:
     """
     **Get Public Product Candles**
@@ -161,11 +177,7 @@ def get_public_candles(
     """
     endpoint = f"{API_PREFIX}/market/products/{product_id}/candles"
 
-    params = {
-        "start": start,
-        "end": end,
-        "granularity": granularity,
-    }
+    params = {"start": start, "end": end, "granularity": granularity, "limit": limit}
 
     return self.get(endpoint, params=params, public=True, **kwargs)
 

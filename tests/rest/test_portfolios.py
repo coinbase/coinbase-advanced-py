@@ -57,11 +57,11 @@ class PortfoliosTest(unittest.TestCase):
                 "https://api.coinbase.com/api/v3/brokerage/portfolios/1234",
                 json=expected_response,
             )
-            breakdown = client.get_portfolio_breakdown("1234")
+            breakdown = client.get_portfolio_breakdown("1234", "USD")
 
             captured_request = m.request_history[0]
 
-            self.assertEqual(captured_request.query, "")
+            self.assertEqual(captured_request.query, "currency=usd")
             self.assertEqual(breakdown, expected_response)
 
     def test_move_portfolio_funds(self):

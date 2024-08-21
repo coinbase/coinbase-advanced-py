@@ -74,6 +74,9 @@ print(dumps(order, indent=2))
 ```
 This code calls the `get_accounts` and `market_order_buy` endpoints.
 
+TIP: Setting `client_order_id` to the empty string will auto generate a unique client_order_id per call.
+However, this will remove the intended safeguard of accidentally placing duplicate orders.
+
 Refer to the [Advanced API Reference](https://docs.cdp.coinbase.com/advanced-trade/reference) for detailed information on each exposed endpoint.
 Look in the `coinbase.rest` module to see the API hooks that are exposed.
 

@@ -25,7 +25,7 @@ class ProductsTest(unittest.TestCase):
 
             self.assertEqual(
                 captured_request.query,
-                "limit=2&product_type=spot&get_tradability_status=false",
+                "limit=2&product_type=spot&get_tradability_status=false&get_all_products=false",
             )
             self.assertEqual(products, expected_response)
 

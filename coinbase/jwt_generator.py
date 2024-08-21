@@ -4,7 +4,7 @@ import time
 import jwt
 from cryptography.hazmat.primitives import serialization
 
-from coinbase.constants import BASE_URL, REST_SERVICE, WS_SERVICE
+from coinbase.constants import BASE_URL
 
 
 def build_jwt(key_var, secret_var, uri=None) -> str:

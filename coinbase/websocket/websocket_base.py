@@ -57,28 +57,7 @@ class WSClientConnectionClosedException(Exception):
 
 class WSBase(APIBase):
     """
-    **WSBase Client**
-    _____________________________
-
-    Initialize using WSClient
-
-    __________
-
-    **Parameters**:
-
-    - **api_key | Optional (str)** - The API key
-    - **api_secret | Optional (str)** - The API key secret
-    - **key_file | Optional (IO | str)** - Path to API key file or file-like object
-    - **base_url | (str)** - The websocket base url. Default set to "wss://advanced-trade-ws.coinbase.com"
-    - **timeout | Optional (int)** - Set timeout in seconds for REST requests
-    - **max_size | Optional (int)** - Max size in bytes for messages received. Default set to (10 * 1024 * 1024)
-    - **on_message | Optional (Callable[[str], None])** - Function called when a message is received
-    - **on_open | Optional ([Callable[[], None]])** - Function called when a connection is opened
-    - **on_close | Optional ([Callable[[], None]])** - Function called when a connection is closed
-    - **retry | Optional (bool)** - Enables automatic reconnections. Default set to True
-    - **verbose | Optional (bool)** - Enables debug logging. Default set to False
-
-
+    :meta private:
     """
 
     def __init__(
@@ -118,6 +97,7 @@ class WSBase(APIBase):
         self.websocket = None
         self.loop = None
         self.thread = None
+        self._task = None
 
         self.retry = retry
         self._retry_max_tries = WS_RETRY_MAX
@@ -176,7 +156,8 @@ class WSBase(APIBase):
 
             # Start the message handler coroutine after establishing connection
             if not self._retrying:
-                asyncio.create_task(self._message_handler())
+                self._task = asyncio.create_task(self._message_handler())
+
         except asyncio.TimeoutError as toe:
             self.websocket = None
             logger.error("Connection attempt timed out: %s", toe)

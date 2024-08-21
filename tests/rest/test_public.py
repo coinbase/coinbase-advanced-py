@@ -99,7 +99,10 @@ class PublicTest(unittest.TestCase):
 
             captured_request = m.request_history[0]
 
-            self.assertEqual(captured_request.query, "limit=2&product_type=spot")
+            self.assertEqual(
+                captured_request.query,
+                "limit=2&product_type=spot&get_all_products=false",
+            )
             self.assertEqual(products, expected_response)
 
     def test_get_public_product(self):
@@ -132,14 +135,14 @@ class PublicTest(unittest.TestCase):
                 json=expected_response,
             )
             candles = client.get_public_candles(
-                "product_id_1", "1640995200", "1641081600", "FIVE_MINUTE"
+                "product_id_1", "1640995200", "1641081600", "FIVE_MINUTE", 2
             )
 
             captured_request = m.request_history[0]
 
             self.assertEqual(
                 captured_request.query,
-                "start=1640995200&end=1641081600&granularity=five_minute",
+                "start=1640995200&end=1641081600&granularity=five_minute&limit=2",
             )
             self.assertEqual(candles, expected_response)
 

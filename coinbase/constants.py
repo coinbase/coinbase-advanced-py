@@ -7,11 +7,9 @@ USER_AGENT = f"coinbase-advanced-py/{__version__}"
 # REST Constants
 BASE_URL = "api.coinbase.com"
 API_PREFIX = "/api/v3/brokerage"
-REST_SERVICE = "retail_rest_api_proxy"
 
 # Websocket Constants
 WS_BASE_URL = "wss://advanced-trade-ws.coinbase.com"
-WS_SERVICE = "public_websocket_api"
 
 WS_RETRY_MAX = 5
 WS_RETRY_BASE = 5
@@ -30,5 +28,6 @@ TICKER = "ticker"
 TICKER_BATCH = "ticker_batch"
 LEVEL2 = "level2"
 USER = "user"
+FUTURES_BALANCE_SUMMARY = "futures_balance_summary"
 
-WS_AUTH_CHANNELS = {USER}
+WS_AUTH_CHANNELS = {USER, FUTURES_BALANCE_SUMMARY}

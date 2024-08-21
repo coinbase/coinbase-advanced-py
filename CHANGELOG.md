@@ -1,10 +1,22 @@
 # Changelog
 
+## [1.5.0] - 2024-AUG-21 
+
+### Added
+- `get_all_products` parameter to `get_products` and `get_public_products`
+- `aggregation_price_increment` parameter to `get_product_book` and `get_public_product_book`
+- Support for API key permissions endpoint with`get_api_key_permissions`
+- Support for auto generating unique client_order_id when set to empty string
+- Support for Futures Balance Summary Channel in `WSClient`
+
+### Changed
+- Heartbeats channel methods no longer require `product_ids`
+
 ## [1.4.3] - 2024-JUL-22
 
 ### Added
-- - `order_ids`, `time_in_forces` and `sort_by` parameters in List Orders
-  - `trade_ids` and `sort_by` in List Fills
+- `order_ids`, `time_in_forces` and `sort_by` parameters in List Orders
+- `trade_ids` and `sort_by` in List Fills
 
 ### Changed
 - `skip_fcm_risk_check` parameter removed from various Orders methods.

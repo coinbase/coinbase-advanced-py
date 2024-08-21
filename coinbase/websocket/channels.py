@@ -2,6 +2,7 @@ from typing import List
 
 from coinbase.constants import (
     CANDLES,
+    FUTURES_BALANCE_SUMMARY,
     HEARTBEATS,
     LEVEL2,
     MARKET_TRADES,
@@ -12,7 +13,7 @@ from coinbase.constants import (
 )
 
 
-def heartbeats(self, product_ids: List[str]) -> None:
+def heartbeats(self) -> None:
     """
     **Heartbeats Subscribe**
     ________________________
@@ -21,17 +22,17 @@ def heartbeats(self, product_ids: List[str]) -> None:
 
     **Description:**
 
-    Subscribe to heartbeats channel for a list of products_ids.
+    Subscribe to heartbeats channel.
 
     __________
 
     **Read more on the official documentation:** `Heartbeats Channel
     <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#heartbeats-channel>`_
     """
-    self.subscribe(product_ids, [HEARTBEATS])
+    self.subscribe([], [HEARTBEATS])
 
 
-async def heartbeats_async(self, product_ids: List[str]) -> None:
+async def heartbeats_async(self) -> None:
     """
     **Heartbeats Subscribe Async**
     ______________________________
@@ -40,17 +41,17 @@ async def heartbeats_async(self, product_ids: List[str]) -> None:
 
     **Description:**
 
-    Async subscribe to heartbeats channel for a list of products_ids.
+    Async subscribe to heartbeats channel.
 
     __________
 
     **Read more on the official documentation:** `Heartbeats Channel
     <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#heartbeats-channel>`_
     """
-    await self.subscribe_async(product_ids, [HEARTBEATS])
+    await self.subscribe_async([], [HEARTBEATS])
 
 
-def heartbeats_unsubscribe(self, product_ids: List[str]) -> None:
+def heartbeats_unsubscribe(self) -> None:
     """
     **Heartbeats Unsubscribe**
     __________________________
@@ -59,17 +60,19 @@ def heartbeats_unsubscribe(self, product_ids: List[str]) -> None:
 
     **Description:**
 
-    Unsubscribe to heartbeats channel for a list of products_ids.
+    Unsubscribe to heartbeats channel.
 
     __________
 
     **Read more on the official documentation:** `Heartbeats Channel
     <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#heartbeats-channel>`_
     """
-    self.unsubscribe(product_ids, [HEARTBEATS])
+    self.unsubscribe([], [HEARTBEATS])
 
 
-async def heartbeats_unsubscribe_async(self, product_ids: List[str]) -> None:
+async def heartbeats_unsubscribe_async(
+    self,
+) -> None:
     """
     **Heartbeats Unsubscribe Async**
     ________________________________
@@ -78,14 +81,14 @@ async def heartbeats_unsubscribe_async(self, product_ids: List[str]) -> None:
 
     **Description:**
 
-    Async unsubscribe to heartbeats channel for a list of products_ids.
+    Async unsubscribe to heartbeats channel.
 
     __________
 
     **Read more on the official documentation:** `Heartbeats Channel
     <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#heartbeats-channel>`_
     """
-    await self.unsubscribe_async(product_ids, [HEARTBEATS])
+    await self.unsubscribe_async([], [HEARTBEATS])
 
 
 def candles(self, product_ids: List[str]) -> None:
@@ -618,3 +621,79 @@ async def user_unsubscribe_async(self, product_ids: List[str]) -> None:
     <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#user-channel>`_
     """
     await self.unsubscribe_async(product_ids, [USER])
+
+
+def futures_balance_summary(self) -> None:
+    """
+    **Futures Balance Summary Subscribe**
+    __________________
+
+    __________
+
+    **Description:**
+
+    Subscribe to futures_balance_summary channel.
+
+    __________
+
+    **Read more on the official documentation:** `Futures Balance Summary Channel
+    <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#futures-balance-summary-channel>`_
+    """
+    self.subscribe([], [FUTURES_BALANCE_SUMMARY])
+
+
+async def futures_balance_summary_async(self) -> None:
+    """
+    **Futures Balance Summary Subscribe Async**
+    ________________________
+
+    __________
+
+    **Description:**
+
+    Async subscribe to futures_balance_summary channel.
+
+    __________
+
+    **Read more on the official documentation:** `Futures Balance Summary Channel
+    <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#futures-balance-summary-channel>`_
+    """
+    await self.subscribe_async([], [FUTURES_BALANCE_SUMMARY])
+
+
+def futures_balance_summary_unsubscribe(self) -> None:
+    """
+    **Futures Balance Summary Unsubscribe**
+    ____________________
+
+    __________
+
+    **Description:**
+
+    Unsubscribe to futures_balance_summary channel.
+
+    __________
+
+    **Read more on the official documentation:** `Futures Balance Summary Channel
+    <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#futures-balance-summary-channel>`_
+    """
+    self.unsubscribe([], [FUTURES_BALANCE_SUMMARY])
+
+
+async def futures_balance_summary_unsubscribe_async(self) -> None:
+    """
+    **Futures Balance Summary Unsubscribe Async**
+    __________________________
+
+    __________
+
+    **Description:**
+
+    Async unsubscribe to futures_balance_summary channel.
+
+    __________
+
+    **Read more on the official documentation:** `Futures Balance Summary Channel
+    <https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#futures-balance-summary-channel>`_
+    """
+    await self.unsubscribe_async([], [FUTURES_BALANCE_SUMMARY])

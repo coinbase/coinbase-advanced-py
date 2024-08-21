@@ -2,12 +2,32 @@ from .rest_base import RESTBase
 
 
 class RESTClient(RESTBase):
+    """
+    **RESTClient**
+    _____________________________
+
+    Initialize using RESTClient
+
+    __________
+
+    **Parameters**:
+
+    - **api_key | Optional (str)** - The API key
+    - **api_secret | Optional (str)** - The API key secret
+    - **key_file | Optional (IO | str)** - Path to API key file or file-like object
+    - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com"
+    - **timeout | Optional (int)** - Set timeout in seconds for REST requests
+    - **verbose | Optional (bool)** - Enables debug logging. Default set to False
+
+
+    """
+
     from .accounts import get_account, get_accounts
     from .convert import commit_convert_trade, create_convert_quote, get_convert_trade
+    from .data_api import get_api_key_permissions
     from .fees import get_transaction_summary
     from .futures import (
         cancel_pending_futures_sweep,
-        close_position,
         get_current_margin_window,
         get_futures_balance_summary,
         get_futures_position,
@@ -20,6 +40,7 @@ class RESTClient(RESTBase):
     from .market_data import get_candles, get_market_trades
     from .orders import (
         cancel_orders,
+        close_position,
         create_order,
         edit_order,
         get_fills,

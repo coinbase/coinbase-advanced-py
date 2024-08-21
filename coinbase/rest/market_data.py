@@ -4,7 +4,13 @@ from coinbase.constants import API_PREFIX
 
 
 def get_candles(
-    self, product_id: str, start: str, end: str, granularity: str, **kwargs
+    self,
+    product_id: str,
+    start: str,
+    end: str,
+    granularity: str,
+    limit: Optional[int] = None,
+    **kwargs,
 ) -> Dict[str, Any]:
     """
     **Get Product Candles**
@@ -25,11 +31,7 @@ def get_candles(
     """
     endpoint = f"{API_PREFIX}/products/{product_id}/candles"
 
-    params = {
-        "start": start,
-        "end": end,
-        "granularity": granularity,
-    }
+    params = {"start": start, "end": end, "granularity": granularity, "limit": limit}
 
     return self.get(endpoint, params=params, **kwargs)
 

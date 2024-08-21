@@ -5,7 +5,6 @@ import unittest
 import jwt
 
 from coinbase import jwt_generator
-from coinbase.constants import REST_SERVICE, WS_SERVICE
 
 from .constants import TEST_API_KEY, TEST_API_SECRET
 

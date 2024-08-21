@@ -19,14 +19,14 @@ Getting Started
    :alt: Apache License 2.0
 
 Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug
-into the `Coinbase Advanced API <https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome>`_
+into the `Coinbase Advanced API <https://docs.cdp.coinbase.com/advanced-trade/docs/welcome/>`_
 
 
-- Docs: https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome
+- Docs: https://docs.cdp.coinbase.com/advanced-trade/docs/welcome/
 - Python SDK: https://github.com/coinbase/coinbase-advanced-py
 
 For detailed exercises on how to get started using the SDK look at our SDK Overview:
-https://docs.cloud.coinbase.com/advanced-trade-api/docs/sdk-overview
+https://docs.cdp.coinbase.com/advanced-trade/docs/sdk-overview
 
 -------------
 

@@ -43,23 +43,7 @@ def handle_exception(response):
 
 class RESTBase(APIBase):
     """
-    **RESTClient**
-    _____________________________
-
-    Initialize using RESTClient
-
-    __________
-
-    **Parameters**:
-
-    - **api_key | Optional (str)** - The API key
-    - **api_secret | Optional (str)** - The API key secret
-    - **key_file | Optional (IO | str)** - Path to API key file or file-like object
-    - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com"
-    - **timeout | Optional (int)** - Set timeout in seconds for REST requests
-    - **verbose | Optional (bool)** - Enables debug logging. Default set to False
-
-
+    :meta private:
     """
 
     def __init__(

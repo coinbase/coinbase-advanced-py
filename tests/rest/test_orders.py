@@ -1222,9 +1222,6 @@ class OrdersTest(unittest.TestCase):
                 "product_id_1",
                 "BUY",
                 order_configuration,
-                commission_rate="0.005",
-                is_max=False,
-                tradable_balance="100",
                 leverage="5",
                 margin_type="CROSS",
                 retail_portfolio_id="portfolio_id_1",
@@ -1240,9 +1237,6 @@ class OrdersTest(unittest.TestCase):
                     "product_id": "product_id_1",
                     "side": "BUY",
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
-                    "commission_rate": {"value": "0.005"},
-                    "is_max": False,
-                    "tradable_balance": "100",
                     "leverage": "5",
                     "margin_type": "CROSS",
                     "retail_portfolio_id": "portfolio_id_1",
@@ -1274,7 +1268,6 @@ class OrdersTest(unittest.TestCase):
                     "product_id": "product_id_1",
                     "side": "BUY",
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1303,7 +1296,6 @@ class OrdersTest(unittest.TestCase):
                     "product_id": "product_id_1",
                     "side": "BUY",
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1332,7 +1324,6 @@ class OrdersTest(unittest.TestCase):
                     "product_id": "product_id_1",
                     "side": "SELL",
                     "order_configuration": {"market_market_ioc": {"base_size": "1"}},
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1362,7 +1353,6 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {
                         "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1392,7 +1382,6 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {
                         "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1422,7 +1411,6 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {
                         "sor_limit_ioc": {"base_size": "1", "limit_price": "100"}
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1462,7 +1450,6 @@ class OrdersTest(unittest.TestCase):
                             "post_only": True,
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1501,7 +1488,6 @@ class OrdersTest(unittest.TestCase):
                             "post_only": True,
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1540,7 +1526,6 @@ class OrdersTest(unittest.TestCase):
                             "post_only": True,
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1581,7 +1566,6 @@ class OrdersTest(unittest.TestCase):
                             "post_only": False,
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1618,7 +1602,6 @@ class OrdersTest(unittest.TestCase):
                             "post_only": False,
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1655,7 +1638,6 @@ class OrdersTest(unittest.TestCase):
                             "post_only": False,
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1685,7 +1667,6 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {
                         "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1715,7 +1696,6 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {
                         "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1745,7 +1725,6 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {
                         "limit_limit_fok": {"base_size": "1", "limit_price": "100"}
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1787,7 +1766,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1828,7 +1806,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1869,7 +1846,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1913,7 +1889,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1956,7 +1931,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -1999,7 +1973,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_direction": "STOP_DIRECTION_STOP_UP",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2039,7 +2012,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_trigger_price": "90",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2075,7 +2047,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_trigger_price": "90",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2111,7 +2082,6 @@ class OrdersTest(unittest.TestCase):
                             "stop_trigger_price": "90",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2153,7 +2123,6 @@ class OrdersTest(unittest.TestCase):
                             "end_time": "2022-01-01T00:00:00Z",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2194,7 +2163,6 @@ class OrdersTest(unittest.TestCase):
                             "end_time": "2022-01-01T00:00:00Z",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
@@ -2231,7 +2199,38 @@ class OrdersTest(unittest.TestCase):
                             "end_time": "2022-01-01T00:00:00Z",
                         }
                     },
-                    "is_max": False,
                 },
             )
             self.assertEqual(preview, expected_response)
+
+    def test_close_position(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        expected_response = {
+            "client_order_id": "client_order_id_1",
+            "product_id": "product_id_1",
+        }
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/close_position",
+                json=expected_response,
+            )
+            closedOrder = client.close_position(
+                "client_order_id_1", "product_id_1", "100"
+            )
+
+            captured_request = m.request_history[0]
+            captured_json = captured_request.json()
+
+            self.assertEqual(captured_request.query, "")
+            self.assertEqual(
+                captured_json,
+                {
+                    "client_order_id": "client_order_id_1",
+                    "product_id": "product_id_1",
+                    "size": "100",
+                },
+            )
+            self.assertEqual(closedOrder, expected_response)

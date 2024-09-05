@@ -36,6 +36,10 @@ Channels
 .. autofunction:: coinbase.websocket.WSUserClient.user_async
 .. autofunction:: coinbase.websocket.WSUserClient.user_unsubscribe
 .. autofunction:: coinbase.websocket.WSUserClient.user_unsubscribe_async
+.. autofunction:: coinbase.websocket.WSUserClient.futures_balance_summary
+.. autofunction:: coinbase.websocket.WSUserClient.futures_balance_summary_async
+.. autofunction:: coinbase.websocket.WSUserClient.futures_balance_summary_unsubscribe
+.. autofunction:: coinbase.websocket.WSUserClient.futures_balance_summary_unsubscribe_async
 
 Exceptions
 ---------------------------

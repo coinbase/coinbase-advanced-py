@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.1] - 2024-SEP-05
+
+### Added
+- Add WSUserClient to SDK documents
+
 ## [1.6.0] - 2024-SEP-05
 
 ### Added

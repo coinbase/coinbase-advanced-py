@@ -36,4 +36,5 @@ https://docs.cdp.coinbase.com/advanced-trade/docs/sdk-overview
 
    coinbase.rest
    coinbase.websocket
+   coinbase.websocket.user
    jwt_generator

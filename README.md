@@ -137,6 +137,22 @@ def on_open():
 
 client = WSClient(api_key=api_key, api_secret=api_secret, on_message=on_message, on_open=on_open)
 ```
+### WebSocket User API Client
+We offer a WebSocket User API client that allows you to connect to the Coinbase Advanced Trade WebSocket [user channel](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#user-channel) and [futures_balance_summary channel](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#futures-balance-summary-channel).
+
+In your code, import the WSUserClient class instead of WSClient.
+
+```python
+from coinbase.websocket import WSUserClient
+
+api_key = "organizations/{org_id}/apiKeys/{key_id}"
+api_secret = "-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n"
+
+def on_message(msg):
+    print(msg)
+
+client = WSUserClient(api_key=api_key, api_secret=api_secret, on_message=on_message)
+```
 
 ### Using the WebSocket Client
 Once you have instantiated the client, you can connect to the WebSocket API by calling the `open` method, and disconnect by calling the `close` method.

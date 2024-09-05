@@ -10,6 +10,7 @@ API_PREFIX = "/api/v3/brokerage"
 
 # Websocket Constants
 WS_BASE_URL = "wss://advanced-trade-ws.coinbase.com"
+WS_USER_BASE_URL = "wss://advanced-trade-ws-user.coinbase.com"
 
 WS_RETRY_MAX = 5
 WS_RETRY_BASE = 5

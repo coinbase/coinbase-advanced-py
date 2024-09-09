@@ -105,6 +105,12 @@ market_trades = client.get_market_trades(product_id="BTC-USD", limit=5)
 portfolio = client.create_portfolio(name="TestPortfolio")
 ```
 
+### Rate Limit Response Headers
+The Advanced API returns useful rate limit information in the response headers as detailed in our [documentation](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-rate-limits#private-endpoints). By initializing the RESTClient with the `rate_limit_headers` field set to True, as shown below, these headers will be appended as fields to the API response body:
+```python
+client = RESTClient(api_key=api_key, api_secret=api_secret, rate_limit_headers=True)
+```
+
 ___
 ## WebSocket API Client
 We offer a WebSocket API client that allows you to connect to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview).

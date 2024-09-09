@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.2] - 2024-SEP-09
+
+### Added
+- Support for RESTClient to append rate limit response headers to REST response bodies by setting `rate_limit_headers` to `True`.
+
 ## [1.6.1] - 2024-SEP-05
 
 ### Added

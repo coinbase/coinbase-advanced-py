@@ -8,7 +8,13 @@ from requests.exceptions import HTTPError
 
 from coinbase import jwt_generator
 from coinbase.api_base import APIBase, get_logger
-from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, BASE_URL, USER_AGENT
+from coinbase.constants import (
+    API_ENV_KEY,
+    API_SECRET_ENV_KEY,
+    BASE_URL,
+    RATE_LIMIT_HEADERS,
+    USER_AGENT,
+)
 
 logger = get_logger("coinbase.RESTClient")
 
@@ -54,6 +60,7 @@ class RESTBase(APIBase):
         base_url=BASE_URL,
         timeout: Optional[int] = None,
         verbose: Optional[bool] = False,
+        rate_limit_headers: Optional[bool] = False,
     ):
         super().__init__(
             api_key=api_key,
@@ -63,6 +70,7 @@ class RESTBase(APIBase):
             timeout=timeout,
             verbose=verbose,
         )
+        self.rate_limit_headers = rate_limit_headers
         self.session = requests.Session()
         if verbose:
             logger.setLevel(logging.DEBUG)
@@ -221,7 +229,17 @@ class RESTBase(APIBase):
 
         logger.debug(f"Raw response: {response.json()}")
 
-        return response.json()
+        response_data = response.json()
+
+        if self.rate_limit_headers:
+            response_headers = dict(response.headers)
+            specific_headers = {
+                key: response_headers.get(key, None) for key in RATE_LIMIT_HEADERS
+            }
+
+            response_data = {**response_data, **specific_headers}
+
+        return response_data
 
     def set_headers(self, method, path):
         """

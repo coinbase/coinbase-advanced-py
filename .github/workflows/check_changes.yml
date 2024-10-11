@@ -1,0 +1,24 @@
+name: Check for Changes in get_accounts
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for changes in rest/accounts.py
+        run: |
+          if git diff HEAD~1 -- rest/accounts.py | grep 'get_accounts'; then
+            echo "Changes detected in get_accounts function"
+          else
+            echo "No changes detected in get_accounts function"
+          fi

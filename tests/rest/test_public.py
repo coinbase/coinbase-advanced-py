@@ -25,7 +25,7 @@ class PublicTest(unittest.TestCase):
             captured_headers = captured_request.headers
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(time, expected_response)
+            self.assertEqual(time.__dict__, expected_response)
             self.assertIn("Authorization", captured_headers)
 
     def test_unauthenticated_request(self):
@@ -45,7 +45,7 @@ class PublicTest(unittest.TestCase):
             captured_headers = captured_request.headers
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(time, expected_response)
+            self.assertEqual(time.__dict__, expected_response)
             self.assertNotIn("Authorization", captured_headers)
 
     def test_get_time(self):
@@ -64,7 +64,7 @@ class PublicTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(time, expected_response)
+            self.assertEqual(time.__dict__, expected_response)
 
     def test_get_public_product_book(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -82,7 +82,7 @@ class PublicTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "product_id=product_1&limit=10")
-            self.assertEqual(book, expected_response)
+            self.assertEqual(book.__dict__, expected_response)
 
     def test_get_public_products(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -103,7 +103,7 @@ class PublicTest(unittest.TestCase):
                 captured_request.query,
                 "limit=2&product_type=spot&get_all_products=false",
             )
-            self.assertEqual(products, expected_response)
+            self.assertEqual(products.__dict__, expected_response)
 
     def test_get_public_product(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -121,7 +121,7 @@ class PublicTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(product, expected_response)
+            self.assertEqual(product.__dict__, expected_response)
 
     def test_get_public_candles(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -144,7 +144,7 @@ class PublicTest(unittest.TestCase):
                 captured_request.query,
                 "start=1640995200&end=1641081600&granularity=five_minute&limit=2",
             )
-            self.assertEqual(candles, expected_response)
+            self.assertEqual(candles.__dict__, expected_response)
 
     def test_get_public_market_trades(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -166,4 +166,4 @@ class PublicTest(unittest.TestCase):
             self.assertEqual(
                 captured_request.query, "limit=10&start=1640995200&end=1641081600"
             )
-            self.assertEqual(trades, expected_response)
+            self.assertEqual(trades.__dict__, expected_response)

@@ -24,7 +24,7 @@ class FuturesTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(balance_summary, expected_response)
+            self.assertEqual(balance_summary.__dict__, expected_response)
 
     def test_list_futures_positions(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -42,7 +42,7 @@ class FuturesTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(positions, expected_response)
+            self.assertEqual(positions.__dict__, expected_response)
 
     def test_get_futures_position(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -60,7 +60,7 @@ class FuturesTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(position, expected_response)
+            self.assertEqual(position.__dict__, expected_response)
 
     def test_schedule_futures_sweep(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -80,7 +80,7 @@ class FuturesTest(unittest.TestCase):
 
             self.assertEqual(captured_request.query, "")
             self.assertEqual(captured_json, {"usd_amount": "5"})
-            self.assertEqual(response, expected_response)
+            self.assertEqual(response.__dict__, expected_response)
 
     def test_list_futures_sweeps(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -98,7 +98,7 @@ class FuturesTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(sweeps, expected_response)
+            self.assertEqual(sweeps.__dict__, expected_response)
 
     def test_cancel_pending_futures_sweep(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -116,7 +116,7 @@ class FuturesTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(delete, expected_response)
+            self.assertEqual(delete.__dict__, expected_response)
 
     def test_get_intraday_margin_setting(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -134,7 +134,7 @@ class FuturesTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(intraday_margin_setting, expected_response)
+            self.assertEqual(intraday_margin_setting.__dict__, expected_response)
 
     def test_get_current_margin_window(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -154,7 +154,7 @@ class FuturesTest(unittest.TestCase):
             self.assertEqual(
                 captured_request.query, "margin_profile_type=margin_profile_type_1"
             )
-            self.assertEqual(margin_window, expected_response)
+            self.assertEqual(margin_window.__dict__, expected_response)
 
     def test_set_intraday_margin_setting(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -181,4 +181,4 @@ class FuturesTest(unittest.TestCase):
                 },
             )
 
-            self.assertEqual(setting, expected_response)
+            self.assertEqual(setting.__dict__, expected_response)

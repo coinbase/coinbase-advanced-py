@@ -6,6 +6,8 @@
 Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome).
 This SDK also supports easy connection to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview).
 
+Coinbase Advanced Trade offers a comprehensive API for traders, providing access to real-time market data, order management, and execution. Elevate your trading strategies and develop sophisticated solutions using our powerful tools and features.
+
 For thorough documentation of all available functions, refer to the following link: https://coinbase.github.io/coinbase-advanced-py
 
 ___
@@ -79,6 +81,20 @@ However, this will remove the intended safeguard of accidentally placing duplica
 
 Refer to the [Advanced API Reference](https://docs.cdp.coinbase.com/advanced-trade/reference) for detailed information on each exposed endpoint.
 Look in the `coinbase.rest` module to see the API hooks that are exposed.
+
+### Custom Response Objects
+Endpoints will return corresponding, custom class objects. This allows you to retrieve response object fields using dot-notation. Here is an example of how you can access a product's price via the Get Product endpoint:
+```python
+product = client.get_product("BTC-USD")
+print(product.price)
+```
+Dot-notation is only available for fields that are defined. Although all higher-level fields have been defined, not every nested field has. Fields that are not defined are still accessible using standard bracket notation. 
+
+For example, we make a call to List Accounts. We take the first account from the defined `accounts` field and access the defined `available_balance` field. Despite its nested fields not being explicitly defined and inaccessible via dot-notation, we can still access them manually using bracket notation, like:
+```python
+accounts = client.get_accounts()
+print(accounts.accounts[0].available_balance['value'])
+```
 
 ### Passing in additional parameters
 Use `kwargs` to pass in any additional parameters. For example:

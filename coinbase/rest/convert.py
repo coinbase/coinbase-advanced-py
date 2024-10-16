@@ -1,6 +1,11 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.convert_types import (
+    CommitConvertTradeResponse,
+    CreateConvertQuoteResponse,
+    GetConvertTradeResponse,
+)
 
 
 def create_convert_quote(
@@ -11,7 +16,7 @@ def create_convert_quote(
     user_incentive_id: Optional[str] = None,
     code_val: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateConvertQuoteResponse:
     """
     **Create Convert Quote**
     ________________________
@@ -49,12 +54,12 @@ def create_convert_quote(
     if filtered_trade_incentive_metadata:
         data["trade_incentive_metadata"] = filtered_trade_incentive_metadata
 
-    return self.post(endpoint, data=data, **kwargs)
+    return CreateConvertQuoteResponse(self.post(endpoint, data=data, **kwargs))
 
 
 def get_convert_trade(
     self, trade_id: str, from_account: str, to_account: str, **kwargs
-) -> Dict[str, Any]:
+) -> GetConvertTradeResponse:
     """
     **Get Convert Trade**
     _____________________
@@ -78,12 +83,12 @@ def get_convert_trade(
         "to_account": to_account,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetConvertTradeResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def commit_convert_trade(
     self, trade_id: str, from_account: str, to_account: str, **kwargs
-) -> Dict[str, Any]:
+) -> CommitConvertTradeResponse:
     """
     **Commit Convert Trade**
     ________________________
@@ -107,4 +112,4 @@ def commit_convert_trade(
         "to_account": to_account,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return CommitConvertTradeResponse(self.post(endpoint, data=data, **kwargs))

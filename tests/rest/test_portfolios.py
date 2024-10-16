@@ -24,7 +24,7 @@ class PortfoliosTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "portfolio_type=default")
-            self.assertEqual(portfolios, expected_response)
+            self.assertEqual(portfolios.__dict__, expected_response)
 
     def test_create_portfolio(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -44,7 +44,7 @@ class PortfoliosTest(unittest.TestCase):
 
             self.assertEqual(captured_request.query, "")
             self.assertEqual(captured_json, {"name": "Test Portfolio"})
-            self.assertEqual(portfolio, expected_response)
+            self.assertEqual(portfolio.__dict__, expected_response)
 
     def test_get_portfolio_breakdown(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -62,7 +62,7 @@ class PortfoliosTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "currency=usd")
-            self.assertEqual(breakdown, expected_response)
+            self.assertEqual(breakdown.__dict__, expected_response)
 
     def test_move_portfolio_funds(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -89,7 +89,7 @@ class PortfoliosTest(unittest.TestCase):
                     "target_portfolio_uuid": "5678",
                 },
             )
-            self.assertEqual(move, expected_response)
+            self.assertEqual(move.__dict__, expected_response)
 
     def test_edit_portfolio(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -109,7 +109,7 @@ class PortfoliosTest(unittest.TestCase):
 
             self.assertEqual(captured_request.query, "")
             self.assertEqual(captured_json, {"name": "Test Portfolio"})
-            self.assertEqual(edit, expected_response)
+            self.assertEqual(edit.__dict__, expected_response)
 
     def test_delete_portfolio(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -127,4 +127,4 @@ class PortfoliosTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(delete, expected_response)
+            self.assertEqual(delete.__dict__, expected_response)

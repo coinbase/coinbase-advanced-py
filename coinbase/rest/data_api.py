@@ -1,12 +1,13 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.data_api_types import GetAPIKeyPermissionsResponse
 
 
 def get_api_key_permissions(
     self,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetAPIKeyPermissionsResponse:
     """
     **Get Api Key Permissions**
     _____________________________
@@ -25,4 +26,4 @@ def get_api_key_permissions(
     """
     endpoint = f"{API_PREFIX}/key_permissions"
 
-    return self.get(endpoint, **kwargs)
+    return GetAPIKeyPermissionsResponse(self.get(endpoint, **kwargs))

@@ -18,7 +18,7 @@ class RESTClient(RESTBase):
     - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com"
     - **timeout | Optional (int)** - Set timeout in seconds for REST requests
     - **verbose | Optional (bool)** - Enables debug logging. Default set to False
-
+    - **rate_limit_headers | Optional (bool)** - Enables rate limit headers. Default set to False
 
     """
 

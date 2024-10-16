@@ -43,7 +43,7 @@ class ConvertTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(quote, expected_response)
+            self.assertEqual(quote.__dict__, expected_response)
 
     def test_get_convert_trade(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -64,7 +64,7 @@ class ConvertTest(unittest.TestCase):
                 captured_request.query,
                 "from_account=from_account&to_account=to_account",
             )
-            self.assertEqual(trade, expected_response)
+            self.assertEqual(trade.__dict__, expected_response)
 
     def test_commit_convert_trade(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -87,4 +87,4 @@ class ConvertTest(unittest.TestCase):
                 captured_json,
                 {"from_account": "from_account", "to_account": "to_account"},
             )
-            self.assertEqual(trade, expected_response)
+            self.assertEqual(trade.__dict__, expected_response)

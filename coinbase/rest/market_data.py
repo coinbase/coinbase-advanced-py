@@ -1,6 +1,10 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.product_types import (
+    GetMarketTradesResponse,
+    GetProductCandlesResponse,
+)
 
 
 def get_candles(
@@ -11,7 +15,7 @@ def get_candles(
     granularity: str,
     limit: Optional[int] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetProductCandlesResponse:
     """
     **Get Product Candles**
     __________
@@ -33,7 +37,7 @@ def get_candles(
 
     params = {"start": start, "end": end, "granularity": granularity, "limit": limit}
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetProductCandlesResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_market_trades(
@@ -43,7 +47,7 @@ def get_market_trades(
     start: Optional[str] = None,
     end: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetMarketTradesResponse:
     """
     **Get Market Trades**
     _____________________
@@ -65,4 +69,4 @@ def get_market_trades(
 
     params = {"limit": limit, "start": start, "end": end}
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetMarketTradesResponse(self.get(endpoint, params=params, **kwargs))

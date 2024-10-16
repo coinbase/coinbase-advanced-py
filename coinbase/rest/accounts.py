@@ -1,6 +1,7 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.accounts_types import GetAccountResponse, ListAccountsResponse
 
 
 def get_accounts(
@@ -9,7 +10,7 @@ def get_accounts(
     cursor: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListAccountsResponse:
     """
     **List Accounts**
     _________________
@@ -33,10 +34,10 @@ def get_accounts(
         "retail_portfolio_id": retail_portfolio_id,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListAccountsResponse(self.get(endpoint, params=params, **kwargs))
 
 
-def get_account(self, account_uuid: str, **kwargs) -> Dict[str, Any]:
+def get_account(self, account_uuid: str, **kwargs) -> GetAccountResponse:
     """
 
     **Get Account**
@@ -55,4 +56,4 @@ def get_account(self, account_uuid: str, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/accounts/{account_uuid}"
 
-    return self.get(endpoint, **kwargs)
+    return GetAccountResponse(self.get(endpoint, **kwargs))

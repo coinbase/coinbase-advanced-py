@@ -3,8 +3,10 @@ import unittest
 from requests_mock import Mocker
 
 from coinbase.rest import RESTClient
+from coinbase.rest.types.orders_types import ListOrdersResponse
 
 from ..constants import TEST_API_KEY, TEST_API_SECRET
+from .serialize import object_to_dict
 
 
 class OrdersTest(unittest.TestCase):
@@ -49,7 +51,7 @@ class OrdersTest(unittest.TestCase):
                     "retail_portfolio_id": "portfolio_id_1",
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_market_order(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -69,7 +71,6 @@ class OrdersTest(unittest.TestCase):
 
             captured_request = m.request_history[0]
             captured_json = captured_request.json()
-
             self.assertEqual(captured_request.query, "")
             self.assertEqual(
                 captured_json,
@@ -80,7 +81,7 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_market_order_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -109,7 +110,7 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_market_order_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -138,7 +139,7 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {"market_market_ioc": {"base_size": "1"}},
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_ioc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -170,7 +171,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_ioc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -202,7 +203,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_ioc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -234,7 +235,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -275,7 +276,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_gtc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -315,7 +316,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_gtc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -355,7 +356,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_gtd(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -397,7 +398,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_gtd_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -434,7 +435,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_gtd_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -471,7 +472,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_fok(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -503,7 +504,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_fok_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -535,7 +536,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_limit_order_fok_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -567,7 +568,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_stop_limit_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -610,7 +611,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_stop_limit_order_gtc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -652,7 +653,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_stop_limit_order_gtc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -694,7 +695,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_stop_limit_order_gtd(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -739,7 +740,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_stop_limit_order_gtd_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -783,7 +784,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_stop_limit_order_gtd_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -827,7 +828,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_trigger_bracket_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -868,7 +869,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_trigger_bracket_order_gtc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -904,7 +905,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_trigger_bracket_order_gtc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -940,7 +941,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_trigger_bracket_order_gtd(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -983,7 +984,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_trigger_bracket_order_gtd_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1025,7 +1026,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_trigger_bracket_order_gtd_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1067,7 +1068,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_get_order(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1085,7 +1086,7 @@ class OrdersTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_list_orders(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1111,7 +1112,11 @@ class OrdersTest(unittest.TestCase):
                 captured_request.query,
                 "product_ids=product_id_1&product_ids=product_id_2&order_status=open&limit=2&product_type=spot",
             )
-            self.assertEqual(orders, expected_response)
+            actual_response_dict = object_to_dict(orders)
+            expected_response_dict = object_to_dict(
+                ListOrdersResponse(expected_response)
+            )
+            self.assertEqual(actual_response_dict, expected_response_dict)
 
     def test_get_fills(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1138,7 +1143,7 @@ class OrdersTest(unittest.TestCase):
                 captured_request.query,
                 "order_ids=1234&product_ids=product_id_1&retail_portfolio_id=portfolio_id_1&limit=2&cursor=abc",
             )
-            self.assertEqual(orders, expected_response)
+            self.assertEqual(orders.__dict__, expected_response)
 
     def test_edit_order(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1160,7 +1165,7 @@ class OrdersTest(unittest.TestCase):
             self.assertEqual(
                 captured_json, {"order_id": "order_id_1", "size": "100", "price": "50"}
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_preview_edit_order(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1182,7 +1187,7 @@ class OrdersTest(unittest.TestCase):
             self.assertEqual(
                 captured_json, {"order_id": "order_id_1", "size": "100", "price": "50"}
             )
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_cancel_orders(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1202,7 +1207,7 @@ class OrdersTest(unittest.TestCase):
 
             self.assertEqual(captured_request.query, "")
             self.assertEqual(captured_json, {"order_ids": ["order_id_1", "order_id_2"]})
-            self.assertEqual(order, expected_response)
+            self.assertEqual(order.__dict__, expected_response)
 
     def test_preview_order(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1242,7 +1247,7 @@ class OrdersTest(unittest.TestCase):
                     "retail_portfolio_id": "portfolio_id_1",
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_market_order(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1270,7 +1275,7 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_market_order_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1298,7 +1303,7 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {"market_market_ioc": {"quote_size": "1"}},
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_market_order_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1326,7 +1331,7 @@ class OrdersTest(unittest.TestCase):
                     "order_configuration": {"market_market_ioc": {"base_size": "1"}},
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_ioc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1355,7 +1360,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_ioc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1384,7 +1389,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_ioc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1413,7 +1418,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1452,7 +1457,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_gtc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1490,7 +1495,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_gtc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1528,7 +1533,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_gtd(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1568,7 +1573,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_gtd_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1604,7 +1609,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_gtd_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1640,7 +1645,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_fok(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1669,7 +1674,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_fok_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1698,7 +1703,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_limit_order_fok_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1727,7 +1732,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_stop_limit_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1768,7 +1773,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_stop_limit_order_gtc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1808,7 +1813,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_stop_limit_order_gtc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1848,7 +1853,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_stop_limit_order_gtd(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1891,7 +1896,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_stop_limit_order_gtd_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1933,7 +1938,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_stop_limit_order_gtd_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -1975,7 +1980,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_trigger_bracket_order_gtc(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -2014,7 +2019,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_trigger_bracket_order_gtc_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -2049,7 +2054,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_trigger_bracket_gtc_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -2084,7 +2089,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_trigger_bracket_order_gtd(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -2125,7 +2130,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_trigger_bracket_order_gtd_buy(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -2165,7 +2170,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_preview_trigger_bracket_gtd_sell(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -2201,7 +2206,7 @@ class OrdersTest(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(preview, expected_response)
+            self.assertEqual(preview.__dict__, expected_response)
 
     def test_close_position(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -2233,4 +2238,4 @@ class OrdersTest(unittest.TestCase):
                     "size": "100",
                 },
             )
-            self.assertEqual(closedOrder, expected_response)
+            self.assertEqual(closedOrder.__dict__, expected_response)

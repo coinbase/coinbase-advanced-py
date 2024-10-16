@@ -1,6 +1,12 @@
 from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.product_types import (
+    GetBestBidAskResponse,
+    GetProductBookResponse,
+    GetProductResponse,
+    ListProductsResponse,
+)
 
 
 def get_products(
@@ -14,7 +20,7 @@ def get_products(
     get_tradability_status: Optional[bool] = False,
     get_all_products: Optional[bool] = False,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListProductsResponse:
     """
     **List Products**
     _________________
@@ -45,12 +51,12 @@ def get_products(
         "get_all_products": get_all_products,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListProductsResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_product(
     self, product_id: str, get_tradability_status: Optional[bool] = False, **kwargs
-) -> Dict[str, Any]:
+) -> GetProductResponse:
     """
     **Get Product**
     _______________
@@ -74,7 +80,7 @@ def get_product(
         "get_tradability_status": get_tradability_status,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetProductResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_product_book(
@@ -83,7 +89,7 @@ def get_product_book(
     limit: Optional[int] = None,
     aggregation_price_increment: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetProductBookResponse:
     """
     **Get Product Book**
     ____________________
@@ -109,12 +115,12 @@ def get_product_book(
         "aggregation_price_increment": aggregation_price_increment,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetProductBookResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_best_bid_ask(
     self, product_ids: Optional[List[str]] = None, **kwargs
-) -> Dict[str, Any]:
+) -> GetBestBidAskResponse:
     """
     **Get Best Bid/Ask**
     ____________________
@@ -138,4 +144,4 @@ def get_best_bid_ask(
         "product_ids": product_ids,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetBestBidAskResponse(self.get(endpoint, params=params, **kwargs))

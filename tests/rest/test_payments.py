@@ -24,7 +24,7 @@ class PaymentsTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(payments, expected_response)
+            self.assertEqual(payments.__dict__, expected_response)
 
     def test_get_payment_method(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -42,4 +42,4 @@ class PaymentsTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(payment, expected_response)
+            self.assertEqual(payment.__dict__, expected_response)

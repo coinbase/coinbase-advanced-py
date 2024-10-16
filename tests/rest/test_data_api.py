@@ -26,4 +26,4 @@ class DataApiTest(unittest.TestCase):
             )
             key_permissions = client.get_api_key_permissions()
 
-            self.assertEqual(key_permissions, expected_response)
+            self.assertEqual(key_permissions.__dict__, expected_response)

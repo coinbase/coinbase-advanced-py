@@ -2,6 +2,17 @@ import uuid
 from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.orders_types import (
+    CancelOrdersResponse,
+    ClosePositionResponse,
+    CreateOrderResponse,
+    EditOrderPreviewResponse,
+    EditOrderResponse,
+    GetOrderResponse,
+    ListFillsResponse,
+    ListOrdersResponse,
+    PreviewOrderResponse,
+)
 
 
 def generate_client_order_id() -> str:
@@ -22,7 +33,7 @@ def create_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Create Order**
     ________________
@@ -56,7 +67,7 @@ def create_order(
         "retail_portfolio_id": retail_portfolio_id,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return CreateOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 # Market orders
@@ -72,7 +83,7 @@ def market_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Market Order**
     ________________
@@ -124,7 +135,7 @@ def market_order_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Create Market Order Buy**
     ____________________
@@ -167,7 +178,7 @@ def market_order_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Create Market Order Sell**
     _____________________
@@ -212,7 +223,7 @@ def limit_order_ioc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit IOC Order**
     ________________
@@ -261,7 +272,7 @@ def limit_order_ioc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit IOC Order Buy**
     ________________
@@ -307,7 +318,7 @@ def limit_order_ioc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit IOC Order Sell**
     ________________
@@ -356,7 +367,7 @@ def limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTC**
     ___________________
@@ -409,7 +420,7 @@ def limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTC Buy**
     _______________________
@@ -456,7 +467,7 @@ def limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTC Sell**
     ________________________
@@ -506,7 +517,7 @@ def limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTD**
     ___________________
@@ -561,7 +572,7 @@ def limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTD Buy**
     _______________________
@@ -610,7 +621,7 @@ def limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTD Sell**
     ________________________
@@ -659,7 +670,7 @@ def limit_order_fok(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit FOK Order**
     ________________
@@ -708,7 +719,7 @@ def limit_order_fok_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit FOK Order Buy**
     ________________
@@ -754,7 +765,7 @@ def limit_order_fok_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit FOK Order Sell**
     ________________
@@ -804,7 +815,7 @@ def stop_limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTC**
     ________________________
@@ -859,7 +870,7 @@ def stop_limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTC Buy**
     ____________________________
@@ -908,7 +919,7 @@ def stop_limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTC Sell**
     _____________________________
@@ -960,7 +971,7 @@ def stop_limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTD**
     ________________________
@@ -1017,7 +1028,7 @@ def stop_limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTD Buy**
     ____________________________
@@ -1068,7 +1079,7 @@ def stop_limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTD Sell**
     _____________________________
@@ -1119,7 +1130,7 @@ def trigger_bracket_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Trigger Bracket Order GTC**
     ________________________
@@ -1172,7 +1183,7 @@ def trigger_bracket_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Trigger Bracket Order GTC Buy**
     ____________________________
@@ -1219,7 +1230,7 @@ def trigger_bracket_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Trigger Bracket Order GTC Sell**
     _____________________________
@@ -1269,7 +1280,7 @@ def trigger_bracket_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Trigger Bracket Order GTD**
     ________________________
@@ -1324,7 +1335,7 @@ def trigger_bracket_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Trigger Bracket Order GTD Buy**
     ____________________________
@@ -1373,7 +1384,7 @@ def trigger_bracket_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Trigger Bracket Order GTD Sell**
     _____________________________
@@ -1409,7 +1420,7 @@ def trigger_bracket_order_gtd_sell(
     )
 
 
-def get_order(self, order_id: str, **kwargs) -> Dict[str, Any]:
+def get_order(self, order_id: str, **kwargs) -> GetOrderResponse:
     """
     **Get Order**
     _____________
@@ -1429,7 +1440,7 @@ def get_order(self, order_id: str, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/orders/historical/{order_id}"
 
-    return self.get(endpoint, **kwargs)
+    return GetOrderResponse(self.get(endpoint, **kwargs))
 
 
 def list_orders(
@@ -1451,7 +1462,7 @@ def list_orders(
     time_in_forces: Optional[str] = None,
     sort_by: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListOrdersResponse:
     """
     **List Orders**
     _______________
@@ -1489,7 +1500,7 @@ def list_orders(
         "sort_by": sort_by,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListOrdersResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_fills(
@@ -1504,7 +1515,7 @@ def get_fills(
     cursor: Optional[str] = None,
     sort_by: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListFillsResponse:
     """
     **List Fills**
     ______________
@@ -1535,7 +1546,7 @@ def get_fills(
         "sort_by": sort_by,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListFillsResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def edit_order(
@@ -1544,7 +1555,7 @@ def edit_order(
     size: Optional[str] = None,
     price: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> EditOrderResponse:
     """
     **Edit Order**
     ______________
@@ -1569,7 +1580,7 @@ def edit_order(
         "price": price,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return EditOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 def preview_edit_order(
@@ -1578,7 +1589,7 @@ def preview_edit_order(
     size: Optional[str] = None,
     price: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> EditOrderPreviewResponse:
     """
     **Preview Edit Order**
     ______________________
@@ -1603,10 +1614,10 @@ def preview_edit_order(
         "price": price,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return EditOrderPreviewResponse(self.post(endpoint, data=data, **kwargs))
 
 
-def cancel_orders(self, order_ids: List[str], **kwargs) -> Dict[str, Any]:
+def cancel_orders(self, order_ids: List[str], **kwargs) -> CancelOrdersResponse:
     """
     **Cancel Orders**
     _________________
@@ -1629,7 +1640,7 @@ def cancel_orders(self, order_ids: List[str], **kwargs) -> Dict[str, Any]:
         "order_ids": order_ids,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return CancelOrdersResponse(self.post(endpoint, data=data, **kwargs))
 
 
 def preview_order(
@@ -1641,7 +1652,7 @@ def preview_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Order**
     _________________
@@ -1670,7 +1681,7 @@ def preview_order(
         "retail_portfolio_id": retail_portfolio_id,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return PreviewOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 # Preview market orders
@@ -1684,7 +1695,7 @@ def preview_market_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Market Order**
     ________________________
@@ -1731,7 +1742,7 @@ def preview_market_order_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Market Buy Order**
     ____________________________
@@ -1770,7 +1781,7 @@ def preview_market_order_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Market Sell Order**
     _____________________________
@@ -1811,7 +1822,7 @@ def preview_limit_order_ioc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order IOC**
     ___________________________
@@ -1854,7 +1865,7 @@ def preview_limit_order_ioc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order IOC Buy**
     ___________________________
@@ -1894,7 +1905,7 @@ def preview_limit_order_ioc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order IOC Sell**
     ___________________________
@@ -1937,7 +1948,7 @@ def preview_limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTC**
     ___________________________
@@ -1985,7 +1996,7 @@ def preview_limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTC Buy**
     _______________________________
@@ -2027,7 +2038,7 @@ def preview_limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTC Sell**
     ________________________________
@@ -2072,7 +2083,7 @@ def preview_limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTD**
     ___________________________
@@ -2122,7 +2133,7 @@ def preview_limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTD Buy**
     _______________________________
@@ -2166,7 +2177,7 @@ def preview_limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTD Sell**
     ________________________________
@@ -2209,7 +2220,7 @@ def preview_limit_order_fok(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order FOK**
     ___________________________
@@ -2252,7 +2263,7 @@ def preview_limit_order_fok_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order FOK Buy**
     ___________________________
@@ -2292,7 +2303,7 @@ def preview_limit_order_fok_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order FOK Sell**
     ___________________________
@@ -2336,7 +2347,7 @@ def preview_stop_limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTC**
     ________________________________
@@ -2386,7 +2397,7 @@ def preview_stop_limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTC Buy**
     ____________________________________
@@ -2430,7 +2441,7 @@ def preview_stop_limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTC Sell**
     _____________________________________
@@ -2477,7 +2488,7 @@ def preview_stop_limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTD**
     ________________________________
@@ -2529,7 +2540,7 @@ def preview_stop_limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTD Buy**
     ____________________________________
@@ -2575,7 +2586,7 @@ def preview_stop_limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTD Sell**
     _____________________________________
@@ -2621,7 +2632,7 @@ def preview_trigger_bracket_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Trigger Bracket Order GTC**
     ________________________________
@@ -2669,7 +2680,7 @@ def preview_trigger_bracket_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Trigger Bracket Order GTC Buy**
     ____________________________________
@@ -2711,7 +2722,7 @@ def preview_trigger_bracket_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Trigger Bracket Order GTC Sell**
     _____________________________________
@@ -2756,7 +2767,7 @@ def preview_trigger_bracket_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Trigger Bracket Order GTD**
     ________________________________
@@ -2806,7 +2817,7 @@ def preview_trigger_bracket_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Trigger Bracket Order GTD Buy**
     ____________________________________
@@ -2850,7 +2861,7 @@ def preview_trigger_bracket_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Trigger Bracket Order GTD Sell**
     _____________________________________
@@ -2885,7 +2896,7 @@ def preview_trigger_bracket_order_gtd_sell(
 
 def close_position(
     self, client_order_id: str, product_id: str, size: Optional[str] = None, **kwargs
-) -> Dict[str, Any]:
+) -> ClosePositionResponse:
     """
     **Close Position**
     _________________
@@ -2910,4 +2921,4 @@ def close_position(
 
     data = {"client_order_id": client_order_id, "product_id": product_id, "size": size}
 
-    return self.post(endpoint, data=data, **kwargs)
+    return ClosePositionResponse(self.post(endpoint, data=data, **kwargs))

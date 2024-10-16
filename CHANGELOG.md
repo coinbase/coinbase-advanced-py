@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.0] - 2024-OCT-16
+
+### Added
+- Custom response types to REST endpoints
+- Dot-notation and auto-completing fields for defined objects
+
 ## [1.6.2] - 2024-SEP-09
 
 ### Added

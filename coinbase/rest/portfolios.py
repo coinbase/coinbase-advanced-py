@@ -1,11 +1,19 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.portfolios_types import (
+    CreatePortfolioResponse,
+    DeletePortfolioResponse,
+    EditPortfolioResponse,
+    GetPortfolioBreakdownResponse,
+    ListPortfoliosResponse,
+    MovePortfolioFundsResponse,
+)
 
 
 def get_portfolios(
     self, portfolio_type: Optional[str] = None, **kwargs
-) -> Dict[str, Any]:
+) -> ListPortfoliosResponse:
     """
     **List Portfolios**
     ___________________
@@ -27,10 +35,10 @@ def get_portfolios(
 
     params = {"portfolio_type": portfolio_type}
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListPortfoliosResponse(self.get(endpoint, params=params, **kwargs))
 
 
-def create_portfolio(self, name: str, **kwargs) -> Dict[str, Any]:
+def create_portfolio(self, name: str, **kwargs) -> CreatePortfolioResponse:
     """
     **Create Portfolio**
     ____________________
@@ -54,12 +62,12 @@ def create_portfolio(self, name: str, **kwargs) -> Dict[str, Any]:
         "name": name,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return CreatePortfolioResponse(self.post(endpoint, data=data, **kwargs))
 
 
 def get_portfolio_breakdown(
     self, portfolio_uuid: str, currency: Optional[str] = None, **kwargs
-) -> Dict[str, Any]:
+) -> GetPortfolioBreakdownResponse:
     """
     **Get Portfolio Breakdown**
     ___________________________
@@ -80,7 +88,7 @@ def get_portfolio_breakdown(
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
     params = {"currency": currency}
-    return self.get(endpoint, params=params, **kwargs)
+    return GetPortfolioBreakdownResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def move_portfolio_funds(
@@ -90,7 +98,7 @@ def move_portfolio_funds(
     source_portfolio_uuid: str,
     target_portfolio_uuid: str,
     **kwargs,
-) -> Dict[str, Any]:
+) -> MovePortfolioFundsResponse:
     """
     **Move Portfolio Funds**
     ________________________
@@ -119,10 +127,12 @@ def move_portfolio_funds(
         "target_portfolio_uuid": target_portfolio_uuid,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return MovePortfolioFundsResponse(self.post(endpoint, data=data, **kwargs))
 
 
-def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs) -> Dict[str, Any]:
+def edit_portfolio(
+    self, portfolio_uuid: str, name: str, **kwargs
+) -> EditPortfolioResponse:
     """
     **Edit Portfolio**
     __________________
@@ -146,10 +156,10 @@ def edit_portfolio(self, portfolio_uuid: str, name: str, **kwargs) -> Dict[str, 
         "name": name,
     }
 
-    return self.put(endpoint, data=data, **kwargs)
+    return EditPortfolioResponse(self.put(endpoint, data=data, **kwargs))
 
 
-def delete_portfolio(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
+def delete_portfolio(self, portfolio_uuid: str, **kwargs) -> DeletePortfolioResponse:
     """
     **Delete Portfolio**
     ____________________
@@ -169,4 +179,4 @@ def delete_portfolio(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
-    return self.delete(endpoint, **kwargs)
+    return DeletePortfolioResponse(self.delete(endpoint, **kwargs))

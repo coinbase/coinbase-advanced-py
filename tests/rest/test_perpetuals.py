@@ -39,7 +39,7 @@ class PerpetualsTest(unittest.TestCase):
                     "currency": "USD",
                 },
             )
-            self.assertEqual(response, expected_response)
+            self.assertEqual(response.__dict__, expected_response)
 
     def test_get_perps_portfolio_summary(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -57,7 +57,7 @@ class PerpetualsTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(portfolios, expected_response)
+            self.assertEqual(portfolios.__dict__, expected_response)
 
     def test_list_perps_positions(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -75,7 +75,7 @@ class PerpetualsTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(portfolios, expected_response)
+            self.assertEqual(portfolios.__dict__, expected_response)
 
     def test_get_perps_position(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -95,7 +95,7 @@ class PerpetualsTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(portfolios, expected_response)
+            self.assertEqual(portfolios.__dict__, expected_response)
 
     def test_get_perps_portfolio_balances(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -113,7 +113,7 @@ class PerpetualsTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "")
-            self.assertEqual(portfolios, expected_response)
+            self.assertEqual(portfolios.__dict__, expected_response)
 
     def test_opt_in_or_out_multi_asset_collateral(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -142,4 +142,4 @@ class PerpetualsTest(unittest.TestCase):
                     "multi_asset_collateral_enabled": True,
                 },
             )
-            self.assertEqual(response, expected_response)
+            self.assertEqual(response.__dict__, expected_response)

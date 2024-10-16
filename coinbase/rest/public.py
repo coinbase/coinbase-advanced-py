@@ -1,9 +1,17 @@
 from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.public_types import (
+    GetPublicMarketTradesResponse,
+    GetPublicProductBookResponse,
+    GetPublicProductCandlesResponse,
+    GetPublicProductResponse,
+    GetServerTimeResponse,
+    ListPublicProductsResponse,
+)
 
 
-def get_unix_time(self, **kwargs) -> Dict[str, Any]:
+def get_unix_time(self, **kwargs) -> GetServerTimeResponse:
     """
     **Get Server Time**
     _________________
@@ -22,7 +30,7 @@ def get_unix_time(self, **kwargs) -> Dict[str, Any]:
 
     endpoint = f"{API_PREFIX}/time"
 
-    return self.get(endpoint, public=True, **kwargs)
+    return GetServerTimeResponse(self.get(endpoint, public=True, **kwargs))
 
 
 def get_public_product_book(
@@ -31,7 +39,7 @@ def get_public_product_book(
     limit: Optional[int] = None,
     aggregation_price_increment: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetPublicProductBookResponse:
     """
     **Get Public Product Book**
     _________________
@@ -62,7 +70,9 @@ def get_public_product_book(
         "aggregation_price_increment": aggregation_price_increment,
     }
 
-    return self.get(endpoint, params=params, public=True, **kwargs)
+    return GetPublicProductBookResponse(
+        self.get(endpoint, params=params, public=True, **kwargs)
+    )
 
 
 def get_public_products(
@@ -75,7 +85,7 @@ def get_public_products(
     expiring_contract_status: Optional[str] = None,
     get_all_products: bool = False,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListPublicProductsResponse:
     """
     **List Public Products**
     _________________
@@ -111,10 +121,12 @@ def get_public_products(
         "get_all_products": get_all_products,
     }
 
-    return self.get(endpoint, params=params, public=True, **kwargs)
+    return ListPublicProductsResponse(
+        self.get(endpoint, params=params, public=True, **kwargs)
+    )
 
 
-def get_public_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
+def get_public_product(self, product_id: str, **kwargs) -> GetPublicProductResponse:
     """
     **Public Get Product**
     _______________
@@ -140,7 +152,7 @@ def get_public_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/market/products/{product_id}"
 
-    return self.get(endpoint, public=True, **kwargs)
+    return GetPublicProductResponse(self.get(endpoint, public=True, **kwargs))
 
 
 def get_public_candles(
@@ -151,7 +163,7 @@ def get_public_candles(
     granularity: str,
     limit: Optional[int] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetPublicProductCandlesResponse:
     """
     **Get Public Product Candles**
     __________
@@ -179,7 +191,9 @@ def get_public_candles(
 
     params = {"start": start, "end": end, "granularity": granularity, "limit": limit}
 
-    return self.get(endpoint, params=params, public=True, **kwargs)
+    return GetPublicProductCandlesResponse(
+        self.get(endpoint, params=params, public=True, **kwargs)
+    )
 
 
 def get_public_market_trades(
@@ -189,7 +203,7 @@ def get_public_market_trades(
     start: Optional[str] = None,
     end: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetPublicMarketTradesResponse:
     """
     **Get Public Market Trades**
     _____________________
@@ -217,4 +231,6 @@ def get_public_market_trades(
 
     params = {"limit": limit, "start": start, "end": end}
 
-    return self.get(endpoint, params=params, public=True, **kwargs)
+    return GetPublicMarketTradesResponse(
+        self.get(endpoint, params=params, public=True, **kwargs)
+    )

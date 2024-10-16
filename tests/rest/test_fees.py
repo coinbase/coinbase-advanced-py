@@ -29,4 +29,4 @@ class FeesTest(unittest.TestCase):
                 captured_request.query,
                 "product_type=product_type&contract_expiry_type=contract_expiry_type&product_venue=product_venue",
             )
-            self.assertEqual(summary, expected_response)
+            self.assertEqual(summary.__dict__, expected_response)

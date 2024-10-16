@@ -1,9 +1,20 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.futures_types import (
+    CancelPendingFuturesSweepResponse,
+    GetCurrentMarginWindowResponse,
+    GetFuturesBalanceSummaryResponse,
+    GetFuturesPositionResponse,
+    GetIntradayMarginSettingResponse,
+    ListFuturesPositionsResponse,
+    ListFuturesSweepsResponse,
+    ScheduleFuturesSweepResponse,
+    SetIntradayMarginSettingResponse,
+)
 
 
-def get_futures_balance_summary(self, **kwargs) -> Dict[str, Any]:
+def get_futures_balance_summary(self, **kwargs) -> GetFuturesBalanceSummaryResponse:
     """
     **Get Futures Balance Summary**
     _______________________________
@@ -23,10 +34,10 @@ def get_futures_balance_summary(self, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/cfm/balance_summary"
 
-    return self.get(endpoint, **kwargs)
+    return GetFuturesBalanceSummaryResponse(self.get(endpoint, **kwargs))
 
 
-def list_futures_positions(self, **kwargs) -> Dict[str, Any]:
+def list_futures_positions(self, **kwargs) -> ListFuturesPositionsResponse:
     """
     **List Futures Positions**
     __________________________
@@ -46,10 +57,10 @@ def list_futures_positions(self, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/cfm/positions"
 
-    return self.get(endpoint, **kwargs)
+    return ListFuturesPositionsResponse(self.get(endpoint, **kwargs))
 
 
-def get_futures_position(self, product_id: str, **kwargs) -> Dict[str, Any]:
+def get_futures_position(self, product_id: str, **kwargs) -> GetFuturesPositionResponse:
     """
     **Get Futures Position**
     _________________________
@@ -69,10 +80,12 @@ def get_futures_position(self, product_id: str, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/cfm/positions/{product_id}"
 
-    return self.get(endpoint, **kwargs)
+    return GetFuturesPositionResponse(self.get(endpoint, **kwargs))
 
 
-def schedule_futures_sweep(self, usd_amount: str, **kwargs) -> Dict[str, Any]:
+def schedule_futures_sweep(
+    self, usd_amount: str, **kwargs
+) -> ScheduleFuturesSweepResponse:
     """
     **Schedule Futures Sweep**
     __________________________
@@ -94,10 +107,10 @@ def schedule_futures_sweep(self, usd_amount: str, **kwargs) -> Dict[str, Any]:
 
     data = {"usd_amount": usd_amount}
 
-    return self.post(endpoint, data=data, **kwargs)
+    return ScheduleFuturesSweepResponse(self.post(endpoint, data=data, **kwargs))
 
 
-def list_futures_sweeps(self, **kwargs) -> Dict[str, Any]:
+def list_futures_sweeps(self, **kwargs) -> ListFuturesSweepsResponse:
     """
     **List Futures Sweeps**
     _______________________
@@ -117,10 +130,10 @@ def list_futures_sweeps(self, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/cfm/sweeps"
 
-    return self.get(endpoint, **kwargs)
+    return ListFuturesSweepsResponse(self.get(endpoint, **kwargs))
 
 
-def cancel_pending_futures_sweep(self, **kwargs) -> Dict[str, Any]:
+def cancel_pending_futures_sweep(self, **kwargs) -> CancelPendingFuturesSweepResponse:
     """
     **Cancel Pending Futures Sweep**
     ________________________________
@@ -140,10 +153,10 @@ def cancel_pending_futures_sweep(self, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/cfm/sweeps"
 
-    return self.delete(endpoint, **kwargs)
+    return CancelPendingFuturesSweepResponse(self.delete(endpoint, **kwargs))
 
 
-def get_intraday_margin_setting(self, **kwargs) -> Dict[str, Any]:
+def get_intraday_margin_setting(self, **kwargs) -> GetIntradayMarginSettingResponse:
     """
     **Get Intraday Margin Setting**
     _______________________________
@@ -163,12 +176,12 @@ def get_intraday_margin_setting(self, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/cfm/intraday/margin_setting"
 
-    return self.get(endpoint, **kwargs)
+    return GetIntradayMarginSettingResponse(self.get(endpoint, **kwargs))
 
 
 def get_current_margin_window(
     self, margin_profile_type: str, **kwargs
-) -> Dict[str, Any]:
+) -> GetCurrentMarginWindowResponse:
     """
     **Get Current Margin Window**
     ________________________________
@@ -191,10 +204,12 @@ def get_current_margin_window(
 
     params = {"margin_profile_type": margin_profile_type}
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetCurrentMarginWindowResponse(self.get(endpoint, params=params, **kwargs))
 
 
-def set_intraday_margin_setting(self, setting: str, **kwargs) -> Dict[str, Any]:
+def set_intraday_margin_setting(
+    self, setting: str, **kwargs
+) -> SetIntradayMarginSettingResponse:
     """
     **Set Intraday Margin Setting**
     ________________________________
@@ -217,4 +232,4 @@ def set_intraday_margin_setting(self, setting: str, **kwargs) -> Dict[str, Any]:
 
     data = {"setting": setting}
 
-    return self.post(endpoint, data=data, **kwargs)
+    return SetIntradayMarginSettingResponse(self.post(endpoint, data=data, **kwargs))

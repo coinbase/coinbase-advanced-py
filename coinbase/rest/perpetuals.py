@@ -1,11 +1,17 @@
-from typing import Any, Dict, Optional
-
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.perpetuals_types import (
+    AllocatePortfolioResponse,
+    GetPerpetualsPortfolioSummaryResponse,
+    GetPerpetualsPositionResponse,
+    GetPortfolioBalancesResponse,
+    ListPerpetualsPositionsResponse,
+    OptInOutMultiAssetCollateralResponse,
+)
 
 
 def allocate_portfolio(
     self, portfolio_uuid: str, symbol: str, amount: str, currency: str, **kwargs
-) -> Dict[str, Any]:
+) -> AllocatePortfolioResponse:
     """
     **Allocate Portfolio**
     ________________
@@ -33,10 +39,12 @@ def allocate_portfolio(
         "currency": currency,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return AllocatePortfolioResponse(self.post(endpoint, data=data, **kwargs))
 
 
-def get_perps_portfolio_summary(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
+def get_perps_portfolio_summary(
+    self, portfolio_uuid: str, **kwargs
+) -> GetPerpetualsPortfolioSummaryResponse:
     """
     **Get Perpetuals Portfolio Summary**
     ________________
@@ -56,10 +64,12 @@ def get_perps_portfolio_summary(self, portfolio_uuid: str, **kwargs) -> Dict[str
     """
     endpoint = f"{API_PREFIX}/intx/portfolio/{portfolio_uuid}"
 
-    return self.get(endpoint, **kwargs)
+    return GetPerpetualsPortfolioSummaryResponse(self.get(endpoint, **kwargs))
 
 
-def list_perps_positions(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
+def list_perps_positions(
+    self, portfolio_uuid: str, **kwargs
+) -> ListPerpetualsPositionsResponse:
     """
     **List Perpetuals Positions**
     ________________
@@ -79,12 +89,12 @@ def list_perps_positions(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
     """
     endpoint = f"{API_PREFIX}/intx/positions/{portfolio_uuid}"
 
-    return self.get(endpoint, **kwargs)
+    return ListPerpetualsPositionsResponse(self.get(endpoint, **kwargs))
 
 
 def get_perps_position(
     self, portfolio_uuid: str, symbol: str, **kwargs
-) -> Dict[str, Any]:
+) -> GetPerpetualsPositionResponse:
     """
     **Get Perpetuals Position**
     ________________
@@ -104,10 +114,12 @@ def get_perps_position(
     """
     endpoint = f"{API_PREFIX}/intx/positions/{portfolio_uuid}/{symbol}"
 
-    return self.get(endpoint, **kwargs)
+    return GetPerpetualsPositionResponse(self.get(endpoint, **kwargs))
 
 
-def get_perps_portfolio_balances(self, portfolio_uuid: str, **kwargs) -> Dict[str, Any]:
+def get_perps_portfolio_balances(
+    self, portfolio_uuid: str, **kwargs
+) -> GetPortfolioBalancesResponse:
     """
     **Get Portfolio Balances**
     ________________
@@ -127,12 +139,12 @@ def get_perps_portfolio_balances(self, portfolio_uuid: str, **kwargs) -> Dict[st
     """
     endpoint = f"{API_PREFIX}/intx/balances/{portfolio_uuid}"
 
-    return self.get(endpoint, **kwargs)
+    return GetPortfolioBalancesResponse(self.get(endpoint, **kwargs))
 
 
 def opt_in_or_out_multi_asset_collateral(
     self, portfolio_uuid: str, multi_asset_collateral_enabled: bool, **kwargs
-) -> Dict[str, Any]:
+) -> OptInOutMultiAssetCollateralResponse:
     """
     **Opt In or Out of Multi Asset Collateral**
     ________________
@@ -158,4 +170,6 @@ def opt_in_or_out_multi_asset_collateral(
         "multi_asset_collateral_enabled": multi_asset_collateral_enabled,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return OptInOutMultiAssetCollateralResponse(
+        self.post(endpoint, data=data, **kwargs)
+    )

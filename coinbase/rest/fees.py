@@ -1,6 +1,7 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.fees_types import GetTransactionSummaryResponse
 
 
 def get_transaction_summary(
@@ -9,7 +10,7 @@ def get_transaction_summary(
     contract_expiry_type: Optional[str] = None,
     product_venue: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetTransactionSummaryResponse:
     """
     **Get Transactions Summary**
     _____________________________
@@ -34,4 +35,4 @@ def get_transaction_summary(
         "product_venue": product_venue,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetTransactionSummaryResponse(self.get(endpoint, params=params, **kwargs))

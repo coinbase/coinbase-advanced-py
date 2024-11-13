@@ -9,11 +9,9 @@ common_fields = {
 
 class BaseResponse:
     def __init__(self, **kwargs):
-        for field in list(kwargs.keys()):
-            attr_name = field.replace("-", "_")
-
+        for field, formattedField in common_fields.items():
             if field in kwargs:
-                setattr(self, attr_name, kwargs.pop(field))
+                setattr(self, formattedField, kwargs.pop(field))
 
         for key in list(kwargs.keys()):
             setattr(self, key, kwargs.pop(key))

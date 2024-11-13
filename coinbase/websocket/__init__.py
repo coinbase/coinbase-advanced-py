@@ -3,6 +3,7 @@ from typing import IO, Callable, Optional, Union
 
 from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, WS_USER_BASE_URL
 
+from .types.websocket_response import WebsocketResponse
 from .websocket_base import WSBase, WSClientConnectionClosedException, WSClientException
 
 

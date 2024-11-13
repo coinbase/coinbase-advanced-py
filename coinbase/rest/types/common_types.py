@@ -382,17 +382,18 @@ class OrderConfiguration(BaseResponse):
                 **kwargs.pop("limit_limit_fok")
             )
         if "stop_limit_stop_limit_gtc" in kwargs:
-            self.stop_limit_stop_limit_gtc: Optional[
-                StopLimitStopLimitGtc
-            ] = StopLimitStopLimitGtc(**kwargs.pop("stop_limit_stop_limit_gtc"))
+            self.stop_limit_stop_limit_gtc: Optional[StopLimitStopLimitGtc] = (
+                StopLimitStopLimitGtc(**kwargs.pop("stop_limit_stop_limit_gtc"))
+            )
         if "stop_limit_stop_limit_gtd" in kwargs:
-            self.stop_limit_stop_limit_gtd: Optional[
-                StopLimitStopLimitGtd
-            ] = StopLimitStopLimitGtd(**kwargs.pop("stop_limit_stop_limit_gtd"))
+            self.stop_limit_stop_limit_gtd: Optional[StopLimitStopLimitGtd] = (
+                StopLimitStopLimitGtd(**kwargs.pop("stop_limit_stop_limit_gtd"))
+            )
         if "trigger_bracket_gtc" in kwargs:
             self.trigger_bracket_gtc: Optional[TriggerBracketGtc] = TriggerBracketGtc(
                 **kwargs.pop("trigger_bracket_gtc")
             )
+
         if "trigger_bracket_gtd" in kwargs:
             self.trigger_bracket_gtd: Optional[TriggerBracketGtd] = TriggerBracketGtd(
                 **kwargs.pop("trigger_bracket_gtd")

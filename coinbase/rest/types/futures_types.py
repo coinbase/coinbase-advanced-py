@@ -83,9 +83,9 @@ class GetCurrentMarginWindowResponse(BaseResponse):
                 "is_intraday_margin_killswitch_enabled"
             )
         if "is_intraday_margin_enrollment_killswitch_enabled" in response:
-            self.is_intraday_margin_enrollment_killswitch_enabled: Optional[
-                bool
-            ] = response.pop("is_intraday_margin_enrollment_killswitch_enabled")
+            self.is_intraday_margin_enrollment_killswitch_enabled: Optional[bool] = (
+                response.pop("is_intraday_margin_enrollment_killswitch_enabled")
+            )
         super().__init__(**response)
 
 

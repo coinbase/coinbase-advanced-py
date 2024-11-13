@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.0] - 2024-NOV-12
+
+### Added
+- Custom response type object for WebSocket channels
+
 ## [1.7.0] - 2024-OCT-16
 
 ### Added

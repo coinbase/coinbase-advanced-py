@@ -269,6 +269,35 @@ The functions described above handle the asynchronous nature of WebSocket connec
 
 We similarly provide async channel specific methods for subscribing and unsubscribing such as `ticker_async`, `ticker_unsubscribe_async`, etc.
 
+### WebSocket Response Types
+For your convenience, we have provided a custom, built-in WebSocket response type object to help interact with our WebSocket feeds more easily.
+
+Assume we simply want the price feed for BTC-USD and ETH-USD. 
+Like we did in previous steps, we subscribe to the `ticker` channel and include 'BTC-USD' and 'ETH-USD' in the `product_ids` list. 
+As the data comes through, it is passed into the `on_message` function. From there, we use it to build the `WebsocketResponse` object.
+
+Using said object, we can now extract only the desired parts. In our case, we retrieve and print only the `product_id` and `price` fields, resulting in a cleaner feed.
+```python
+def on_message(msg):
+    ws_object = WebsocketResponse(json.loads(msg))
+    if ws_object.channel == "ticker" :
+        for event in ws_object.events:
+            for ticker in event.tickers:
+                print(ticker.product_id + ": " + ticker.price)
+
+client.open()
+client.subscribe(product_ids=["BTC-USD", "ETH-USD"], channels=["ticker"])
+time.sleep(10)
+client.unsubscribe(product_ids=["BTC-USD", "ETH-USD"], channels=["ticker"])
+client.close()
+```
+#### Avoiding errors
+In the example, note how we first checked `if ws_object.channel == "ticker"`. 
+Since each channel's event field has a unique structure and set of fields, it's important to ensure that the fields we access are actually present in the object.
+For example, if we were to subscribe to the `user` channel and try to access a field that does not exist in it, such as the `tickers` field, we would be met with an error.
+
+Therefore, we urge users to reference our [documentation](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels), which outlines the JSON object that each channel will return.
+
 ___
 ## Debugging the Clients
 You can enable debug logging for the REST and WebSocket clients by setting the `verbose` variable to `True` when initializing the clients. This will log useful information throughout the lifecycle of the REST request or WebSocket connection, and is highly recommended for debugging purposes.

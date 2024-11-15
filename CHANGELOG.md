@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.1] - 2024-NOV-15
+
+### Added
+- Support for converting custom REST and WebSocket response type objects to dict via new `to_dict()` function
+
+### Fixed
+- Importing from `coinbase.websocket.types`
+
 ## [1.8.0] - 2024-NOV-12
 
 ### Added

@@ -69,10 +69,10 @@ You are able to use any of the API hooks to make calls to the Coinbase API. For 
 from json import dumps
 
 accounts = client.get_accounts()
-print(dumps(accounts, indent=2))
+print(dumps(accounts.to_dict(), indent=2))
 
 order = client.market_order_buy(client_order_id="clientOrderId", product_id="BTC-USD", quote_size="1")
-print(dumps(order, indent=2))
+print(dumps(order.to_dict(), indent=2))
 ```
 This code calls the `get_accounts` and `market_order_buy` endpoints.
 
@@ -270,7 +270,12 @@ The functions described above handle the asynchronous nature of WebSocket connec
 We similarly provide async channel specific methods for subscribing and unsubscribing such as `ticker_async`, `ticker_unsubscribe_async`, etc.
 
 ### WebSocket Response Types
-For your convenience, we have provided a custom, built-in WebSocket response type object to help interact with our WebSocket feeds more easily.
+For your convenience, we have provided a custom, built-in WebSocket response type object to help interact with our WebSocket feeds more easily. 
+Simply import it from the same module as you do the `WSClient`:
+
+```python
+from coinbase.websocket import WSClient, WebsocketResponse
+```
 
 Assume we simply want the price feed for BTC-USD and ETH-USD. 
 Like we did in previous steps, we subscribe to the `ticker` channel and include 'BTC-USD' and 'ETH-USD' in the `product_ids` list. 
@@ -278,6 +283,8 @@ As the data comes through, it is passed into the `on_message` function. From the
 
 Using said object, we can now extract only the desired parts. In our case, we retrieve and print only the `product_id` and `price` fields, resulting in a cleaner feed.
 ```python
+from coinbase.websocket import WSClient, WebsocketResponse
+
 def on_message(msg):
     ws_object = WebsocketResponse(json.loads(msg))
     if ws_object.channel == "ticker" :
@@ -366,7 +373,7 @@ from coinbase.rest import RESTClient
 client = RESTClient()
 
 public_products = client.get_public_products()
-print(public_products)
+print(json.dumps(public_products.to_dict(), indent=2))
 ```
 _Full list of all public REST endpoints [here](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-overview#public-endpoints)_
 

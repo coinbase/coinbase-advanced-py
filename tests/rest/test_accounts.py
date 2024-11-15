@@ -4,7 +4,6 @@ from requests_mock import Mocker
 
 from coinbase.rest import RESTClient
 from coinbase.rest.types.accounts_types import ListAccountsResponse
-from tests.rest.serialize import object_to_dict
 
 from ..constants import TEST_API_KEY, TEST_API_SECRET
 
@@ -32,12 +31,8 @@ class AccountsTest(unittest.TestCase):
                 captured_request.query,
                 "limit=2&cursor=abcd&retail_portfolio_id=portfolio1",
             )
-            actual_response_dict = object_to_dict(accounts)
-            expected_response_dict = object_to_dict(
-                ListAccountsResponse(expected_response)
-            )
-            print(actual_response_dict)
-            print(expected_response_dict)
+            actual_response_dict = accounts.to_dict()
+            expected_response_dict = ListAccountsResponse(expected_response).to_dict()
             self.assertEqual(actual_response_dict, expected_response_dict)
 
     def test_get_account(self):

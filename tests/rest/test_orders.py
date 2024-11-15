@@ -6,7 +6,6 @@ from coinbase.rest import RESTClient
 from coinbase.rest.types.orders_types import ListOrdersResponse
 
 from ..constants import TEST_API_KEY, TEST_API_SECRET
-from .serialize import object_to_dict
 
 
 class OrdersTest(unittest.TestCase):
@@ -1112,10 +1111,8 @@ class OrdersTest(unittest.TestCase):
                 captured_request.query,
                 "product_ids=product_id_1&product_ids=product_id_2&order_status=open&limit=2&product_type=spot",
             )
-            actual_response_dict = object_to_dict(orders)
-            expected_response_dict = object_to_dict(
-                ListOrdersResponse(expected_response)
-            )
+            actual_response_dict = orders.to_dict()
+            expected_response_dict = ListOrdersResponse(expected_response).to_dict()
             self.assertEqual(actual_response_dict, expected_response_dict)
 
     def test_get_fills(self):

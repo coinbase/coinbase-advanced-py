@@ -12,66 +12,68 @@ class WSHeartBeats(BaseResponse):
 
 class WSCandle(BaseResponse):
     def __init__(self, **kwargs):
-        self.start: str = kwargs.pop("start", None)
-        self.high: str = kwargs.pop("high", None)
-        self.low: str = kwargs.pop("low", None)
-        self.open: str = kwargs.pop("open", None)
-        self.close: str = kwargs.pop("close", None)
-        self.volume: str = kwargs.pop("volume", None)
-        self.product_id: str = kwargs.pop("product_id", None)
+        self.start: Optional[str] = kwargs.pop("start", None)
+        self.high: Optional[str] = kwargs.pop("high", None)
+        self.low: Optional[str] = kwargs.pop("low", None)
+        self.open: Optional[str] = kwargs.pop("open", None)
+        self.close: Optional[str] = kwargs.pop("close", None)
+        self.volume: Optional[str] = kwargs.pop("volume", None)
+        self.product_id: Optional[str] = kwargs.pop("product_id", None)
         super().__init__(**kwargs)
 
 
 class WSHistoricalMarketTrade(BaseResponse):
     def __init__(self, **kwargs):
-        self.product_id: str = kwargs.pop("product_id", None)
-        self.trade_id: str = kwargs.pop("trade_id", None)
-        self.price: str = kwargs.pop("price", None)
-        self.size: str = kwargs.pop("size", None)
-        self.time: str = kwargs.pop("time", None)
-        self.side: str = kwargs.pop("side", None)
+        self.product_id: Optional[str] = kwargs.pop("product_id", None)
+        self.trade_id: Optional[str] = kwargs.pop("trade_id", None)
+        self.price: Optional[str] = kwargs.pop("price", None)
+        self.size: Optional[str] = kwargs.pop("size", None)
+        self.time: Optional[str] = kwargs.pop("time", None)
+        self.side: Optional[str] = kwargs.pop("side", None)
         super().__init__(**kwargs)
 
 
 class WSProduct(BaseResponse):
     def __init__(self, **kwargs):
-        self.product_type: str = kwargs.pop("product_type", None)
-        self.id: str = kwargs.pop("id", None)
-        self.base_currency: str = kwargs.pop("base_currency", None)
-        self.quote_currency: str = kwargs.pop("quote_currency", None)
-        self.base_increment: str = kwargs.pop("base_increment", None)
-        self.quote_increment: str = kwargs.pop("quote_increment", None)
-        self.display_name: str = kwargs.pop("display_name", None)
-        self.status: str = kwargs.pop("status", None)
-        self.status_message: str = kwargs.pop("status_message", None)
-        self.min_market_funds: str = kwargs.pop("min_market_funds", None)
+        self.product_type: Optional[str] = kwargs.pop("product_type", None)
+        self.id: Optional[str] = kwargs.pop("id", None)
+        self.base_currency: Optional[str] = kwargs.pop("base_currency", None)
+        self.quote_currency: Optional[str] = kwargs.pop("quote_currency", None)
+        self.base_increment: Optional[str] = kwargs.pop("base_increment", None)
+        self.quote_increment: Optional[str] = kwargs.pop("quote_increment", None)
+        self.display_name: Optional[str] = kwargs.pop("display_name", None)
+        self.status: Optional[str] = kwargs.pop("status", None)
+        self.status_message: Optional[str] = kwargs.pop("status_message", None)
+        self.min_market_funds: Optional[str] = kwargs.pop("min_market_funds", None)
         super().__init__(**kwargs)
 
 
 class WSTicker(BaseResponse):
     def __init__(self, **kwargs):
-        self.type: str = kwargs.pop("type", None)
-        self.product_id: str = kwargs.pop("product_id", None)
-        self.price: str = kwargs.pop("price", None)
-        self.volume_24_h: str = kwargs.pop("volume_24_h", None)
-        self.low_24_h: str = kwargs.pop("low_24_h", None)
-        self.high_24_h: str = kwargs.pop("high_24_h", None)
-        self.low_52_w: str = kwargs.pop("low_52_w", None)
-        self.high_52_w: str = kwargs.pop("high_52_w", None)
-        self.price_percent_chg_24_h: str = kwargs.pop("price_percent_chg_24_h", None)
-        self.best_bid: str = kwargs.pop("best_bid", None)
-        self.best_ask: str = kwargs.pop("best_ask", None)
-        self.best_bid_quantity: str = kwargs.pop("best_bid_quantity", None)
-        self.best_ask_quantity: str = kwargs.pop("best_ask_quantity", None)
+        self.type: Optional[str] = kwargs.pop("type", None)
+        self.product_id: Optional[str] = kwargs.pop("product_id", None)
+        self.price: Optional[str] = kwargs.pop("price", None)
+        self.volume_24_h: Optional[str] = kwargs.pop("volume_24_h", None)
+        self.low_24_h: Optional[str] = kwargs.pop("low_24_h", None)
+        self.high_24_h: Optional[str] = kwargs.pop("high_24_h", None)
+        self.low_52_w: Optional[str] = kwargs.pop("low_52_w", None)
+        self.high_52_w: Optional[str] = kwargs.pop("high_52_w", None)
+        self.price_percent_chg_24_h: Optional[str] = kwargs.pop(
+            "price_percent_chg_24_h", None
+        )
+        self.best_bid: Optional[str] = kwargs.pop("best_bid", None)
+        self.best_ask: Optional[str] = kwargs.pop("best_ask", None)
+        self.best_bid_quantity: Optional[str] = kwargs.pop("best_bid_quantity", None)
+        self.best_ask_quantity: Optional[str] = kwargs.pop("best_ask_quantity", None)
         super().__init__(**kwargs)
 
 
 class L2Update(BaseResponse):
     def __init__(self, **kwargs):
-        self.side: str = kwargs.pop("side", None)
-        self.event_time: str = kwargs.pop("event_time", None)
-        self.price_level: str = kwargs.pop("price_level", None)
-        self.new_quantity: str = kwargs.pop("new_quantity", None)
+        self.side: Optional[str] = kwargs.pop("side", None)
+        self.event_time: Optional[str] = kwargs.pop("event_time", None)
+        self.price_level: Optional[str] = kwargs.pop("price_level", None)
+        self.new_quantity: Optional[str] = kwargs.pop("new_quantity", None)
         super().__init__(**kwargs)
 
 
@@ -179,22 +181,26 @@ class UserExpFuturesPositions(BaseResponse):
 
 class WSFCMBalanceSummary(BaseResponse):
     def __init__(self, **kwargs):
-        self.futures_buying_power: str = kwargs.pop("futures_buying_power", None)
-        self.total_usd_balance: str = kwargs.pop("total_usd_balance", None)
-        self.cbi_usd_balance: str = kwargs.pop("cbi_usd_balance", None)
-        self.cfm_usd_balance: str = kwargs.pop("cfm_usd_balance", None)
-        self.total_open_orders_hold_amount: str = kwargs.pop(
+        self.futures_buying_power: Optional[str] = kwargs.pop(
+            "futures_buying_power", None
+        )
+        self.total_usd_balance: Optional[str] = kwargs.pop("total_usd_balance", None)
+        self.cbi_usd_balance: Optional[str] = kwargs.pop("cbi_usd_balance", None)
+        self.cfm_usd_balance: Optional[str] = kwargs.pop("cfm_usd_balance", None)
+        self.total_open_orders_hold_amount: Optional[str] = kwargs.pop(
             "total_open_orders_hold_amount", None
         )
-        self.unrealized_pnl: str = kwargs.pop("unrealized_pnl", None)
-        self.daily_realized_pnl: str = kwargs.pop("daily_realized_pnl", None)
-        self.initial_margin: str = kwargs.pop("initial_margin", None)
-        self.available_margin: str = kwargs.pop("available_margin", None)
-        self.liquidation_threshold: str = kwargs.pop("liquidation_threshold", None)
-        self.liquidation_buffer_amount: str = kwargs.pop(
+        self.unrealized_pnl: Optional[str] = kwargs.pop("unrealized_pnl", None)
+        self.daily_realized_pnl: Optional[str] = kwargs.pop("daily_realized_pnl", None)
+        self.initial_margin: Optional[str] = kwargs.pop("initial_margin", None)
+        self.available_margin: Optional[str] = kwargs.pop("available_margin", None)
+        self.liquidation_threshold: Optional[str] = kwargs.pop(
+            "liquidation_threshold", None
+        )
+        self.liquidation_buffer_amount: Optional[str] = kwargs.pop(
             "liquidation_buffer_amount", None
         )
-        self.liquidation_buffer_percentage: str = kwargs.pop(
+        self.liquidation_buffer_percentage: Optional[str] = kwargs.pop(
             "liquidation_buffer_percentage", None
         )
         self.intraday_margin_window_measure: Optional[FCMMarginWindowMeasure] = (

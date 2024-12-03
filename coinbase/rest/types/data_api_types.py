@@ -1,7 +1,6 @@
 from typing import Optional
 
 from coinbase.rest.types.base_response import BaseResponse
-from coinbase.rest.types.common_types import PortfolioType
 
 
 # Get API Key Permissions
@@ -16,7 +15,5 @@ class GetAPIKeyPermissionsResponse(BaseResponse):
         if "portfolio_uuid" in response:
             self.portfolio_uuid: Optional[str] = response.pop("portfolio_uuid")
         if "portfolio_type" in response:
-            self.portfolio_type: Optional[PortfolioType] = response.pop(
-                "portfolio_type"
-            )
+            self.portfolio_type: Optional[str] = response.pop("portfolio_type")
         super().__init__(**response)

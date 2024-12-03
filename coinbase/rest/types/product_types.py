@@ -1,14 +1,6 @@
 from typing import Any, Dict, List, Optional
 
 from coinbase.rest.types.base_response import BaseResponse
-from coinbase.rest.types.common_types import (
-    Candle,
-    HistoricalMarketTrade,
-    PriceBook,
-    Product,
-    ProductType,
-    ProductVenue,
-)
 
 
 # Get Best Bid/Ask
@@ -26,6 +18,14 @@ class GetProductBookResponse(BaseResponse):
     def __init__(self, response: dict):
         if "pricebook" in response:
             self.pricebook: PriceBook = PriceBook(**response.pop("pricebook"))
+        if "last" in response:
+            self.last: Optional[str] = response.pop("last")
+        if "mid_market" in response:
+            self.mid_market: Optional[str] = response.pop("mid_market")
+        if "spread_bps" in response:
+            self.spread_bps: Optional[str] = response.pop("spread_bps")
+        if "spread_absolute" in response:
+            self.spread_absolute: Optional[str] = response.pop("spread_absolute")
         super().__init__(**response)
 
 
@@ -93,7 +93,7 @@ class GetProductResponse(BaseResponse):
         if "auction_mode" in response:
             self.auction_mode: bool = response.pop("auction_mode")
         if "product_type" in response:
-            self.product_type: Optional[ProductType] = response.pop("product_type")
+            self.product_type: Optional[str] = response.pop("product_type")
         if "quote_currency_id" in response:
             self.quote_currency_id: Optional[str] = response.pop("quote_currency_id")
         if "base_currency_id" in response:
@@ -121,7 +121,7 @@ class GetProductResponse(BaseResponse):
         if "display_name" in response:
             self.display_name: Optional[str] = response.pop("display_name")
         if "product_venue" in response:
-            self.product_venue: Optional[ProductVenue] = response.pop("product_venue")
+            self.product_venue: Optional[str] = response.pop("product_venue")
         if "approximate_quote_24h_volume" in response:
             self.approximate_quote_24h_volume: Optional[str] = response.pop(
                 "approximate_quote_24h_volume"
@@ -155,3 +155,159 @@ class GetMarketTradesResponse(BaseResponse):
         if "best_ask" in response:
             self.best_ask: Optional[str] = response.pop("best_ask")
         super().__init__(**response)
+
+
+# ----------------------------------------------------------------
+
+
+class L2Level(BaseResponse):
+    def __init__(self, **kwargs):
+        if "price" in kwargs:
+            self.price: str = kwargs.pop("price")
+        if "size" in kwargs:
+            self.size: str = kwargs.pop("size")
+        super().__init__(**kwargs)
+
+
+class PriceBook(BaseResponse):
+    def __init__(self, **kwargs):
+        if "product_id" in kwargs:
+            self.product_id: str = kwargs.pop("product_id")
+        if "bids" in kwargs:
+            self.bids: List[L2Level] = [
+                L2Level(**l2_level) for l2_level in kwargs.pop("bids")
+            ]
+        if "asks" in kwargs:
+            self.asks: List[L2Level] = [
+                L2Level(**l2_level) for l2_level in kwargs.pop("asks")
+            ]
+        if "time" in kwargs:
+            self.time: Optional[Dict[str, Any]] = kwargs.pop("time")
+        super().__init__(**kwargs)
+
+
+class Product(BaseResponse):
+    def __init__(self, **kwargs):
+        if "product_id" in kwargs:
+            self.product_id: str = kwargs.pop("product_id")
+        if "price" in kwargs:
+            self.price: str = kwargs.pop("price")
+        if "price_percentage_change_24h" in kwargs:
+            self.price_percentage_change_24h: str = kwargs.pop(
+                "price_percentage_change_24h"
+            )
+        if "volume_24h" in kwargs:
+            self.volume_24h: str = kwargs.pop("volume_24h")
+        if "volume_percentage_change_24h" in kwargs:
+            self.volume_percentage_change_24h: str = kwargs.pop(
+                "volume_percentage_change_24h"
+            )
+        if "base_increment" in kwargs:
+            self.base_increment: str = kwargs.pop("base_increment")
+        if "quote_increment" in kwargs:
+            self.quote_increment: str = kwargs.pop("quote_increment")
+        if "quote_min_size" in kwargs:
+            self.quote_min_size: str = kwargs.pop("quote_min_size")
+        if "quote_max_size" in kwargs:
+            self.quote_max_size: str = kwargs.pop("quote_max_size")
+        if "base_min_size" in kwargs:
+            self.base_min_size: str = kwargs.pop("base_min_size")
+        if "base_max_size" in kwargs:
+            self.base_max_size: str = kwargs.pop("base_max_size")
+        if "base_name" in kwargs:
+            self.base_name: str = kwargs.pop("base_name")
+        if "quote_name" in kwargs:
+            self.quote_name: str = kwargs.pop("quote_name")
+        if "watched" in kwargs:
+            self.watched: bool = kwargs.pop("watched")
+        if "is_disabled" in kwargs:
+            self.is_disabled: bool = kwargs.pop("is_disabled")
+        if "new" in kwargs:
+            self.new: bool = kwargs.pop("new")
+        if "status" in kwargs:
+            self.status: str = kwargs.pop("status")
+        if "cancel_only" in kwargs:
+            self.cancel_only: bool = kwargs.pop("cancel_only")
+        if "limit_only" in kwargs:
+            self.limit_only: bool = kwargs.pop("limit_only")
+        if "post_only" in kwargs:
+            self.post_only: bool = kwargs.pop("post_only")
+        if "trading_disabled" in kwargs:
+            self.trading_disabled: bool = kwargs.pop("trading_disabled")
+        if "auction_mode" in kwargs:
+            self.auction_mode: bool = kwargs.pop("auction_mode")
+        if "product_type" in kwargs:
+            self.product_type: Optional[str] = kwargs.pop("product_type")
+        if "quote_currency_id" in kwargs:
+            self.quote_currency_id: Optional[str] = kwargs.pop("quote_currency_id")
+        if "base_currency_id" in kwargs:
+            self.base_currency_id: Optional[str] = kwargs.pop("base_currency_id")
+        if "fcm_trading_session_details" in kwargs:
+            self.fcm_trading_session_details: Optional[Dict[str, Any]] = kwargs.pop(
+                "fcm_trading_session_details"
+            )
+        if "mid_market_price" in kwargs:
+            self.mid_market_price: Optional[str] = kwargs.pop("mid_market_price")
+        if "alias" in kwargs:
+            self.alias: Optional[str] = kwargs.pop("alias")
+        if "alias_to" in kwargs:
+            self.alias_to: Optional[List[str]] = kwargs.pop("alias_to")
+        if "base_display_symbol" in kwargs:
+            self.base_display_symbol: str = kwargs.pop("base_display_symbol")
+        if "quote_display_symbol" in kwargs:
+            self.quote_display_symbol: Optional[str] = kwargs.pop(
+                "quote_display_symbol"
+            )
+        if "view_only" in kwargs:
+            self.view_only: Optional[bool] = kwargs.pop("view_only")
+        if "price_increment" in kwargs:
+            self.price_increment: Optional[str] = kwargs.pop("price_increment")
+        if "display_name" in kwargs:
+            self.display_name: Optional[str] = kwargs.pop("display_name")
+        if "product_venue" in kwargs:
+            self.product_venue: Optional[str] = kwargs.pop("product_venue")
+        if "approximate_quote_24h_volume" in kwargs:
+            self.approximate_quote_24h_volume: Optional[str] = kwargs.pop(
+                "approximate_quote_24h_volume"
+            )
+        if "future_product_details" in kwargs:
+            self.future_product_details: Optional[Dict[str, Any]] = kwargs.pop(
+                "future_product_details"
+            )
+        super().__init__(**kwargs)
+
+
+class Candle(BaseResponse):
+    def __init__(self, **kwargs):
+        if "start" in kwargs:
+            self.start: Optional[str] = kwargs.pop("start")
+        if "low" in kwargs:
+            self.low: Optional[str] = kwargs.pop("low")
+        if "high" in kwargs:
+            self.high: Optional[str] = kwargs.pop("high")
+        if "open" in kwargs:
+            self.open: Optional[str] = kwargs.pop("open")
+        if "close" in kwargs:
+            self.close: Optional[str] = kwargs.pop("close")
+        if "volume" in kwargs:
+            self.volume: Optional[str] = kwargs.pop("volume")
+        super().__init__(**kwargs)
+
+
+class HistoricalMarketTrade(BaseResponse):
+    def __init__(self, **kwargs):
+        if "trade_id" in kwargs:
+            self.trade_id: Optional[str] = kwargs.pop("trade_id")
+        if "product_id" in kwargs:
+            self.product_id: Optional[str] = kwargs.pop("product_id")
+        if "price" in kwargs:
+            self.price: Optional[str] = kwargs.pop("price")
+        if "size" in kwargs:
+            self.size: Optional[str] = kwargs.pop("size")
+        if "time" in kwargs:
+            self.time: Optional[str] = kwargs.pop("time")
+        if "side" in kwargs:
+            self.side: Optional[str] = kwargs.pop("side")
+        if "exchange" in kwargs:
+            self.exchange: Optional[str] = kwargs.pop("exchange")
+        super().__init__(**kwargs)

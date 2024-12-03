@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.8.2] - 2024-DEC-3
+
+### Added
+- More defined custom response type objects
+- New fields for`Account`, `HistoricalMarketTrade` and `GetProductBookResponse`
+
+### Changed
+- Removed redundant response enum types 
+- Removed redundant Public endpoint response types, now use same response types as Product endpoints
+- Move custom object locations to their respective endpoints where response objects are defined
+
 ## [1.8.1] - 2024-NOV-15
 
 ### Added

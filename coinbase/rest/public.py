@@ -1,14 +1,14 @@
 from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
-from coinbase.rest.types.public_types import (
-    GetPublicMarketTradesResponse,
-    GetPublicProductBookResponse,
-    GetPublicProductCandlesResponse,
-    GetPublicProductResponse,
-    GetServerTimeResponse,
-    ListPublicProductsResponse,
+from coinbase.rest.types.product_types import (
+    GetMarketTradesResponse,
+    GetProductBookResponse,
+    GetProductCandlesResponse,
+    GetProductResponse,
+    ListProductsResponse,
 )
+from coinbase.rest.types.public_types import GetServerTimeResponse
 
 
 def get_unix_time(self, **kwargs) -> GetServerTimeResponse:
@@ -39,7 +39,7 @@ def get_public_product_book(
     limit: Optional[int] = None,
     aggregation_price_increment: Optional[str] = None,
     **kwargs,
-) -> GetPublicProductBookResponse:
+) -> GetProductBookResponse:
     """
     **Get Public Product Book**
     _________________
@@ -70,7 +70,7 @@ def get_public_product_book(
         "aggregation_price_increment": aggregation_price_increment,
     }
 
-    return GetPublicProductBookResponse(
+    return GetProductBookResponse(
         self.get(endpoint, params=params, public=True, **kwargs)
     )
 
@@ -85,7 +85,7 @@ def get_public_products(
     expiring_contract_status: Optional[str] = None,
     get_all_products: bool = False,
     **kwargs,
-) -> ListPublicProductsResponse:
+) -> ListProductsResponse:
     """
     **List Public Products**
     _________________
@@ -121,12 +121,12 @@ def get_public_products(
         "get_all_products": get_all_products,
     }
 
-    return ListPublicProductsResponse(
+    return ListProductsResponse(
         self.get(endpoint, params=params, public=True, **kwargs)
     )
 
 
-def get_public_product(self, product_id: str, **kwargs) -> GetPublicProductResponse:
+def get_public_product(self, product_id: str, **kwargs) -> GetProductResponse:
     """
     **Public Get Product**
     _______________
@@ -152,7 +152,7 @@ def get_public_product(self, product_id: str, **kwargs) -> GetPublicProductRespo
     """
     endpoint = f"{API_PREFIX}/market/products/{product_id}"
 
-    return GetPublicProductResponse(self.get(endpoint, public=True, **kwargs))
+    return GetProductResponse(self.get(endpoint, public=True, **kwargs))
 
 
 def get_public_candles(
@@ -163,7 +163,7 @@ def get_public_candles(
     granularity: str,
     limit: Optional[int] = None,
     **kwargs,
-) -> GetPublicProductCandlesResponse:
+) -> GetProductCandlesResponse:
     """
     **Get Public Product Candles**
     __________
@@ -191,7 +191,7 @@ def get_public_candles(
 
     params = {"start": start, "end": end, "granularity": granularity, "limit": limit}
 
-    return GetPublicProductCandlesResponse(
+    return GetProductCandlesResponse(
         self.get(endpoint, params=params, public=True, **kwargs)
     )
 
@@ -203,7 +203,7 @@ def get_public_market_trades(
     start: Optional[str] = None,
     end: Optional[str] = None,
     **kwargs,
-) -> GetPublicMarketTradesResponse:
+) -> GetMarketTradesResponse:
     """
     **Get Public Market Trades**
     _____________________
@@ -231,6 +231,6 @@ def get_public_market_trades(
 
     params = {"limit": limit, "start": start, "end": end}
 
-    return GetPublicMarketTradesResponse(
+    return GetMarketTradesResponse(
         self.get(endpoint, params=params, public=True, **kwargs)
     )

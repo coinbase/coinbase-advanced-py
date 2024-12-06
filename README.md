@@ -197,13 +197,13 @@ We also provide channel specific methods for subscribing and unsubscribing. For 
 ```python
 client.open()
 client.ticker(product_ids=["BTC-USD", "ETH-USD"])
-client.heartbeats(product_ids=["BTC-USD", "ETH-USD"])
+client.heartbeats()
 
 # wait 10 seconds
 time.sleep(10)
 
 client.ticker_unsubscribe(product_ids=["BTC-USD", "ETH-USD"])
-client.heartbeats_unsubscribe(product_ids=["BTC-USD", "ETH-USD"])
+client.heartbeats_unsubscribe()
 client.close()
 ```
 

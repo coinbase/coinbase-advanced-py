@@ -25,7 +25,7 @@ def get_transaction_summary(
 
     __________
 
-    **Read more on the official documentation:** `Create Convert Quote <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createconvertquote>`_
+    **Read more on the official documentation:** `Get Transaction Summary <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gettransactionsummary>`_
     """
     endpoint = f"{API_PREFIX}/transaction_summary"
 

@@ -15,10 +15,14 @@ class RESTClient(RESTBase):
     - **api_key | Optional (str)** - The API key
     - **api_secret | Optional (str)** - The API key secret
     - **key_file | Optional (IO | str)** - Path to API key file or file-like object
-    - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com"
+    - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com" if *sandbox*
+      is False, otherwise "https://api-sandbox.coinbase.com"
     - **timeout | Optional (int)** - Set timeout in seconds for REST requests
     - **verbose | Optional (bool)** - Enables debug logging. Default set to False
     - **rate_limit_headers | Optional (bool)** - Enables rate limit headers. Default set to False
+    - **sandbox | bool** - Whether the target API is a sandbox and permits unauthenticated requests to otherwise
+      authenticated endpoints (see https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-sandbox for more
+      information). Default set to False
 
     """
 

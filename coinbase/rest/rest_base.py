@@ -13,6 +13,7 @@ from coinbase.constants import (
     API_SECRET_ENV_KEY,
     BASE_URL,
     RATE_LIMIT_HEADERS,
+    SANDBOX_BASE_URL,
     USER_AGENT,
 )
 
@@ -57,11 +58,15 @@ class RESTBase(APIBase):
         api_key: Optional[str] = os.getenv(API_ENV_KEY),
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
         key_file: Optional[Union[IO, str]] = None,
-        base_url=BASE_URL,
+        base_url: Optional[str] = None,
         timeout: Optional[int] = None,
         verbose: Optional[bool] = False,
         rate_limit_headers: Optional[bool] = False,
+        sandbox: bool = False,
     ):
+        if not base_url:
+            base_url = SANDBOX_BASE_URL if sandbox else BASE_URL
+
         super().__init__(
             api_key=api_key,
             api_secret=api_secret,
@@ -72,6 +77,7 @@ class RESTBase(APIBase):
         )
         self.rate_limit_headers = rate_limit_headers
         self.session = requests.Session()
+        self.sandbox = sandbox
         if verbose:
             logger.setLevel(logging.DEBUG)
 
@@ -191,7 +197,8 @@ class RESTBase(APIBase):
         """
         :meta private:
         """
-        if not self.is_authenticated and not public:
+
+        if not self.is_authenticated and (not public and not self.sandbox):
             raise AuthenticationError(
                 "Unauthenticated request to private endpoint. If you wish to access private endpoints, you must provide your API key and secret when initializing the RESTClient."
             )

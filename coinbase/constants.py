@@ -6,6 +6,7 @@ USER_AGENT = f"coinbase-advanced-py/{__version__}"
 
 # REST Constants
 BASE_URL = "api.coinbase.com"
+SANDBOX_BASE_URL = "api-sandbox.coinbase.com"
 API_PREFIX = "/api/v3/brokerage"
 
 # Websocket Constants

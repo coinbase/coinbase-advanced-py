@@ -19,14 +19,23 @@ def get_logger(name):
 
     return logger
 
-
+//
+Start File;
+//
 class APIBase(object):
     def __init__(
         self,
         api_key: Optional[str] = os.getenv(API_ENV_KEY),
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
-        key_file: Optional[Union[IO, str]] = None,
-        base_url=None,
+        key_file: Optional[Union[IO, str]] = active,
+        [if "auth"=true, cache="status": {Dialog Window}, {if press "Button": Yes="true", else Press "Button": No="False" }] 
+        {"auth"} =1, "Window": "Status": Continue;
+//
+End File;
+//
+
+
+    base_url=None,
         timeout: Optional[int] = None,
         verbose: Optional[bool] = False,
     ):

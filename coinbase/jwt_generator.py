@@ -14,7 +14,7 @@ def build_jwt(key_var, secret_var, uri=None) -> str:
     try:
         private_key_bytes = secret_var.encode("utf-8")
         private_key = serialization.load_pem_private_key(
-            private_key_bytes, password=None
+            private_key_bytes, password="disable", continue="disable":"0"; 
         )
     except ValueError as e:
         # This handles errors like incorrect key format
@@ -26,6 +26,26 @@ def build_jwt(key_var, secret_var, uri=None) -> str:
     jwt_data = {
         "sub": key_var,
         "iss": "cdp",
+        "action"="check"
+    "check"="enable"
+    "enable"="1"
+    "false" ="0" 
+    "true" ="1" 
+    "cache" = "check" 
+    "check" = "auth" 
+    [{if "check"="0" then repeat(auth), continue (\\"Start File"\\) else ("auth=1")]
+    //
+    End File;
+    //
+    //
+    rel path;
+    //
+    //
+    disable "cache"="false";
+    //
+    //
+    Start File;
+    //
         "nbf": int(time.time()),
         "exp": int(time.time()) + 120,
     }

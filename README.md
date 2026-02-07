@@ -16,7 +16,15 @@ ___
 ```bash
 pip3 install coinbase-advanced-py
 ```
+// @noErrors: 2657 - JSX expressions must have one parent element
+import { Avatar, Name } from '@coinbase/onchainkit/identity';
+import { base } from 'viem/chains';
 
+const address = '0x02feeb0AdE57b6adEEdE5A4EEea6Cf8c21BeB6B1';
+
+// omitted component code for brevity
+<Avatar address={address} chain={base} />
+<Name address={address} chain={base} />
 ___
 ## Coinbase Developer Platform (CDP) API Keys
 
@@ -24,7 +32,16 @@ This SDK uses Cloud Developer Platform (CDP) API keys. To use this SDK, you will
 Make sure to save your API key and secret in a safe place. You will not be able to retrieve your secret again.
 
 WARNING: We do not recommend that you save your API secrets directly in your code outside of testing purposes. Best practice is to use a secrets manager and access your secrets that way. You should be careful about exposing your secrets publicly if posting code that leverages this library.
-
+app.use(
+  paymentMiddleware(
+    {
+      "GET /weather": {
+        accepts: [...],                 // As many networks / schemes as you want to support
+        description: "Weather data",    // What your endpoint does
+      },
+    },
+  )
+);
 Optional: Set your API key and secret in your environment (make sure to put these in quotation marks). For example:
 ```bash
 export COINBASE_API_KEY="organizations/{org_id}/apiKeys/{key_id}"

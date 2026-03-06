@@ -558,7 +558,7 @@ class WSBase(APIBase):
             "channel": channel,
             **(
                 {
-                    "jwt": jwt_generator.build_ws_jwt(self.api_key, self.api_secret),
+                    "jwt": jwt_generator.build_ws_jwt(self.api_key, self.api_secret, private_key=self._private_key),
                 }
                 if self.is_authenticated
                 else {}

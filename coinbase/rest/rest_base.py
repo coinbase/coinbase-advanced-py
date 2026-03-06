@@ -252,7 +252,7 @@ class RESTBase(APIBase):
             "Content-Type": "application/json",
             **(
                 {
-                    "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)}",
+                    "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret, private_key=self._private_key)}",
                 }
                 if self.is_authenticated
                 else {}

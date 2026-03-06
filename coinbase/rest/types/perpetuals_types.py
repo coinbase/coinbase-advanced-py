@@ -13,12 +13,12 @@ class AllocatePortfolioResponse(BaseResponse):
 # Get Perpetuals Portfolio Summary
 class GetPerpetualsPortfolioSummaryResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "portfolios" in response:
+        if "portfolios" in response and response["portfolios"] is not None:
             self.portfolios: Optional[List[PerpetualPortfolio]] = [
                 PerpetualPortfolio(**portfolio)
                 for portfolio in response.pop("portfolios")
             ]
-        if "summary" in response:
+        if "summary" in response and response["summary"] is not None:
             self.summary: Optional[PortfolioSummary] = PortfolioSummary(
                 **response.pop("summary")
             )
@@ -28,11 +28,11 @@ class GetPerpetualsPortfolioSummaryResponse(BaseResponse):
 # List Perpetuals Positions
 class ListPerpetualsPositionsResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "positions" in response:
+        if "positions" in response and response["positions"] is not None:
             self.positions: Optional[List[Position]] = [
                 Position(**pos) for pos in response.pop("positions")
             ]
-        if "summary" in response:
+        if "summary" in response and response["summary"] is not None:
             self.summary: Optional[PositionSummary] = PositionSummary(
                 **response.pop("summary")
             )
@@ -42,7 +42,7 @@ class ListPerpetualsPositionsResponse(BaseResponse):
 # Get Perpetuals Position
 class GetPerpetualsPositionResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "position" in response:
+        if "position" in response and response["position"] is not None:
             self.position: Optional[Position] = Position(**response.pop("position"))
         super().__init__(**response)
 
@@ -50,7 +50,7 @@ class GetPerpetualsPositionResponse(BaseResponse):
 # Get Portfolio Balances
 class GetPortfolioBalancesResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "portfolio_balances" in response:
+        if "portfolio_balances" in response and response["portfolio_balances"] is not None:
             self.portfolio_balances: Optional[List[PortfolioBalance]] = [
                 PortfolioBalance(**balance)
                 for balance in response.pop("portfolio_balances")

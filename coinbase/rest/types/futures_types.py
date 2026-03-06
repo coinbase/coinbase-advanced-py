@@ -7,7 +7,7 @@ from coinbase.rest.types.common_types import Amount
 # Get Futures Balance Summary
 class GetFuturesBalanceSummaryResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "balance_summary" in response:
+        if "balance_summary" in response and response["balance_summary"] is not None:
             self.balance_summary: Optional[FCMBalanceSummary] = FCMBalanceSummary(
                 **response.pop("balance_summary")
             )
@@ -17,7 +17,7 @@ class GetFuturesBalanceSummaryResponse(BaseResponse):
 # List Futures Positions
 class ListFuturesPositionsResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "positions" in response:
+        if "positions" in response and response["positions"] is not None:
             self.positions: Optional[List[FCMPosition]] = [
                 FCMPosition(**position) for position in response.pop("positions")
             ]
@@ -27,7 +27,7 @@ class ListFuturesPositionsResponse(BaseResponse):
 # Get Futures Position
 class GetFuturesPositionResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "position" in response:
+        if "position" in response and response["position"] is not None:
             self.position: Optional[FCMPosition] = FCMPosition(
                 **response.pop("position")
             )
@@ -45,7 +45,7 @@ class ScheduleFuturesSweepResponse(BaseResponse):
 # List Futures Sweeps
 class ListFuturesSweepsResponse(BaseResponse):
     def __init__(self, response: dict):
-        if "sweeps" in response:
+        if "sweeps" in response and response["sweeps"] is not None:
             self.sweeps: List[FCMSweep] = [
                 FCMSweep(**sweep) for sweep in response.pop("sweeps")
             ]

@@ -7,21 +7,22 @@ from cryptography.hazmat.primitives import serialization
 from coinbase.constants import BASE_URL
 
 
-def build_jwt(key_var, secret_var, uri=None) -> str:
+def build_jwt(key_var, secret_var, uri=None, private_key=None) -> str:
     """
     :meta private:
     """
-    try:
-        private_key_bytes = secret_var.encode("utf-8")
-        private_key = serialization.load_pem_private_key(
-            private_key_bytes, password=None
-        )
-    except ValueError as e:
-        # This handles errors like incorrect key format
-        raise Exception(
-            f"{e}\n"
-            "Are you sure you generated your key at https://cloud.coinbase.com/access/api ?"
-        )
+    if private_key is None:
+        try:
+            private_key_bytes = secret_var.encode("utf-8")
+            private_key = serialization.load_pem_private_key(
+                private_key_bytes, password=None
+            )
+        except ValueError as e:
+            # This handles errors like incorrect key format
+            raise Exception(
+                f"{e}\n"
+                "Are you sure you generated your key at https://cloud.coinbase.com/access/api ?"
+            )
 
     jwt_data = {
         "sub": key_var,
@@ -43,7 +44,7 @@ def build_jwt(key_var, secret_var, uri=None) -> str:
     return jwt_token
 
 
-def build_rest_jwt(uri, key_var, secret_var) -> str:
+def build_rest_jwt(uri, key_var, secret_var, private_key=None) -> str:
     """
     **Build REST JWT**
     __________
@@ -59,11 +60,12 @@ def build_rest_jwt(uri, key_var, secret_var) -> str:
     - **uri (str)** - Formatted URI for the endpoint (e.g. "GET api.coinbase.com/api/v3/brokerage/accounts") Can be generated using ``format_jwt_uri``
     - **key_var (str)** - The API key
     - **secret_var (str)** - The API key secret
+    - **private_key** - Optional pre-parsed private key to avoid re-parsing on every call
     """
-    return build_jwt(key_var, secret_var, uri=uri)
+    return build_jwt(key_var, secret_var, uri=uri, private_key=private_key)
 
 
-def build_ws_jwt(key_var, secret_var) -> str:
+def build_ws_jwt(key_var, secret_var, private_key=None) -> str:
     """
     **Build WebSocket JWT**
     __________
@@ -78,8 +80,9 @@ def build_ws_jwt(key_var, secret_var) -> str:
 
     - **key_var (str)** - The API key
     - **secret_var (str)** - The API key secret
+    - **private_key** - Optional pre-parsed private key to avoid re-parsing on every call
     """
-    return build_jwt(key_var, secret_var)
+    return build_jwt(key_var, secret_var, private_key=private_key)
 
 
 def format_jwt_uri(method, path) -> str:

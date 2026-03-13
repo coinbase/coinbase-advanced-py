@@ -5,6 +5,7 @@ import os
 import ssl
 import threading
 import time
+from multiprocessing import AuthenticationError
 from typing import IO, Callable, List, Optional, Union
 
 import backoff
@@ -18,6 +19,7 @@ from coinbase.constants import (
     SUBSCRIBE_MESSAGE_TYPE,
     UNSUBSCRIBE_MESSAGE_TYPE,
     USER_AGENT,
+    WS_AUTH_CHANNELS,
     WS_BASE_URL,
     WS_RETRY_BASE,
     WS_RETRY_FACTOR,
@@ -55,28 +57,7 @@ class WSClientConnectionClosedException(Exception):
 
 class WSBase(APIBase):
     """
-    **WSBase Client**
-    _____________________________
-
-    Initialize using WSClient
-
-    __________
-
-    **Parameters**:
-
-    - **api_key | Optional (str)** - The API key
-    - **api_secret | Optional (str)** - The API key secret
-    - **key_file | Optional (IO | str)** - Path to API key file or file-like object
-    - **base_url | (str)** - The websocket base url. Default set to "wss://advanced-trade-ws.coinbase.com"
-    - **timeout | Optional (int)** - Set timeout in seconds for REST requests
-    - **max_size | Optional (int)** - Max size in bytes for messages received. Default set to (10 * 1024 * 1024)
-    - **on_message | Optional (Callable[[str], None])** - Function called when a message is received
-    - **on_open | Optional ([Callable[[], None]])** - Function called when a connection is opened
-    - **on_close | Optional ([Callable[[], None]])** - Function called when a connection is closed
-    - **retry | Optional (bool)** - Enables automatic reconnections. Default set to True
-    - **verbose | Optional (bool)** - Enables debug logging. Default set to False
-
-
+    :meta private:
     """
 
     def __init__(
@@ -116,6 +97,7 @@ class WSBase(APIBase):
         self.websocket = None
         self.loop = None
         self.thread = None
+        self._task = None
 
         self.retry = retry
         self._retry_max_tries = WS_RETRY_MAX
@@ -174,7 +156,8 @@ class WSBase(APIBase):
 
             # Start the message handler coroutine after establishing connection
             if not self._retrying:
-                asyncio.create_task(self._message_handler())
+                self._task = asyncio.create_task(self._message_handler())
+
         except asyncio.TimeoutError as toe:
             self.websocket = None
             logger.error("Connection attempt timed out: %s", toe)
@@ -264,8 +247,14 @@ class WSBase(APIBase):
         self._ensure_websocket_open()
         for channel in channels:
             try:
+                if not self.is_authenticated and channel in WS_AUTH_CHANNELS:
+                    raise AuthenticationError(
+                        "Unauthenticated request to private channel."
+                    )
+
+                is_public = False if channel in WS_AUTH_CHANNELS else True
                 message = self._build_subscription_message(
-                    product_ids, channel, SUBSCRIBE_MESSAGE_TYPE
+                    product_ids, channel, SUBSCRIBE_MESSAGE_TYPE, is_public
                 )
                 json_message = json.dumps(message)
 
@@ -330,8 +319,13 @@ class WSBase(APIBase):
         self._ensure_websocket_open()
         for channel in channels:
             try:
+                if not self.is_authenticated and channel in WS_AUTH_CHANNELS:
+                    raise AuthenticationError(
+                        "Unauthenticated request to private channel. If you wish to access private channels, you must provide your API key and secret when initializing the WSClient."
+                    )
+                is_public = False if channel in WS_AUTH_CHANNELS else True
                 message = self._build_subscription_message(
-                    product_ids, channel, UNSUBSCRIBE_MESSAGE_TYPE
+                    product_ids, channel, UNSUBSCRIBE_MESSAGE_TYPE, is_public
                 )
                 json_message = json.dumps(message)
 
@@ -553,7 +547,7 @@ class WSBase(APIBase):
                 break
 
     def _build_subscription_message(
-        self, product_ids: List[str], channel: str, message_type: str
+        self, product_ids: List[str], channel: str, message_type: str, public: bool
     ):
         """
         :meta private:
@@ -562,8 +556,13 @@ class WSBase(APIBase):
             "type": message_type,
             "product_ids": product_ids,
             "channel": channel,
-            "jwt": jwt_generator.build_ws_jwt(self.api_key, self.api_secret),
-            "timestamp": int(time.time()),
+            **(
+                {
+                    "jwt": jwt_generator.build_ws_jwt(self.api_key, self.api_secret),
+                }
+                if self.is_authenticated
+                else {}
+            ),
         }
 
     def _ensure_websocket_not_open(self):

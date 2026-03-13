@@ -1,11 +1,16 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.accounts_types import GetAccountResponse, ListAccountsResponse
 
 
 def get_accounts(
-    self, limit: Optional[int] = None, cursor: Optional[str] = None, **kwargs
-) -> Dict[str, Any]:
+    self,
+    limit: Optional[int] = None,
+    cursor: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> ListAccountsResponse:
     """
     **List Accounts**
     _________________
@@ -19,16 +24,20 @@ def get_accounts(
 
     __________
 
-    **Read more on the official documentation:** `List Accounts <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccounts>`_
+    **Read more on the official documentation:** `List Accounts <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccounts>`_
 
     """
     endpoint = f"{API_PREFIX}/accounts"
-    params = {"limit": limit, "cursor": cursor}
+    params = {
+        "limit": limit,
+        "cursor": cursor,
+        "retail_portfolio_id": retail_portfolio_id,
+    }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListAccountsResponse(self.get(endpoint, params=params, **kwargs))
 
 
-def get_account(self, account_uuid: str, **kwargs) -> Dict[str, Any]:
+def get_account(self, account_uuid: str, **kwargs) -> GetAccountResponse:
     """
 
     **Get Account**
@@ -43,8 +52,8 @@ def get_account(self, account_uuid: str, **kwargs) -> Dict[str, Any]:
 
     __________
 
-    **Read more on the official documentation:** `Get Account <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccount>`_
+    **Read more on the official documentation:** `Get Account <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccount>`_
     """
     endpoint = f"{API_PREFIX}/accounts/{account_uuid}"
 
-    return self.get(endpoint, **kwargs)
+    return GetAccountResponse(self.get(endpoint, **kwargs))

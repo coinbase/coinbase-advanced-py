@@ -23,8 +23,11 @@ class ProductsTest(unittest.TestCase):
 
             captured_request = m.request_history[0]
 
-            self.assertEqual(captured_request.query, "limit=2&product_type=spot")
-            self.assertEqual(products, expected_response)
+            self.assertEqual(
+                captured_request.query,
+                "limit=2&product_type=spot&get_tradability_status=false&get_all_products=false",
+            )
+            self.assertEqual(products.__dict__, expected_response)
 
     def test_get_product(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -41,8 +44,8 @@ class ProductsTest(unittest.TestCase):
 
             captured_request = m.request_history[0]
 
-            self.assertEqual(captured_request.query, "")
-            self.assertEqual(product, expected_response)
+            self.assertEqual(captured_request.query, "get_tradability_status=false")
+            self.assertEqual(product.__dict__, expected_response)
 
     def test_get_product_book(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -60,7 +63,7 @@ class ProductsTest(unittest.TestCase):
             captured_request = m.request_history[0]
 
             self.assertEqual(captured_request.query, "product_id=product_1&limit=10")
-            self.assertEqual(book, expected_response)
+            self.assertEqual(book.__dict__, expected_response)
 
     def test_get_best_bid_ask(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -80,4 +83,4 @@ class ProductsTest(unittest.TestCase):
             self.assertEqual(
                 captured_request.query, "product_ids=product_1&product_ids=product_2"
             )
-            self.assertEqual(bid_ask, expected_response)
+            self.assertEqual(bid_ask.__dict__, expected_response)

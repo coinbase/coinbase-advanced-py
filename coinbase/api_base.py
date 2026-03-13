@@ -45,15 +45,21 @@ class APIBase(object):
             except json.JSONDecodeError as e:
                 raise Exception(f"Error decoding JSON: {e}")
 
-        if api_key is None:
-            raise Exception(
-                f"Must specify env var COINBASE_API_KEY or pass api_key in constructor"
+        self.is_authenticated = False
+        if api_key is not None and api_secret is not None:
+            self.api_key = api_key
+            self.api_secret = bytes(api_secret, encoding="utf8").decode(
+                "unicode_escape"
             )
-        if api_secret is None:
+            self.is_authenticated = True
+        elif api_key is not None:
             raise Exception(
-                f"Must specify env var COINBASE_API_SECRET or pass api_secret in constructor"
+                f"Only api_key provided in constructor. Please also provide api_secret"
             )
-        self.api_key = api_key
-        self.api_secret = bytes(api_secret, encoding="utf8").decode("unicode_escape")
+        elif api_secret is not None:
+            raise Exception(
+                f"Only api_secret provided in constructor. Please also provide api_key"
+            )
+
         self.base_url = base_url
         self.timeout = timeout

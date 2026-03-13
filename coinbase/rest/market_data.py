@@ -1,11 +1,21 @@
 from typing import Any, Dict, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.product_types import (
+    GetMarketTradesResponse,
+    GetProductCandlesResponse,
+)
 
 
 def get_candles(
-    self, product_id: str, start: str, end: str, granularity: str, **kwargs
-) -> Dict[str, Any]:
+    self,
+    product_id: str,
+    start: str,
+    end: str,
+    granularity: str,
+    limit: Optional[int] = None,
+    **kwargs,
+) -> GetProductCandlesResponse:
     """
     **Get Product Candles**
     __________
@@ -21,17 +31,13 @@ def get_candles(
     __________
 
     **Read more on the official documentation:** `Get Product Candles
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getcandles>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getcandles>`_
     """
     endpoint = f"{API_PREFIX}/products/{product_id}/candles"
 
-    params = {
-        "start": start,
-        "end": end,
-        "granularity": granularity,
-    }
+    params = {"start": start, "end": end, "granularity": granularity, "limit": limit}
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetProductCandlesResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_market_trades(
@@ -41,7 +47,7 @@ def get_market_trades(
     start: Optional[str] = None,
     end: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> GetMarketTradesResponse:
     """
     **Get Market Trades**
     _____________________
@@ -57,10 +63,10 @@ def get_market_trades(
     __________
 
     **Read more on the official documentation:** `Get Market Trades
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getmarkettrades>`_
     """
     endpoint = f"{API_PREFIX}/products/{product_id}/ticker"
 
     params = {"limit": limit, "start": start, "end": end}
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetMarketTradesResponse(self.get(endpoint, params=params, **kwargs))

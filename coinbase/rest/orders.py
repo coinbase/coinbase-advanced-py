@@ -1,6 +1,25 @@
+import uuid
 from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.orders_types import (
+    CancelOrdersResponse,
+    ClosePositionResponse,
+    CreateOrderResponse,
+    EditOrderPreviewResponse,
+    EditOrderResponse,
+    GetOrderResponse,
+    ListFillsResponse,
+    ListOrdersResponse,
+    PreviewOrderResponse,
+)
+
+
+def generate_client_order_id() -> str:
+    """
+    :meta private:
+    """
+    return uuid.uuid4().hex
 
 
 def create_order(
@@ -14,7 +33,7 @@ def create_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Create Order**
     ________________
@@ -30,9 +49,12 @@ def create_order(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     endpoint = f"{API_PREFIX}/orders"
+
+    if not client_order_id:
+        client_order_id = generate_client_order_id()
 
     data = {
         "client_order_id": client_order_id,
@@ -45,7 +67,7 @@ def create_order(
         "retail_portfolio_id": retail_portfolio_id,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return CreateOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 # Market orders
@@ -61,7 +83,7 @@ def market_order(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Market Order**
     ________________
@@ -78,7 +100,7 @@ def market_order(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
 
     market_market_ioc = {"quote_size": quote_size, "base_size": base_size}
@@ -106,13 +128,14 @@ def market_order_buy(
     self,
     client_order_id: str,
     product_id: str,
-    quote_size: str,
+    quote_size: Optional[str] = None,
+    base_size: Optional[str] = None,
     self_trade_prevention_id: Optional[str] = None,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Create Market Order Buy**
     ____________________
@@ -128,7 +151,7 @@ def market_order_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return market_order(
         self,
@@ -136,6 +159,7 @@ def market_order_buy(
         product_id,
         "BUY",
         quote_size=quote_size,
+        base_size=base_size,
         self_trade_prevention_id=self_trade_prevention_id,
         leverage=leverage,
         margin_type=margin_type,
@@ -154,7 +178,7 @@ def market_order_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Create Market Order Sell**
     _____________________
@@ -170,7 +194,7 @@ def market_order_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return market_order(
         self,
@@ -199,7 +223,7 @@ def limit_order_ioc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit IOC Order**
     ________________
@@ -216,7 +240,7 @@ def limit_order_ioc(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
 
     sor_limit_ioc = {"base_size": base_size, "limit_price": limit_price}
@@ -248,7 +272,7 @@ def limit_order_ioc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit IOC Order Buy**
     ________________
@@ -265,7 +289,7 @@ def limit_order_ioc_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
 
     return limit_order_ioc(
@@ -294,7 +318,7 @@ def limit_order_ioc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit IOC Order Sell**
     ________________
@@ -311,7 +335,7 @@ def limit_order_ioc_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
 
     return limit_order_ioc(
@@ -343,7 +367,7 @@ def limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTC**
     ___________________
@@ -360,7 +384,7 @@ def limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     order_configuration = {
         "limit_limit_gtc": {
@@ -396,7 +420,7 @@ def limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTC Buy**
     _______________________
@@ -413,7 +437,7 @@ def limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return limit_order_gtc(
         self,
@@ -443,7 +467,7 @@ def limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTC Sell**
     ________________________
@@ -460,7 +484,7 @@ def limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return limit_order_gtc(
         self,
@@ -493,7 +517,7 @@ def limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTD**
     ___________________
@@ -510,7 +534,7 @@ def limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     order_configuration = {
         "limit_limit_gtd": {
@@ -548,7 +572,7 @@ def limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTD Buy**
     _______________________
@@ -565,7 +589,7 @@ def limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return limit_order_gtd(
         self,
@@ -597,7 +621,7 @@ def limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Limit Order GTD Sell**
     ________________________
@@ -614,7 +638,7 @@ def limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return limit_order_gtd(
         self,
@@ -625,6 +649,149 @@ def limit_order_gtd_sell(
         limit_price=limit_price,
         end_time=end_time,
         post_only=post_only,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+# Limit FOK Orders
+def limit_order_fok(
+    self,
+    client_order_id: str,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Limit FOK Order**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Limit Order with a FOK time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+
+    limit_limit_fok = {"base_size": base_size, "limit_price": limit_price}
+
+    order_configuration = {"limit_limit_fok": limit_limit_fok}
+
+    return create_order(
+        self,
+        client_order_id,
+        product_id,
+        side,
+        order_configuration,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def limit_order_fok_buy(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Limit FOK Order Buy**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Buy Limit Order with a FOK time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+
+    return limit_order_fok(
+        self,
+        client_order_id,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def limit_order_fok_sell(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Limit FOK Order Sell**
+    ________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Sell Limit Order with a FOK time-in-force policy. Provide the base_size (quantity of your base currency to
+    spend) as well as a limit_price that indicates the maximum price at which the order should be filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+
+    return limit_order_fok(
+        self,
+        client_order_id,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
         self_trade_prevention_id=self_trade_prevention_id,
         leverage=leverage,
         margin_type=margin_type,
@@ -648,7 +815,7 @@ def stop_limit_order_gtc(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTC**
     ________________________
@@ -665,7 +832,7 @@ def stop_limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtc": {
@@ -703,7 +870,7 @@ def stop_limit_order_gtc_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTC Buy**
     ____________________________
@@ -720,7 +887,7 @@ def stop_limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return stop_limit_order_gtc(
         self,
@@ -752,7 +919,7 @@ def stop_limit_order_gtc_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTC Sell**
     _____________________________
@@ -769,7 +936,7 @@ def stop_limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return stop_limit_order_gtc(
         self,
@@ -804,7 +971,7 @@ def stop_limit_order_gtd(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTD**
     ________________________
@@ -821,7 +988,7 @@ def stop_limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtd": {
@@ -861,7 +1028,7 @@ def stop_limit_order_gtd_buy(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTD Buy**
     ____________________________
@@ -878,7 +1045,7 @@ def stop_limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return stop_limit_order_gtd(
         self,
@@ -912,7 +1079,7 @@ def stop_limit_order_gtd_sell(
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> CreateOrderResponse:
     """
     **Stop-Limit Order GTD Sell**
     _____________________________
@@ -929,7 +1096,7 @@ def stop_limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
     """
     return stop_limit_order_gtd(
         self,
@@ -949,7 +1116,311 @@ def stop_limit_order_gtd_sell(
     )
 
 
-def get_order(self, order_id: str, **kwargs) -> Dict[str, Any]:
+# Trigger Bracket GTC orders
+def trigger_bracket_order_gtc(
+    self,
+    client_order_id: str,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Trigger Bracket Order GTC**
+    ________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Trigger Bracket order with a GTC time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtc": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+        }
+    }
+
+    return create_order(
+        self,
+        client_order_id,
+        product_id,
+        side,
+        order_configuration,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtc_buy(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Trigger Bracket Order GTC Buy**
+    ____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a BUY Trigger Bracket order with a GTC time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtc(
+        self,
+        client_order_id,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtc_sell(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Trigger Bracket Order GTC Sell**
+    _____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a SELL Trigger Bracket order with a GTC time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtc(
+        self,
+        client_order_id,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+# Trigger Bracket GTD orders
+def trigger_bracket_order_gtd(
+    self,
+    client_order_id: str,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Trigger Bracket Order GTD**
+    ________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a Trigger Bracket order with a GTD time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtd": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+            "end_time": end_time,
+        }
+    }
+
+    return create_order(
+        self,
+        client_order_id,
+        product_id,
+        side,
+        order_configuration,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtd_buy(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Trigger Bracket Order GTD Buy**
+    ____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a BUY Trigger Bracket order with a GTD time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtd(
+        self,
+        client_order_id,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def trigger_bracket_order_gtd_sell(
+    self,
+    client_order_id: str,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    self_trade_prevention_id: Optional[str] = None,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> CreateOrderResponse:
+    """
+    **Trigger Bracket Order GTD Sell**
+    _____________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders
+
+    __________
+
+    **Description:**
+
+    Place a SELL Trigger Bracket order with a GTD time-in-force policy. Trigger Bracket orders become active and wait to trigger based on
+    the movement of the last trade price. The last trade price is the last price at which an order was filled.
+
+    __________
+
+    **Read more on the official documentation:** `Create Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    """
+    return trigger_bracket_order_gtd(
+        self,
+        client_order_id,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
+        self_trade_prevention_id=self_trade_prevention_id,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def get_order(self, order_id: str, **kwargs) -> GetOrderResponse:
     """
     **Get Order**
     _____________
@@ -965,21 +1436,22 @@ def get_order(self, order_id: str, **kwargs) -> Dict[str, Any]:
     __________
 
     **Read more on the official documentation:** `Get Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_gethistoricalorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorder>`_
     """
     endpoint = f"{API_PREFIX}/orders/historical/{order_id}"
 
-    return self.get(endpoint, **kwargs)
+    return GetOrderResponse(self.get(endpoint, **kwargs))
 
 
 def list_orders(
     self,
-    product_id: Optional[str] = None,
+    order_ids: Optional[List[str]] = None,
+    product_ids: Optional[List[str]] = None,
     order_status: Optional[List[str]] = None,
     limit: Optional[int] = None,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
-    order_type: Optional[str] = None,
+    order_types: Optional[str] = None,
     order_side: Optional[str] = None,
     cursor: Optional[str] = None,
     product_type: Optional[str] = None,
@@ -987,8 +1459,10 @@ def list_orders(
     contract_expiry_type: Optional[str] = None,
     asset_filters: Optional[List[str]] = None,
     retail_portfolio_id: Optional[str] = None,
+    time_in_forces: Optional[str] = None,
+    sort_by: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListOrdersResponse:
     """
     **List Orders**
     _______________
@@ -1004,16 +1478,17 @@ def list_orders(
     __________
 
     **Read more on the official documentation:** `List Orders
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_gethistoricalorders>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorders>`_
     """
     endpoint = f"{API_PREFIX}/orders/historical/batch"
     params = {
-        "product_id": product_id,
+        "order_ids": order_ids,
+        "product_ids": product_ids,
         "order_status": order_status,
         "limit": limit,
         "start_date": start_date,
         "end_date": end_date,
-        "order_type": order_type,
+        "order_types": order_types,
         "order_side": order_side,
         "cursor": cursor,
         "product_type": product_type,
@@ -1021,21 +1496,26 @@ def list_orders(
         "contract_expiry_type": contract_expiry_type,
         "asset_filters": asset_filters,
         "retail_portfolio_id": retail_portfolio_id,
+        "time_in_forces": time_in_forces,
+        "sort_by": sort_by,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListOrdersResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_fills(
     self,
-    order_id: Optional[str] = None,
-    product_id: Optional[str] = None,
+    order_ids: Optional[List[str]] = None,
+    trade_ids: Optional[List[str]] = None,
+    product_ids: Optional[List[str]] = None,
     start_sequence_timestamp: Optional[str] = None,
     end_sequence_timestamp: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     limit: Optional[int] = None,
     cursor: Optional[str] = None,
+    sort_by: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListFillsResponse:
     """
     **List Fills**
     ______________
@@ -1051,19 +1531,22 @@ def get_fills(
     __________
 
     **Read more on the official documentation:** `List Fills
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfills>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfills>`_
     """
     endpoint = f"{API_PREFIX}/orders/historical/fills"
     params = {
-        "order_id": order_id,
-        "product_id": product_id,
+        "order_ids": order_ids,
+        "trade_ids": trade_ids,
+        "product_ids": product_ids,
         "start_sequence_timestamp": start_sequence_timestamp,
         "end_sequence_timestamp": end_sequence_timestamp,
+        "retail_portfolio_id": retail_portfolio_id,
         "limit": limit,
         "cursor": cursor,
+        "sort_by": sort_by,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListFillsResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def edit_order(
@@ -1072,7 +1555,7 @@ def edit_order(
     size: Optional[str] = None,
     price: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> EditOrderResponse:
     """
     **Edit Order**
     ______________
@@ -1088,7 +1571,7 @@ def edit_order(
     __________
 
     **Read more on the official documentation:** `Edit Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_editorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_editorder>`_
     """
     endpoint = f"{API_PREFIX}/orders/edit"
     data = {
@@ -1097,7 +1580,7 @@ def edit_order(
         "price": price,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return EditOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 def preview_edit_order(
@@ -1106,7 +1589,7 @@ def preview_edit_order(
     size: Optional[str] = None,
     price: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> EditOrderPreviewResponse:
     """
     **Preview Edit Order**
     ______________________
@@ -1122,7 +1605,7 @@ def preview_edit_order(
     __________
 
     **Read more on the official documentation:** `Edit Order Preview
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeweditorder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeweditorder>`_
     """
     endpoint = f"{API_PREFIX}/orders/edit_preview"
     data = {
@@ -1131,10 +1614,10 @@ def preview_edit_order(
         "price": price,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return EditOrderPreviewResponse(self.post(endpoint, data=data, **kwargs))
 
 
-def cancel_orders(self, order_ids: List[str], **kwargs) -> Dict[str, Any]:
+def cancel_orders(self, order_ids: List[str], **kwargs) -> CancelOrdersResponse:
     """
     **Cancel Orders**
     _________________
@@ -1150,14 +1633,14 @@ def cancel_orders(self, order_ids: List[str], **kwargs) -> Dict[str, Any]:
     __________
 
     **Read more on the official documentation:** `Cancel Orders
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_cancelorders>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_cancelorders>`_
     """
     endpoint = f"{API_PREFIX}/orders/batch_cancel"
     data = {
         "order_ids": order_ids,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return CancelOrdersResponse(self.post(endpoint, data=data, **kwargs))
 
 
 def preview_order(
@@ -1165,14 +1648,11 @@ def preview_order(
     product_id: str,
     side: str,
     order_configuration,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Order**
     _________________
@@ -1188,26 +1668,20 @@ def preview_order(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     endpoint = f"{API_PREFIX}/orders/preview"
-
-    if commission_rate:
-        commission_rate = {"value": commission_rate}
 
     data = {
         "product_id": product_id,
         "side": side,
         "order_configuration": order_configuration,
-        "commission_rate": commission_rate,
-        "is_max": is_max,
-        "tradable_balance": tradable_balance,
-        "skip_fcm_risk_check": skip_fcm_risk_check,
         "leverage": leverage,
         "margin_type": margin_type,
+        "retail_portfolio_id": retail_portfolio_id,
     }
 
-    return self.post(endpoint, data=data, **kwargs)
+    return PreviewOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 # Preview market orders
@@ -1217,14 +1691,11 @@ def preview_market_order(
     side: str,
     quote_size: Optional[str] = None,
     base_size: Optional[str] = None,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Market Order**
     ________________________
@@ -1240,7 +1711,7 @@ def preview_market_order(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
 
     market_market_ioc = {"quote_size": quote_size, "base_size": base_size}
@@ -1255,12 +1726,9 @@ def preview_market_order(
         product_id,
         side,
         order_configuration,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1269,14 +1737,12 @@ def preview_market_order_buy(
     self,
     product_id: str,
     quote_size: Optional[str] = None,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
+    base_size: Optional[str] = None,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Market Buy Order**
     ____________________________
@@ -1292,19 +1758,17 @@ def preview_market_order_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_market_order(
         self,
         product_id,
         "BUY",
         quote_size=quote_size,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
+        base_size=base_size,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1313,14 +1777,11 @@ def preview_market_order_sell(
     self,
     product_id: str,
     base_size: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Market Sell Order**
     _____________________________
@@ -1336,19 +1797,16 @@ def preview_market_order_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_market_order(
         self,
         product_id,
         "SELL",
         base_size=base_size,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1360,14 +1818,11 @@ def preview_limit_order_ioc(
     side: str,
     base_size: str,
     limit_price: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order IOC**
     ___________________________
@@ -1383,7 +1838,7 @@ def preview_limit_order_ioc(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     order_configuration = {
         "sor_limit_ioc": {"base_size": base_size, "limit_price": limit_price}
@@ -1394,12 +1849,9 @@ def preview_limit_order_ioc(
         product_id,
         side,
         order_configuration,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1409,14 +1861,11 @@ def preview_limit_order_ioc_buy(
     product_id: str,
     base_size: str,
     limit_price: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order IOC Buy**
     ___________________________
@@ -1432,7 +1881,7 @@ def preview_limit_order_ioc_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_limit_order_ioc(
         self,
@@ -1440,12 +1889,9 @@ def preview_limit_order_ioc_buy(
         "BUY",
         base_size=base_size,
         limit_price=limit_price,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1455,14 +1901,11 @@ def preview_limit_order_ioc_sell(
     product_id: str,
     base_size: str,
     limit_price: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order IOC Sell**
     ___________________________
@@ -1478,7 +1921,7 @@ def preview_limit_order_ioc_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_limit_order_ioc(
         self,
@@ -1486,12 +1929,9 @@ def preview_limit_order_ioc_sell(
         "SELL",
         base_size=base_size,
         limit_price=limit_price,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1504,14 +1944,11 @@ def preview_limit_order_gtc(
     base_size: str,
     limit_price: str,
     post_only: bool = False,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTC**
     ___________________________
@@ -1527,7 +1964,7 @@ def preview_limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     order_configuration = {
         "limit_limit_gtc": {
@@ -1542,12 +1979,9 @@ def preview_limit_order_gtc(
         product_id,
         side,
         order_configuration,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1558,14 +1992,11 @@ def preview_limit_order_gtc_buy(
     base_size: str,
     limit_price: str,
     post_only: bool = False,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTC Buy**
     _______________________________
@@ -1581,7 +2012,7 @@ def preview_limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_limit_order_gtc(
         self,
@@ -1590,12 +2021,9 @@ def preview_limit_order_gtc_buy(
         base_size=base_size,
         limit_price=limit_price,
         post_only=post_only,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1606,14 +2034,11 @@ def preview_limit_order_gtc_sell(
     base_size: str,
     limit_price: str,
     post_only: bool = False,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTC Sell**
     ________________________________
@@ -1629,7 +2054,7 @@ def preview_limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_limit_order_gtc(
         self,
@@ -1638,12 +2063,9 @@ def preview_limit_order_gtc_sell(
         base_size=base_size,
         limit_price=limit_price,
         post_only=post_only,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1657,14 +2079,11 @@ def preview_limit_order_gtd(
     limit_price: str,
     end_time: str,
     post_only: bool = False,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTD**
     ___________________________
@@ -1680,7 +2099,7 @@ def preview_limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     order_configuration = {
         "limit_limit_gtd": {
@@ -1696,12 +2115,9 @@ def preview_limit_order_gtd(
         product_id,
         side,
         order_configuration,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1713,14 +2129,11 @@ def preview_limit_order_gtd_buy(
     limit_price: str,
     end_time: str,
     post_only: bool = False,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTD Buy**
     _______________________________
@@ -1736,7 +2149,7 @@ def preview_limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_limit_order_gtd(
         self,
@@ -1746,12 +2159,9 @@ def preview_limit_order_gtd_buy(
         limit_price=limit_price,
         end_time=end_time,
         post_only=post_only,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1763,14 +2173,11 @@ def preview_limit_order_gtd_sell(
     limit_price: str,
     end_time: str,
     post_only: bool = False,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Limit Order GTD Sell**
     ________________________________
@@ -1786,7 +2193,7 @@ def preview_limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_limit_order_gtd(
         self,
@@ -1796,12 +2203,133 @@ def preview_limit_order_gtd_sell(
         limit_price=limit_price,
         end_time=end_time,
         post_only=post_only,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_limit_order_fok(
+    self,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Limit Order FOK**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order FOK request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    order_configuration = {
+        "limit_limit_fok": {"base_size": base_size, "limit_price": limit_price}
+    }
+
+    return preview_order(
+        self,
+        product_id,
+        side,
+        order_configuration,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_limit_order_fok_buy(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Limit Order FOK Buy**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order FOK buy request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_limit_order_fok(
+        self,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_limit_order_fok_sell(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Limit Order FOK Sell**
+    ___________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a limit order FOK sell request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_limit_order_fok(
+        self,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1815,14 +2343,11 @@ def preview_stop_limit_order_gtc(
     limit_price: str,
     stop_price: str,
     stop_direction: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTC**
     ________________________________
@@ -1838,7 +2363,7 @@ def preview_stop_limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtc": {
@@ -1854,12 +2379,9 @@ def preview_stop_limit_order_gtc(
         product_id,
         side,
         order_configuration,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1871,14 +2393,11 @@ def preview_stop_limit_order_gtc_buy(
     limit_price: str,
     stop_price: str,
     stop_direction: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTC Buy**
     ____________________________________
@@ -1894,7 +2413,7 @@ def preview_stop_limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_stop_limit_order_gtc(
         self,
@@ -1904,12 +2423,9 @@ def preview_stop_limit_order_gtc_buy(
         limit_price=limit_price,
         stop_price=stop_price,
         stop_direction=stop_direction,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1921,14 +2437,11 @@ def preview_stop_limit_order_gtc_sell(
     limit_price: str,
     stop_price: str,
     stop_direction: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTC Sell**
     _____________________________________
@@ -1944,7 +2457,7 @@ def preview_stop_limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_stop_limit_order_gtc(
         self,
@@ -1954,12 +2467,9 @@ def preview_stop_limit_order_gtc_sell(
         limit_price=limit_price,
         stop_price=stop_price,
         stop_direction=stop_direction,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -1974,14 +2484,11 @@ def preview_stop_limit_order_gtd(
     stop_price: str,
     end_time: str,
     stop_direction: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTD**
     ________________________________
@@ -1997,7 +2504,7 @@ def preview_stop_limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtd": {
@@ -2014,12 +2521,9 @@ def preview_stop_limit_order_gtd(
         product_id,
         side,
         order_configuration,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -2032,14 +2536,11 @@ def preview_stop_limit_order_gtd_buy(
     stop_price: str,
     end_time: str,
     stop_direction: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTD Buy**
     ____________________________________
@@ -2055,7 +2556,7 @@ def preview_stop_limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_stop_limit_order_gtd(
         self,
@@ -2066,12 +2567,9 @@ def preview_stop_limit_order_gtd_buy(
         stop_price=stop_price,
         end_time=end_time,
         stop_direction=stop_direction,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
 
@@ -2084,14 +2582,11 @@ def preview_stop_limit_order_gtd_sell(
     stop_price: str,
     end_time: str,
     stop_direction: str,
-    commission_rate: Optional[str] = None,
-    is_max: Optional[bool] = False,
-    tradable_balance: Optional[str] = None,
-    skip_fcm_risk_check: Optional[bool] = False,
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> PreviewOrderResponse:
     """
     **Preview Stop-Limit Order GTD Sell**
     _____________________________________
@@ -2107,7 +2602,7 @@ def preview_stop_limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
     """
     return preview_stop_limit_order_gtd(
         self,
@@ -2118,11 +2613,312 @@ def preview_stop_limit_order_gtd_sell(
         stop_price=stop_price,
         end_time=end_time,
         stop_direction=stop_direction,
-        commission_rate=commission_rate,
-        is_max=is_max,
-        tradable_balance=tradable_balance,
-        skip_fcm_risk_check=skip_fcm_risk_check,
         leverage=leverage,
         margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
         **kwargs,
     )
+
+
+# Preview Trigger Bracket GTC orders
+def preview_trigger_bracket_order_gtc(
+    self,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Trigger Bracket Order GTC**
+    ________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTC order request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtc": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+        }
+    }
+
+    return preview_order(
+        self,
+        product_id,
+        side,
+        order_configuration,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtc_buy(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Trigger Bracket Order GTC Buy**
+    ____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTC order buy request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtc(
+        self,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtc_sell(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Trigger Bracket Order GTC Sell**
+    _____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTC order sell request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtc(
+        self,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+# Preview Trigger Bracket GTD orders
+def preview_trigger_bracket_order_gtd(
+    self,
+    product_id: str,
+    side: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Trigger Bracket Order GTD**
+    ________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTD order request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    order_configuration = {
+        "trigger_bracket_gtd": {
+            "base_size": base_size,
+            "limit_price": limit_price,
+            "stop_trigger_price": stop_trigger_price,
+            "end_time": end_time,
+        }
+    }
+
+    return preview_order(
+        self,
+        product_id,
+        side,
+        order_configuration,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtd_buy(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Trigger Bracket Order GTD Buy**
+    ____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTD order buy request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtd(
+        self,
+        product_id,
+        "BUY",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def preview_trigger_bracket_order_gtd_sell(
+    self,
+    product_id: str,
+    base_size: str,
+    limit_price: str,
+    stop_trigger_price: str,
+    end_time: str,
+    leverage: Optional[str] = None,
+    margin_type: Optional[str] = None,
+    retail_portfolio_id: Optional[str] = None,
+    **kwargs,
+) -> PreviewOrderResponse:
+    """
+    **Preview Trigger Bracket Order GTD Sell**
+    _____________________________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/preview
+
+    __________
+
+    **Description:**
+
+    Preview the results of a trigger bracket GTD order sell request before sending.
+
+    __________
+
+    **Read more on the official documentation:** `Preview Order
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    """
+    return preview_trigger_bracket_order_gtd(
+        self,
+        product_id,
+        "SELL",
+        base_size=base_size,
+        limit_price=limit_price,
+        stop_trigger_price=stop_trigger_price,
+        end_time=end_time,
+        leverage=leverage,
+        margin_type=margin_type,
+        retail_portfolio_id=retail_portfolio_id,
+        **kwargs,
+    )
+
+
+def close_position(
+    self, client_order_id: str, product_id: str, size: Optional[str] = None, **kwargs
+) -> ClosePositionResponse:
+    """
+    **Close Position**
+    _________________
+
+    [POST] https://api.coinbase.com/api/v3/brokerage/orders/close_position
+
+    __________
+
+    **Description:**
+
+    Places an order to close any open positions for a specified ``product_id``.
+
+    __________
+
+    **Read more on the official documentation:** `Close Position
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_closeposition>`_
+    """
+    endpoint = f"{API_PREFIX}/orders/close_position"
+
+    if not client_order_id:
+        client_order_id = generate_client_order_id()
+
+    data = {"client_order_id": client_order_id, "product_id": product_id, "size": size}
+
+    return ClosePositionResponse(self.post(endpoint, data=data, **kwargs))

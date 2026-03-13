@@ -20,16 +20,16 @@ class MarketDataTest(unittest.TestCase):
                 json=expected_response,
             )
             candles = client.get_candles(
-                "product_id_1", "1640995200", "1641081600", "FIVE_MINUTE"
+                "product_id_1", "1640995200", "1641081600", "FIVE_MINUTE", 2
             )
 
             captured_request = m.request_history[0]
 
             self.assertEqual(
                 captured_request.query,
-                "start=1640995200&end=1641081600&granularity=five_minute",
+                "start=1640995200&end=1641081600&granularity=five_minute&limit=2",
             )
-            self.assertEqual(candles, expected_response)
+            self.assertEqual(candles.__dict__, expected_response)
 
     def test_get_market_trades(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
@@ -51,4 +51,4 @@ class MarketDataTest(unittest.TestCase):
             self.assertEqual(
                 captured_request.query, "limit=10&start=1640995200&end=1641081600"
             )
-            self.assertEqual(trades, expected_response)
+            self.assertEqual(trades.__dict__, expected_response)

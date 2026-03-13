@@ -1,6 +1,12 @@
 from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest.types.product_types import (
+    GetBestBidAskResponse,
+    GetProductBookResponse,
+    GetProductResponse,
+    ListProductsResponse,
+)
 
 
 def get_products(
@@ -11,8 +17,10 @@ def get_products(
     product_ids: Optional[List[str]] = None,
     contract_expiry_type: Optional[str] = None,
     expiring_contract_status: Optional[str] = None,
+    get_tradability_status: Optional[bool] = False,
+    get_all_products: Optional[bool] = False,
     **kwargs,
-) -> Dict[str, Any]:
+) -> ListProductsResponse:
     """
     **List Products**
     _________________
@@ -28,7 +36,7 @@ def get_products(
     __________
 
     **Read more on the official documentation:** `List Products
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproducts>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproducts>`_
     """
     endpoint = f"{API_PREFIX}/products"
 
@@ -39,12 +47,16 @@ def get_products(
         "product_ids": product_ids,
         "contract_expiry_type": contract_expiry_type,
         "expiring_contract_status": expiring_contract_status,
+        "get_tradability_status": get_tradability_status,
+        "get_all_products": get_all_products,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return ListProductsResponse(self.get(endpoint, params=params, **kwargs))
 
 
-def get_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
+def get_product(
+    self, product_id: str, get_tradability_status: Optional[bool] = False, **kwargs
+) -> GetProductResponse:
     """
     **Get Product**
     _______________
@@ -60,16 +72,24 @@ def get_product(self, product_id: str, **kwargs) -> Dict[str, Any]:
     __________
 
     **Read more on the official documentation:** `Get Product
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproduct>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproduct>`_
     """
     endpoint = f"{API_PREFIX}/products/{product_id}"
 
-    return self.get(endpoint, **kwargs)
+    params = {
+        "get_tradability_status": get_tradability_status,
+    }
+
+    return GetProductResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_product_book(
-    self, product_id: str, limit: Optional[int] = None, **kwargs
-) -> Dict[str, Any]:
+    self,
+    product_id: str,
+    limit: Optional[int] = None,
+    aggregation_price_increment: Optional[str] = None,
+    **kwargs,
+) -> GetProductBookResponse:
     """
     **Get Product Book**
     ____________________
@@ -85,18 +105,22 @@ def get_product_book(
     __________
 
     **Read more on the official documentation:** `Get Product Book
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproductbook>`_
     """
     endpoint = f"{API_PREFIX}/product_book"
 
-    params = {"product_id": product_id, "limit": limit}
+    params = {
+        "product_id": product_id,
+        "limit": limit,
+        "aggregation_price_increment": aggregation_price_increment,
+    }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetProductBookResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def get_best_bid_ask(
     self, product_ids: Optional[List[str]] = None, **kwargs
-) -> Dict[str, Any]:
+) -> GetBestBidAskResponse:
     """
     **Get Best Bid/Ask**
     ____________________
@@ -112,7 +136,7 @@ def get_best_bid_ask(
     __________
 
     **Read more on the official documentation:** `Get Best Bid/Ask
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook>`_
+    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproductbook>`_
     """
     endpoint = f"{API_PREFIX}/best_bid_ask"
 
@@ -120,4 +144,4 @@ def get_best_bid_ask(
         "product_ids": product_ids,
     }
 
-    return self.get(endpoint, params=params, **kwargs)
+    return GetBestBidAskResponse(self.get(endpoint, params=params, **kwargs))

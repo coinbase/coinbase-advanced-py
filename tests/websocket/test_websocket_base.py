@@ -6,11 +6,7 @@ from unittest.mock import AsyncMock, patch
 import websockets
 
 from coinbase.constants import SUBSCRIBE_MESSAGE_TYPE, UNSUBSCRIBE_MESSAGE_TYPE
-from coinbase.websocket import (
-    WSClient,
-    WSClientConnectionClosedException,
-    WSClientException,
-)
+from coinbase.websocket import WSClient, WSClientConnectionClosedException
 
 from ..constants import TEST_API_KEY, TEST_API_SECRET
 from . import mock_ws_server
@@ -41,6 +37,12 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         self.ws = WSClient(
             TEST_API_KEY,
             TEST_API_SECRET,
+            on_message=self.on_message_mock,
+            retry=False,
+        )
+
+        # initialize public client
+        self.ws_public = WSClient(
             on_message=self.on_message_mock,
             retry=False,
         )
@@ -106,6 +108,22 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         self.mock_websocket.close.assert_awaited_once()
 
     @patch("websockets.connect", new_callable=AsyncMock)
+    def test_open_and_close_unauthenticated(self, mock_connect):
+        # assert you can open and close a websocket client
+        mock_connect.return_value = self.mock_websocket
+
+        # open
+        self.ws_public.open()
+        self.assertIsNotNone(self.ws_public.websocket)
+
+        # assert on_message received
+        self.on_message_mock.assert_called_once_with("test message")
+
+        # close
+        self.ws_public.close()
+        self.mock_websocket.close.assert_awaited_once()
+
+    @patch("websockets.connect", new_callable=AsyncMock)
     def test_reopen(self, mock_connect):
         # assert you can open, close, reopen and close a websocket client
         mock_connect.return_value = self.mock_websocket
@@ -161,6 +179,43 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         self.mock_websocket.close.assert_awaited_once()
 
     @patch("websockets.connect", new_callable=AsyncMock)
+    def test_subscribe_and_unsubscribe_channel_unauthenticated(self, mock_connect):
+        # assert you can subscribe and unsubscribe to a channel
+        mock_connect.return_value = self.mock_websocket
+
+        # open
+        self.ws_public.open()
+        self.assertIsNotNone(self.ws_public.websocket)
+
+        # subscribe
+        self.ws_public.subscribe(
+            product_ids=["BTC-USD", "ETH-USD"], channels=["ticker"]
+        )
+        self.mock_websocket.send.assert_awaited_once()
+
+        # assert subscribe message
+        subscribe = json.loads(self.mock_websocket.send.call_args_list[0][0][0])
+        self.assertEqual(subscribe["type"], SUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(subscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(subscribe["channel"], "ticker")
+
+        # unsubscribe
+        self.ws_public.unsubscribe(
+            product_ids=["BTC-USD", "ETH-USD"], channels=["ticker"]
+        )
+        self.assertEqual(self.mock_websocket.send.await_count, 2)
+
+        # assert unsubscribe message
+        unsubscribe = json.loads(self.mock_websocket.send.call_args_list[1][0][0])
+        self.assertEqual(unsubscribe["type"], UNSUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(unsubscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(unsubscribe["channel"], "ticker")
+
+        # close
+        self.ws_public.close()
+        self.mock_websocket.close.assert_awaited_once()
+
+    @patch("websockets.connect", new_callable=AsyncMock)
     def test_subscribe_and_unsubscribe_channels(self, mock_connect):
         # assert you can subscribe and unsubscribe to multiple channels
         mock_connect.return_value = self.mock_websocket
@@ -208,6 +263,53 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         self.mock_websocket.close.assert_awaited_once()
 
     @patch("websockets.connect", new_callable=AsyncMock)
+    def test_subscribe_and_unsubscribe_channels_unauthenticated(self, mock_connect):
+        # assert you can subscribe and unsubscribe to multiple channels
+        mock_connect.return_value = self.mock_websocket
+
+        # open
+        self.ws_public.open()
+        self.assertIsNotNone(self.ws_public.websocket)
+
+        # subscribe
+        self.ws_public.subscribe(
+            product_ids=["BTC-USD", "ETH-USD"], channels=["ticker", "level2"]
+        )
+        self.assertEqual(self.mock_websocket.send.await_count, 2)
+
+        # assert subscribe messages
+        subscribe_1 = json.loads(self.mock_websocket.send.call_args_list[0][0][0])
+        self.assertEqual(subscribe_1["type"], SUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(subscribe_1["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(subscribe_1["channel"], "ticker")
+
+        subscribe_2 = json.loads(self.mock_websocket.send.call_args_list[1][0][0])
+        self.assertEqual(subscribe_2["type"], SUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(subscribe_2["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(subscribe_2["channel"], "level2")
+
+        # unsubscribe
+        self.ws_public.unsubscribe(
+            product_ids=["BTC-USD", "ETH-USD"], channels=["ticker", "level2"]
+        )
+        self.assertEqual(self.mock_websocket.send.await_count, 4)
+
+        # assert unsubscribe messages
+        unsubscribe_1 = json.loads(self.mock_websocket.send.call_args_list[2][0][0])
+        self.assertEqual(unsubscribe_1["type"], UNSUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(unsubscribe_1["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(unsubscribe_1["channel"], "ticker")
+
+        unsubscribe_2 = json.loads(self.mock_websocket.send.call_args_list[3][0][0])
+        self.assertEqual(unsubscribe_2["type"], UNSUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(unsubscribe_2["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(unsubscribe_2["channel"], "level2")
+
+        # close
+        self.ws_public.close()
+        self.mock_websocket.close.assert_awaited_once()
+
+    @patch("websockets.connect", new_callable=AsyncMock)
     async def test_open_and_close_async(self, mock_connect):
         # assert you can open and close a websocket client
         mock_connect.return_value = self.mock_websocket
@@ -222,6 +324,23 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
 
         # close
         await self.ws.close_async()
+        self.mock_websocket.close.assert_awaited_once()
+
+    @patch("websockets.connect", new_callable=AsyncMock)
+    async def test_open_and_close_async_unauthenticated(self, mock_connect):
+        # assert you can open and close a websocket client
+        mock_connect.return_value = self.mock_websocket
+
+        # open
+        await self.ws_public.open_async()
+        self.assertIsNotNone(self.ws_public.websocket)
+
+        # assert on_message received
+        await self.message_received_event.wait()
+        self.on_message_mock.assert_called_once_with("test message")
+
+        # close
+        await self.ws_public.close_async()
         self.mock_websocket.close.assert_awaited_once()
 
     @patch("websockets.connect", new_callable=AsyncMock)
@@ -282,6 +401,54 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         # close
         await self.ws.close_async()
         self.mock_websocket.close.assert_awaited_once()
+
+    @patch("websockets.connect", new_callable=AsyncMock)
+    async def test_subscribe_and_unsubscribes_channel_async_unauthenticated(
+        self, mock_connect
+    ):
+        # assert you can subscribe and unsubscribe to a channel
+        mock_connect.return_value = self.mock_websocket
+
+        # open
+        await self.ws_public.open_async()
+        self.assertIsNotNone(self.ws_public.websocket)
+
+        # subscribe
+        await self.ws_public.subscribe_async(
+            product_ids=["BTC-USD", "ETH-USD"], channels=["ticker"]
+        )
+        self.mock_websocket.send.assert_awaited_once()
+
+        # assert subscribe message
+        subscribe = json.loads(self.mock_websocket.send.call_args_list[0][0][0])
+        self.assertEqual(subscribe["type"], SUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(subscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(subscribe["channel"], "ticker")
+
+        # unsubscribe
+        await self.ws_public.unsubscribe_async(
+            product_ids=["BTC-USD", "ETH-USD"], channels=["ticker"]
+        )
+        self.assertEqual(self.mock_websocket.send.await_count, 2)
+
+        # assert unsubscribe message
+        unsubscribe = json.loads(self.mock_websocket.send.call_args_list[1][0][0])
+        self.assertEqual(unsubscribe["type"], UNSUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(unsubscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(unsubscribe["channel"], "ticker")
+
+        # close
+        await self.ws_public.close_async()
+        self.mock_websocket.close.assert_awaited_once()
+
+    def test_err_calling_private_unauthenticated(self):
+        # open
+        self.ws_public.open()
+        self.assertIsNotNone(self.ws_public.websocket)
+
+        # assert you cannot call a private endpoint unauthenticated
+        with self.assertRaises(Exception):
+            self.ws.subscribe(product_ids=["BTC-USD"], channels=["user"])
 
 
 class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):

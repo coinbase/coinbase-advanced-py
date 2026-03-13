@@ -8,6 +8,7 @@ import websockets
 
 from coinbase.constants import (
     CANDLES,
+    FUTURES_BALANCE_SUMMARY,
     HEARTBEATS,
     LEVEL2,
     MARKET_TRADES,
@@ -19,6 +20,8 @@ from coinbase.constants import (
 from coinbase.websocket import WSClient
 
 from ..constants import TEST_API_KEY, TEST_API_SECRET
+
+NO_PRODUCT_CHANNELS = {HEARTBEATS, FUTURES_BALANCE_SUMMARY}
 
 
 class WSBaseTest(unittest.IsolatedAsyncioTestCase):
@@ -53,23 +56,31 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(self.ws.websocket)
 
         # subscribe
-        channel_func(product_ids=["BTC-USD", "ETH-USD"])
+        product_ids = []
+        if channel_const not in NO_PRODUCT_CHANNELS:
+            product_ids = ["BTC-USD", "ETH-USD"]
+            channel_func(product_ids=product_ids)
+        else:
+            channel_func()
         self.mock_websocket.send.assert_awaited_once()
 
         # assert subscribe message
         subscribe = json.loads(self.mock_websocket.send.call_args_list[0][0][0])
         self.assertEqual(subscribe["type"], "subscribe")
-        self.assertEqual(subscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(subscribe["product_ids"], product_ids)
         self.assertEqual(subscribe["channel"], channel_const)
 
         # unsubscribe
-        channel_func_unsub(product_ids=["BTC-USD", "ETH-USD"])
+        if channel_const not in NO_PRODUCT_CHANNELS:
+            channel_func_unsub(product_ids=product_ids)
+        else:
+            channel_func_unsub()
         self.assertEqual(self.mock_websocket.send.await_count, 2)
 
         # assert unsubscribe message
         unsubscribe = json.loads(self.mock_websocket.send.call_args_list[1][0][0])
         self.assertEqual(unsubscribe["type"], "unsubscribe")
-        self.assertEqual(unsubscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(unsubscribe["product_ids"], product_ids)
         self.assertEqual(unsubscribe["channel"], channel_const)
 
         # close
@@ -88,23 +99,31 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(self.ws.websocket)
 
         # subscribe
-        await channel_func(product_ids=["BTC-USD", "ETH-USD"])
+        product_ids = []
+        if channel_const not in NO_PRODUCT_CHANNELS:
+            product_ids = ["BTC-USD", "ETH-USD"]
+            await channel_func(product_ids=product_ids)
+        else:
+            await channel_func()
         self.mock_websocket.send.assert_awaited_once()
 
         # assert subscribe message
         subscribe = json.loads(self.mock_websocket.send.call_args_list[0][0][0])
         self.assertEqual(subscribe["type"], "subscribe")
-        self.assertEqual(subscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(subscribe["product_ids"], product_ids)
         self.assertEqual(subscribe["channel"], channel_const)
 
         # unsubscribe
-        await channel_func_unsub(product_ids=["BTC-USD", "ETH-USD"])
+        if channel_const not in NO_PRODUCT_CHANNELS:
+            await channel_func_unsub(product_ids=product_ids)
+        else:
+            await channel_func_unsub()
         self.assertEqual(self.mock_websocket.send.await_count, 2)
 
         # assert unsubscribe message
         unsubscribe = json.loads(self.mock_websocket.send.call_args_list[1][0][0])
         self.assertEqual(unsubscribe["type"], "unsubscribe")
-        self.assertEqual(unsubscribe["product_ids"], ["BTC-USD", "ETH-USD"])
+        self.assertEqual(unsubscribe["product_ids"], product_ids)
         self.assertEqual(unsubscribe["channel"], channel_const)
 
         # close
@@ -200,5 +219,21 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
         asyncio.run(
             self.generic_channel_test_async(
                 self.ws.user_async, self.ws.user_unsubscribe_async, USER
+            )
+        )
+
+    def test_futures_balance_summary(self):
+        self.generic_channel_test(
+            self.ws.futures_balance_summary,
+            self.ws.futures_balance_summary_unsubscribe,
+            FUTURES_BALANCE_SUMMARY,
+        )
+
+    def test_futures_balance_summary_async(self):
+        asyncio.run(
+            self.generic_channel_test_async(
+                self.ws.futures_balance_summary_async,
+                self.ws.futures_balance_summary_unsubscribe_async,
+                FUTURES_BALANCE_SUMMARY,
             )
         )

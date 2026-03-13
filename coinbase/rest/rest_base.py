@@ -1,5 +1,6 @@
 import logging
 import os
+from multiprocessing import AuthenticationError
 from typing import IO, Any, Dict, Optional, Union
 
 import requests
@@ -7,7 +8,13 @@ from requests.exceptions import HTTPError
 
 from coinbase import jwt_generator
 from coinbase.api_base import APIBase, get_logger
-from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY, BASE_URL, USER_AGENT
+from coinbase.constants import (
+    API_ENV_KEY,
+    API_SECRET_ENV_KEY,
+    BASE_URL,
+    RATE_LIMIT_HEADERS,
+    USER_AGENT,
+)
 
 logger = get_logger("coinbase.RESTClient")
 
@@ -42,23 +49,7 @@ def handle_exception(response):
 
 class RESTBase(APIBase):
     """
-    **RESTClient**
-    _____________________________
-
-    Initialize using RESTClient
-
-    __________
-
-    **Parameters**:
-
-    - **api_key | Optional (str)** - The API key
-    - **api_secret | Optional (str)** - The API key secret
-    - **key_file | Optional (IO | str)** - Path to API key file or file-like object
-    - **base_url | (str)** - The base URL for REST requests. Default set to "https://api.coinbase.com"
-    - **timeout | Optional (int)** - Set timeout in seconds for REST requests
-    - **verbose | Optional (bool)** - Enables debug logging. Default set to False
-
-
+    :meta private:
     """
 
     def __init__(
@@ -69,6 +60,7 @@ class RESTBase(APIBase):
         base_url=BASE_URL,
         timeout: Optional[int] = None,
         verbose: Optional[bool] = False,
+        rate_limit_headers: Optional[bool] = False,
     ):
         super().__init__(
             api_key=api_key,
@@ -78,6 +70,8 @@ class RESTBase(APIBase):
             timeout=timeout,
             verbose=verbose,
         )
+        self.rate_limit_headers = rate_limit_headers
+        self.session = requests.Session()
         if verbose:
             logger.setLevel(logging.DEBUG)
 
@@ -197,7 +191,12 @@ class RESTBase(APIBase):
         """
         :meta private:
         """
-        headers = self.set_headers(http_method, url_path, public)
+        if not self.is_authenticated and not public:
+            raise AuthenticationError(
+                "Unauthenticated request to private endpoint. If you wish to access private endpoints, you must provide your API key and secret when initializing the RESTClient."
+            )
+
+        headers = self.set_headers(http_method, url_path)
 
         if params is not None:
             params = {key: value for key, value in params.items() if value is not None}
@@ -218,7 +217,7 @@ class RESTBase(APIBase):
 
         logger.debug(f"Sending {http_method} request to {url}")
 
-        response = requests.request(
+        response = self.session.request(
             http_method,
             url,
             params=params,
@@ -230,9 +229,19 @@ class RESTBase(APIBase):
 
         logger.debug(f"Raw response: {response.json()}")
 
-        return response.json()
+        response_data = response.json()
 
-    def set_headers(self, method, path, public):
+        if self.rate_limit_headers:
+            response_headers = dict(response.headers)
+            specific_headers = {
+                key: response_headers.get(key, None) for key in RATE_LIMIT_HEADERS
+            }
+
+            response_data = {**response_data, **specific_headers}
+
+        return response_data
+
+    def set_headers(self, method, path):
         """
         :meta private:
         """
@@ -245,7 +254,7 @@ class RESTBase(APIBase):
                 {
                     "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)}",
                 }
-                if not public
+                if self.is_authenticated
                 else {}
             ),
         }

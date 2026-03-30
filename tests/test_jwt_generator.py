@@ -1,6 +1,7 @@
 import base64
 import json
 import unittest
+from unittest.mock import patch
 
 import jwt
 
@@ -39,3 +40,36 @@ class JwtGeneratorTest(unittest.TestCase):
         with self.assertRaises(Exception):
             uri = jwt_generator.format_jwt_uri("GET", "/api/v3/brokerage/accounts")
             jwt_generator.build_rest_jwt(uri, TEST_API_KEY, "bad_secret")
+
+    @patch("coinbase.jwt_generator.jwt.encode", return_value="signed-jwt")
+    @patch("coinbase.jwt_generator.serialization.load_pem_private_key")
+    def test_build_rest_jwt_with_preparsed_key(
+        self, mock_load_private_key, mock_jwt_encode
+    ):
+        private_key = object()
+        uri = jwt_generator.format_jwt_uri("GET", "/api/v3/brokerage/accounts")
+
+        result_jwt = jwt_generator.build_rest_jwt(
+            uri, TEST_API_KEY, TEST_API_SECRET, private_key=private_key
+        )
+
+        mock_load_private_key.assert_not_called()
+        self.assertEqual(result_jwt, "signed-jwt")
+        self.assertEqual(mock_jwt_encode.call_args.args[1], private_key)
+        self.assertEqual(mock_jwt_encode.call_args.kwargs["algorithm"], "ES256")
+
+    @patch("coinbase.jwt_generator.jwt.encode", return_value="signed-jwt")
+    @patch("coinbase.jwt_generator.serialization.load_pem_private_key")
+    def test_build_ws_jwt_with_preparsed_key(
+        self, mock_load_private_key, mock_jwt_encode
+    ):
+        private_key = object()
+
+        result_jwt = jwt_generator.build_ws_jwt(
+            TEST_API_KEY, TEST_API_SECRET, private_key=private_key
+        )
+
+        mock_load_private_key.assert_not_called()
+        self.assertEqual(result_jwt, "signed-jwt")
+        self.assertEqual(mock_jwt_encode.call_args.args[1], private_key)
+        self.assertEqual(mock_jwt_encode.call_args.kwargs["algorithm"], "ES256")

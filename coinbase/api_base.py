@@ -3,6 +3,8 @@ import logging
 import os
 from typing import IO, Optional, Union
 
+from cryptography.hazmat.primitives import serialization
+
 from coinbase.constants import API_ENV_KEY, API_SECRET_ENV_KEY
 
 
@@ -46,12 +48,20 @@ class APIBase(object):
                 raise Exception(f"Error decoding JSON: {e}")
 
         self.is_authenticated = False
+        self._private_key = None
         if api_key is not None and api_secret is not None:
             self.api_key = api_key
             self.api_secret = bytes(api_secret, encoding="utf8").decode(
                 "unicode_escape"
             )
             self.is_authenticated = True
+            try:
+                self._private_key = serialization.load_pem_private_key(
+                    self.api_secret.encode("utf-8"), password=None
+                )
+            except (TypeError, ValueError):
+                # Preserve current constructor behavior for placeholder or invalid keys.
+                pass
         elif api_key is not None:
             raise Exception(
                 f"Only api_key provided in constructor. Please also provide api_secret"

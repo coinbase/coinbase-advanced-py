@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from requests.exceptions import HTTPError
 from requests_mock import Mocker
@@ -10,6 +11,21 @@ from ..constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class RestBaseTest(unittest.TestCase):
+    @patch("coinbase.rest.rest_base.jwt_generator.build_rest_jwt", return_value="signed-jwt")
+    def test_set_headers_uses_cached_private_key(self, mock_build_rest_jwt):
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
+
+        headers = client.set_headers("GET", "/api/v3/brokerage/accounts")
+
+        self.assertIsNotNone(client._private_key)
+        self.assertEqual(headers["Authorization"], "Bearer signed-jwt")
+        mock_build_rest_jwt.assert_called_once_with(
+            "GET api.coinbase.com/api/v3/brokerage/accounts",
+            TEST_API_KEY,
+            TEST_API_SECRET,
+            private_key=client._private_key,
+        )
+
     def test_get(self):
         client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
 

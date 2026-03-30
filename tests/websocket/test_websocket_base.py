@@ -47,6 +47,20 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
             retry=False,
         )
 
+    @patch("coinbase.websocket.websocket_base.jwt_generator.build_ws_jwt", return_value="signed-jwt")
+    def test_subscription_message_uses_cached_private_key(self, mock_build_ws_jwt):
+        message = self.ws._build_subscription_message(
+            ["BTC-USD"], "ticker", SUBSCRIBE_MESSAGE_TYPE, public=False
+        )
+
+        self.assertIsNotNone(self.ws._private_key)
+        self.assertEqual(message["jwt"], "signed-jwt")
+        mock_build_ws_jwt.assert_called_once_with(
+            TEST_API_KEY,
+            TEST_API_SECRET,
+            private_key=self.ws._private_key,
+        )
+
     @patch("websockets.connect", new_callable=AsyncMock)
     def test_open_twice(self, mock_connect):
         # assert you cannot open a websocket client twice consecutively

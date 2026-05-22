@@ -23,9 +23,19 @@ ___
 This SDK uses Cloud Developer Platform (CDP) API keys. To use this SDK, you will need to create a CDP API key and secret by following the instructions [here](https://docs.cdp.coinbase.com/advanced-trade/docs/getting-started).
 Make sure to save your API key and secret in a safe place. You will not be able to retrieve your secret again.
 
+Ed25519 is the recommended key type. The SDK also supports ECDSA for existing keys. The key type is auto-detected and the correct JWT signing algorithm (`EdDSA` or `ES256`) is selected automatically. Accepted formats:
+
+- **Ed25519** — PKCS8 PEM (`-----BEGIN PRIVATE KEY-----`), or raw base64 (32-byte seed or 64-byte seed||pubkey as downloaded from the CDP portal)
+- **ECDSA** — SEC1 PEM (`-----BEGIN EC PRIVATE KEY-----`)
+
 WARNING: We do not recommend that you save your API secrets directly in your code outside of testing purposes. Best practice is to use a secrets manager and access your secrets that way. You should be careful about exposing your secrets publicly if posting code that leverages this library.
 
-Optional: Set your API key and secret in your environment (make sure to put these in quotation marks). For example:
+Optional: Set your API key and secret in your environment (make sure to put these in quotation marks). For example, with an Ed25519 key:
+```bash
+export COINBASE_API_KEY="organizations/{org_id}/apiKeys/{key_id}"
+export COINBASE_API_SECRET="YOUR_BASE64_ENCODED_ED25519_PRIVATE_KEY"
+```
+Or with an ECDSA key:
 ```bash
 export COINBASE_API_KEY="organizations/{org_id}/apiKeys/{key_id}"
 export COINBASE_API_SECRET="-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n"
@@ -79,7 +89,7 @@ This code calls the `get_accounts` and `market_order_buy` endpoints.
 TIP: Setting `client_order_id` to the empty string will auto generate a unique client_order_id per call.
 However, this will remove the intended safeguard of accidentally placing duplicate orders.
 
-Refer to the [Advanced API Reference](https://docs.cdp.coinbase.com/advanced-trade/reference) for detailed information on each exposed endpoint.
+Refer to the [Advanced API Reference](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/introduction) for detailed information on each exposed endpoint.
 Look in the `coinbase.rest` module to see the API hooks that are exposed.
 
 ### Custom Response Objects
@@ -113,7 +123,7 @@ market_trades = client.get("/api/v3/brokerage/products/BTC-USD/ticker", params={
 
 portfolio = client.post("/api/v3/brokerage/portfolios", data={"name": "TestPortfolio"})
 ```
-Here we are calling the [GetMarketTrades](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getmarkettrades) and [CreatePortfolio](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createportfolio) endpoints through the generic REST functions.
+Here we are calling the [GetMarketTrades](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-market-trades) and [CreatePortfolio](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/create-portfolio) endpoints through the generic REST functions.
 Once again, the built-in way to query these through the SDK would be:
 ```python
 market_trades = client.get_market_trades(product_id="BTC-USD", limit=5)
@@ -360,14 +370,14 @@ To do so, simply initialize the clients without providing any API keys as argume
 
 ### REST Client
 
-In the REST client, here is an example calling [Get Public Products](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpublicproducts). 
+In the REST client, here is an example calling [Get Public Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/list-public-products). 
 It does _not_ require authentication and is the public counterpart to 
-[Get Products](https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproducts), which _does_ require authentication.
+[Get Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/list-products), which _does_ require authentication.
 
 Both endpoints return the same data.
 
 
-```
+```python
 from coinbase.rest import RESTClient
 
 client = RESTClient()
@@ -385,7 +395,7 @@ In the Websocket client, here is an example subscribing to the [ticker](https://
 Unlike the REST client, Websocket channels handle both authenticated and unauthenticated requests. 
 At the moment, most channels in the Websocket client are public and can be used without keys.
 
-```
+```python
 import time
 from coinbase.websocket import WSClient
 

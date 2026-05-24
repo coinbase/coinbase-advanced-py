@@ -1,2 +1,2 @@
-requests-mock==1.11.0
+requests-mock==1.12.1
 asynctest==0.13.0

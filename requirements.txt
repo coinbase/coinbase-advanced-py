@@ -1,5 +1,5 @@
-requests>=2.31.0
-cryptography>=42.0.4
-PyJWT>=2.8.0
-websockets>=12.0,<14.0
+requests>=2.32.5
+cryptography>=46.0.5
+PyJWT>=2.11.0
+websockets>=12.0,<17.0
 backoff>=2.2.1

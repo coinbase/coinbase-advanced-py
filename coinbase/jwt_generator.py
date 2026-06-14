@@ -1,10 +1,49 @@
+import base64
+import binascii
 import secrets
 import time
+import warnings
 
 import jwt
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec, ed25519
 
 from coinbase.constants import BASE_URL
+
+
+def _load_private_key(secret_var):
+    if secret_var.lstrip().startswith("-----BEGIN"):
+        return serialization.load_pem_private_key(
+            secret_var.encode("utf-8"), password=None
+        )
+
+    # join+split strips whitespace so trailing newlines from .env loaders don't break valid keys
+    try:
+        raw = base64.b64decode("".join(secret_var.split()), validate=True)
+    except (binascii.Error, ValueError):
+        raise ValueError("private key is neither PEM nor valid base64")
+    if len(raw) not in (32, 64):
+        raise ValueError(
+            f"Ed25519 raw key must decode to 32 or 64 bytes, got {len(raw)}"
+        )
+    return ed25519.Ed25519PrivateKey.from_private_bytes(raw[:32])
+
+
+def _algorithm_for(private_key) -> str:
+    if isinstance(private_key, ed25519.Ed25519PrivateKey):
+        return "EdDSA"
+    if isinstance(private_key, ec.EllipticCurvePrivateKey):
+        warnings.warn(
+            "Ed25519 is the recommended key type. Consider switching to an Ed25519 "
+            "key at https://portal.cdp.coinbase.com/",
+            UserWarning,
+            stacklevel=4,
+        )
+        return "ES256"
+    raise ValueError(
+        f"Unsupported private key type: {type(private_key).__name__}. "
+        "Expected ECDSA (P-256) or Ed25519."
+    )
 
 
 def build_jwt(key_var, secret_var, uri=None) -> str:
@@ -12,12 +51,8 @@ def build_jwt(key_var, secret_var, uri=None) -> str:
     :meta private:
     """
     try:
-        private_key_bytes = secret_var.encode("utf-8")
-        private_key = serialization.load_pem_private_key(
-            private_key_bytes, password=None
-        )
-    except ValueError as e:
-        # This handles errors like incorrect key format
+        private_key = _load_private_key(secret_var)
+    except (ValueError, TypeError) as e:
         raise Exception(
             f"{e}\n"
             "Are you sure you generated your key at https://cloud.coinbase.com/access/api ?"
@@ -36,7 +71,7 @@ def build_jwt(key_var, secret_var, uri=None) -> str:
     jwt_token = jwt.encode(
         jwt_data,
         private_key,
-        algorithm="ES256",
+        algorithm=_algorithm_for(private_key),
         headers={"kid": key_var, "nonce": secrets.token_hex()},
     )
 

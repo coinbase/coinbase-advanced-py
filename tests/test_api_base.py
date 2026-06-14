@@ -32,6 +32,15 @@ class RestBaseTest(unittest.TestCase):
         except Exception as e:
             self.fail(f"An unexpected exception occurred: {e}")
 
+    def test_key_file_object_ed25519(self):
+        try:
+            key_file_object = StringIO(
+                '{"id": "test-api-key-id","privateKey": "test-api-key-private-key"}'
+            )
+            APIBase(key_file=key_file_object)
+        except Exception as e:
+            self.fail(f"An unexpected exception occurred: {e}")
+
     def test_key_file_no_key(self):
         with self.assertRaises(Exception):
             key_file_object = StringIO('{"field_1": "value_1","field_2": "value_2"}')

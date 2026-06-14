@@ -40,10 +40,12 @@ class APIBase(object):
                         key_json = json.load(file)
                 else:
                     key_json = json.load(key_file)
-                api_key = key_json["name"]
+                api_key = key_json.get("name") or key_json.get("id")
                 api_secret = key_json["privateKey"]
-            except json.JSONDecodeError as e:
-                raise Exception(f"Error decoding JSON: {e}")
+                if not api_key:
+                    raise KeyError("name")
+            except (json.JSONDecodeError, KeyError) as e:
+                raise Exception(f"Error parsing key file: {e}")
 
         self.is_authenticated = False
         if api_key is not None and api_secret is not None:

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.3] - 2026-MAY-22
+
+### Added
+- Support for Ed25519 (`EdDSA`) API keys alongside the existing ECDSA (`ES256`) keys. The key type is auto-detected from the provided secret. Accepted formats: ECDSA SEC1 PEM (`-----BEGIN EC PRIVATE KEY-----`), Ed25519 PKCS8 PEM (`-----BEGIN PRIVATE KEY-----`), and raw base64 Ed25519 (32-byte seed or 64-byte seed||pubkey as issued by the CDP portal).
+- `UserWarning` when using ECDSA keys encouraging users to switch to Ed25519, the recommended key type.
+
 ## [1.8.2] - 2024-DEC-3
 
 ### Added

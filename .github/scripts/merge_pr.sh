@@ -19,10 +19,11 @@ if ! gh auth status >/dev/null 2>&1; then
 fi
 
 echo "Merging PR #${PR_NUMBER} on ${REPO} (mode=${MODE})"
+# Use the global --repo flag before the subcommand to avoid positional-arg parsing
 if [ "${MODE}" = "squash" ]; then
-  gh pr merge "${PR_NUMBER}" --repo "${REPO}" --squash --delete-branch -m "Merge repo summarizer skill: CI, docs, and subagent metadata"
+  gh --repo "${REPO}" pr merge "${PR_NUMBER}" --squash --delete-branch -m "Merge repo summarizer skill: CI, docs, and subagent metadata"
 else
-  gh pr merge "${PR_NUMBER}" --repo "${REPO}" --merge -m "Merge repo summarizer skill: CI, docs, and subagent metadata"
+  gh --repo "${REPO}" pr merge "${PR_NUMBER}" --merge -m "Merge repo summarizer skill: CI, docs, and subagent metadata"
 fi
 
 echo "Done."

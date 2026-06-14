@@ -1,0 +1,33 @@
+name: Repo Summarizer
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install minimal deps
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Run summarizer
+        run: |
+          python3 ./.vscode/skills/../tools/skills/summarize_repo.py --workspace-root . --depth 2 --pretty > repo_summary.json
+
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-summary
+          path: repo_summary.json

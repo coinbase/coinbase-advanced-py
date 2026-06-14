@@ -2,6 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/coinbase-advanced-py.svg)](https://badge.fury.io/py/coinbase-advanced-py)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/license/apache-2-0/)
 [![Code Style](https://img.shields.io/badge/code_style-black-black)](https://black.readthedocs.io/en/stable/)
+[![Repo Summarizer](https://github.com/coinbase/coinbase-advanced-py/actions/workflows/summarize_repo.yml/badge.svg?branch=master)](https://github.com/coinbase/coinbase-advanced-py/actions/workflows/summarize_repo.yml)
 
 Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome).
 This SDK also supports easy connection to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview).

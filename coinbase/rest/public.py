@@ -25,7 +25,7 @@ def get_unix_time(self, **kwargs) -> GetServerTimeResponse:
 
     __________
 
-    **Read more on the official documentation:** `Get Server Time <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getservertime>`_
+    **Read more on the official documentation:** `Get Server Time <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-server-time>`_
     """
 
     endpoint = f"{API_PREFIX}/time"
@@ -59,7 +59,7 @@ def get_public_product_book(
 
     __________
 
-    **Read more on the official documentation:** `Get Public Product Book <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpublicproductbook>`_
+    **Read more on the official documentation:** `Get Public Product Book <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book>`_
     """
 
     endpoint = f"{API_PREFIX}/market/product_book"
@@ -107,7 +107,7 @@ def get_public_products(
     __________
 
     **Read more on the official documentation:** `List Public Products
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpublicproducts>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/list-public-products>`_
     """
     endpoint = f"{API_PREFIX}/market/products"
 
@@ -148,7 +148,7 @@ def get_public_product(self, product_id: str, **kwargs) -> GetProductResponse:
     __________
 
     **Read more on the official documentation:** `Get Public Product
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpublicproduct>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product>`_
     """
     endpoint = f"{API_PREFIX}/market/products/{product_id}"
 
@@ -185,7 +185,7 @@ def get_public_candles(
     __________
 
     **Read more on the official documentation:** `Get Public Product Candles
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpubliccandles>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-candles>`_
     """
     endpoint = f"{API_PREFIX}/market/products/{product_id}/candles"
 
@@ -225,7 +225,7 @@ def get_public_market_trades(
     __________
 
     **Read more on the official documentation:** `Get Public Market Trades
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpublicmarkettrades>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-market-trades>`_
     """
     endpoint = f"{API_PREFIX}/market/products/{product_id}/ticker"
 

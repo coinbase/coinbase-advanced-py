@@ -49,7 +49,7 @@ def create_order(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     endpoint = f"{API_PREFIX}/orders"
 
@@ -100,7 +100,7 @@ def market_order(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
 
     market_market_ioc = {"quote_size": quote_size, "base_size": base_size}
@@ -151,7 +151,7 @@ def market_order_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return market_order(
         self,
@@ -194,7 +194,7 @@ def market_order_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return market_order(
         self,
@@ -240,7 +240,7 @@ def limit_order_ioc(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
 
     sor_limit_ioc = {"base_size": base_size, "limit_price": limit_price}
@@ -289,7 +289,7 @@ def limit_order_ioc_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
 
     return limit_order_ioc(
@@ -335,7 +335,7 @@ def limit_order_ioc_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
 
     return limit_order_ioc(
@@ -384,7 +384,7 @@ def limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     order_configuration = {
         "limit_limit_gtc": {
@@ -437,7 +437,7 @@ def limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return limit_order_gtc(
         self,
@@ -484,7 +484,7 @@ def limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return limit_order_gtc(
         self,
@@ -534,7 +534,7 @@ def limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     order_configuration = {
         "limit_limit_gtd": {
@@ -589,7 +589,7 @@ def limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return limit_order_gtd(
         self,
@@ -638,7 +638,7 @@ def limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return limit_order_gtd(
         self,
@@ -687,7 +687,7 @@ def limit_order_fok(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
 
     limit_limit_fok = {"base_size": base_size, "limit_price": limit_price}
@@ -736,7 +736,7 @@ def limit_order_fok_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
 
     return limit_order_fok(
@@ -782,7 +782,7 @@ def limit_order_fok_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
 
     return limit_order_fok(
@@ -832,7 +832,7 @@ def stop_limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtc": {
@@ -887,7 +887,7 @@ def stop_limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return stop_limit_order_gtc(
         self,
@@ -936,7 +936,7 @@ def stop_limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return stop_limit_order_gtc(
         self,
@@ -988,7 +988,7 @@ def stop_limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtd": {
@@ -1045,7 +1045,7 @@ def stop_limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return stop_limit_order_gtd(
         self,
@@ -1096,7 +1096,7 @@ def stop_limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return stop_limit_order_gtd(
         self,
@@ -1147,7 +1147,7 @@ def trigger_bracket_order_gtc(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     order_configuration = {
         "trigger_bracket_gtc": {
@@ -1200,7 +1200,7 @@ def trigger_bracket_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return trigger_bracket_order_gtc(
         self,
@@ -1247,7 +1247,7 @@ def trigger_bracket_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return trigger_bracket_order_gtc(
         self,
@@ -1297,7 +1297,7 @@ def trigger_bracket_order_gtd(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     order_configuration = {
         "trigger_bracket_gtd": {
@@ -1352,7 +1352,7 @@ def trigger_bracket_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return trigger_bracket_order_gtd(
         self,
@@ -1401,7 +1401,7 @@ def trigger_bracket_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Create Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order>`_
     """
     return trigger_bracket_order_gtd(
         self,
@@ -1436,7 +1436,7 @@ def get_order(self, order_id: str, **kwargs) -> GetOrderResponse:
     __________
 
     **Read more on the official documentation:** `Get Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/get-order>`_
     """
     endpoint = f"{API_PREFIX}/orders/historical/{order_id}"
 
@@ -1478,7 +1478,7 @@ def list_orders(
     __________
 
     **Read more on the official documentation:** `List Orders
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorders>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-orders>`_
     """
     endpoint = f"{API_PREFIX}/orders/historical/batch"
     params = {
@@ -1531,7 +1531,7 @@ def get_fills(
     __________
 
     **Read more on the official documentation:** `List Fills
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfills>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-fills>`_
     """
     endpoint = f"{API_PREFIX}/orders/historical/fills"
     params = {
@@ -1571,7 +1571,7 @@ def edit_order(
     __________
 
     **Read more on the official documentation:** `Edit Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_editorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/edit-order>`_
     """
     endpoint = f"{API_PREFIX}/orders/edit"
     data = {
@@ -1605,7 +1605,7 @@ def preview_edit_order(
     __________
 
     **Read more on the official documentation:** `Edit Order Preview
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeweditorder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/edit-order-preview>`_
     """
     endpoint = f"{API_PREFIX}/orders/edit_preview"
     data = {
@@ -1633,7 +1633,7 @@ def cancel_orders(self, order_ids: List[str], **kwargs) -> CancelOrdersResponse:
     __________
 
     **Read more on the official documentation:** `Cancel Orders
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_cancelorders>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/cancel-order>`_
     """
     endpoint = f"{API_PREFIX}/orders/batch_cancel"
     data = {
@@ -1668,7 +1668,7 @@ def preview_order(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     endpoint = f"{API_PREFIX}/orders/preview"
 
@@ -1711,7 +1711,7 @@ def preview_market_order(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
 
     market_market_ioc = {"quote_size": quote_size, "base_size": base_size}
@@ -1758,7 +1758,7 @@ def preview_market_order_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_market_order(
         self,
@@ -1797,7 +1797,7 @@ def preview_market_order_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_market_order(
         self,
@@ -1838,7 +1838,7 @@ def preview_limit_order_ioc(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "sor_limit_ioc": {"base_size": base_size, "limit_price": limit_price}
@@ -1881,7 +1881,7 @@ def preview_limit_order_ioc_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_ioc(
         self,
@@ -1921,7 +1921,7 @@ def preview_limit_order_ioc_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_ioc(
         self,
@@ -1964,7 +1964,7 @@ def preview_limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "limit_limit_gtc": {
@@ -2012,7 +2012,7 @@ def preview_limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_gtc(
         self,
@@ -2054,7 +2054,7 @@ def preview_limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_gtc(
         self,
@@ -2099,7 +2099,7 @@ def preview_limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "limit_limit_gtd": {
@@ -2149,7 +2149,7 @@ def preview_limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_gtd(
         self,
@@ -2193,7 +2193,7 @@ def preview_limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_gtd(
         self,
@@ -2236,7 +2236,7 @@ def preview_limit_order_fok(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "limit_limit_fok": {"base_size": base_size, "limit_price": limit_price}
@@ -2279,7 +2279,7 @@ def preview_limit_order_fok_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_fok(
         self,
@@ -2319,7 +2319,7 @@ def preview_limit_order_fok_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_limit_order_fok(
         self,
@@ -2363,7 +2363,7 @@ def preview_stop_limit_order_gtc(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtc": {
@@ -2413,7 +2413,7 @@ def preview_stop_limit_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_stop_limit_order_gtc(
         self,
@@ -2457,7 +2457,7 @@ def preview_stop_limit_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_stop_limit_order_gtc(
         self,
@@ -2504,7 +2504,7 @@ def preview_stop_limit_order_gtd(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "stop_limit_stop_limit_gtd": {
@@ -2556,7 +2556,7 @@ def preview_stop_limit_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_stop_limit_order_gtd(
         self,
@@ -2602,7 +2602,7 @@ def preview_stop_limit_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_stop_limit_order_gtd(
         self,
@@ -2648,7 +2648,7 @@ def preview_trigger_bracket_order_gtc(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "trigger_bracket_gtc": {
@@ -2696,7 +2696,7 @@ def preview_trigger_bracket_order_gtc_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_trigger_bracket_order_gtc(
         self,
@@ -2738,7 +2738,7 @@ def preview_trigger_bracket_order_gtc_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_trigger_bracket_order_gtc(
         self,
@@ -2783,7 +2783,7 @@ def preview_trigger_bracket_order_gtd(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     order_configuration = {
         "trigger_bracket_gtd": {
@@ -2833,7 +2833,7 @@ def preview_trigger_bracket_order_gtd_buy(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_trigger_bracket_order_gtd(
         self,
@@ -2877,7 +2877,7 @@ def preview_trigger_bracket_order_gtd_sell(
     __________
 
     **Read more on the official documentation:** `Preview Order
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders>`_
     """
     return preview_trigger_bracket_order_gtd(
         self,
@@ -2912,7 +2912,7 @@ def close_position(
     __________
 
     **Read more on the official documentation:** `Close Position
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_closeposition>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/close-position>`_
     """
     endpoint = f"{API_PREFIX}/orders/close_position"
 

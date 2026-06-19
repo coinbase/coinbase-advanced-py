@@ -31,7 +31,7 @@ def create_convert_quote(
 
     __________
 
-    **Read more on the official documentation:** `Create Convert Quote <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createconvertquote>`_
+    **Read more on the official documentation:** `Create Convert Quote <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/convert/create-convert-quote>`_
     """
     endpoint = f"{API_PREFIX}/convert/quote"
 
@@ -74,7 +74,7 @@ def get_convert_trade(
 
     __________
 
-    **Read more on the official documentation:** `Get Convert Trade <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getconverttrade>`_
+    **Read more on the official documentation:** `Get Convert Trade <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/convert/get-convert-trade>`_
     """
     endpoint = f"{API_PREFIX}/convert/trade/{trade_id}"
 
@@ -103,7 +103,7 @@ def commit_convert_trade(
 
     __________
 
-    **Read more on the official documentation:** `Commit Convert Trade <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_commitconverttrade>`_
+    **Read more on the official documentation:** `Commit Convert Trade <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/convert/commit-convert-trade>`_
     """
     endpoint = f"{API_PREFIX}/convert/trade/{trade_id}"
 

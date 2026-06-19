@@ -29,7 +29,7 @@ def get_portfolios(
     __________
 
     **Read more on the official documentation:** `List Portfolios
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getportfolios>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/list-portfolios>`_
     """
     endpoint = f"{API_PREFIX}/portfolios"
 
@@ -54,7 +54,7 @@ def create_portfolio(self, name: str, **kwargs) -> CreatePortfolioResponse:
     __________
 
     **Read more on the official documentation:** `Create Portfolio
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createportfolio>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/create-portfolio>`_
     """
     endpoint = f"{API_PREFIX}/portfolios"
 
@@ -83,7 +83,7 @@ def get_portfolio_breakdown(
     __________
 
     **Read more on the official documentation:** `Get Portfolio Breakdown
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getportfoliobreakdown>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/get-portfolio-breakdown>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
@@ -114,7 +114,7 @@ def move_portfolio_funds(
     __________
 
     **Read more on the official documentation:** `Move Portfolio Funds
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_moveportfoliofunds>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/move-portfolios-funds>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/move_funds"
 
@@ -148,7 +148,7 @@ def edit_portfolio(
     __________
 
     **Read more on the official documentation:** `Edit Portfolio
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_editportfolio>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/edit-portfolio>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 
@@ -175,7 +175,7 @@ def delete_portfolio(self, portfolio_uuid: str, **kwargs) -> DeletePortfolioResp
     __________
 
     **Read more on the official documentation:** `Delete Portfolio
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_deleteportfolio>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/delete-portfolio>`_
     """
     endpoint = f"{API_PREFIX}/portfolios/{portfolio_uuid}"
 

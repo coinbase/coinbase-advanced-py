@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.4] - 2026-JUN-19
+
+### Changed
+- ECDSA (`ES256`) API keys no longer emit a `UserWarning` on each request.
+
+### Fixed
+- Updated the "Read more on the official documentation" links in the REST method docstrings to the new CDP API reference URLs; the old links returned 404 after the docs site was restructured.
+
 ## [1.8.3] - 2026-MAY-22
 
 ### Added

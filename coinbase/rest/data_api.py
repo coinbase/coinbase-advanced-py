@@ -22,7 +22,7 @@ def get_api_key_permissions(
 
     __________
 
-    **Read more on the official documentation:** `Create Convert Quote <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getapikeypermissions>`_
+    **Read more on the official documentation:** `Create Convert Quote <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/data-api/get-api-key-permissions>`_
     """
     endpoint = f"{API_PREFIX}/key_permissions"
 

@@ -27,7 +27,7 @@ def allocate_portfolio(
     __________
 
     **Read more on the official documentation:** `Allocate Portfolio
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_allocateportfolio>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/allocate-portfolio>`_
     """
 
     endpoint = f"{API_PREFIX}/intx/allocate"
@@ -60,7 +60,7 @@ def get_perps_portfolio_summary(
     __________
 
     **Read more on the official documentation:** `Get Perpetuals Portfolio Summary
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxportfoliosummary>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/get-perpetuals-portfolio-summary>`_
     """
     endpoint = f"{API_PREFIX}/intx/portfolio/{portfolio_uuid}"
 
@@ -85,7 +85,7 @@ def list_perps_positions(
     __________
 
     **Read more on the official documentation:** `List Perpetuals Positions
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxpositions>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/list-perpetuals-positions>`_
     """
     endpoint = f"{API_PREFIX}/intx/positions/{portfolio_uuid}"
 
@@ -110,7 +110,7 @@ def get_perps_position(
     __________
 
     **Read more on the official documentation:** `Get Perpetuals Positions
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxposition>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/get-perpetuals-position>`_
     """
     endpoint = f"{API_PREFIX}/intx/positions/{portfolio_uuid}/{symbol}"
 
@@ -135,7 +135,7 @@ def get_perps_portfolio_balances(
     __________
 
     **Read more on the official documentation:** `Get Portfolio Balances
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxbalances>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/get-portfolio-balances>`_
     """
     endpoint = f"{API_PREFIX}/intx/balances/{portfolio_uuid}"
 
@@ -160,7 +160,7 @@ def opt_in_or_out_multi_asset_collateral(
     __________
 
     **Read more on the official documentation:** `Opt In or Out of Multi Asset Collateral
-    <https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_intxmultiassetcollateral>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/opt-in-or-out>`_
     """
 
     endpoint = f"{API_PREFIX}/intx/multi_asset_collateral"

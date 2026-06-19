@@ -63,10 +63,6 @@ class JwtGeneratorTest(unittest.TestCase):
             uri = jwt_generator.format_jwt_uri("GET", "/api/v3/brokerage/accounts")
             jwt_generator.build_rest_jwt(uri, TEST_API_KEY, "bad_secret")
 
-    def test_ecdsa_emits_warning(self):
-        with self.assertWarns(UserWarning):
-            jwt_generator.build_ws_jwt(TEST_API_KEY, TEST_API_SECRET)
-
     def test_malformed_pem_raises_clearly(self):
         bad_pem = "-----BEGIN EC PRIVATE KEY-----\nNOTVALIDDATA\n-----END EC PRIVATE KEY-----\n"
         with self.assertRaises(Exception) as ctx:

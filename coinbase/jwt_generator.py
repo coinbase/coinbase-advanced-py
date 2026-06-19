@@ -2,7 +2,6 @@ import base64
 import binascii
 import secrets
 import time
-import warnings
 
 import jwt
 from cryptography.hazmat.primitives import serialization
@@ -33,12 +32,6 @@ def _algorithm_for(private_key) -> str:
     if isinstance(private_key, ed25519.Ed25519PrivateKey):
         return "EdDSA"
     if isinstance(private_key, ec.EllipticCurvePrivateKey):
-        warnings.warn(
-            "Ed25519 is the recommended key type. Consider switching to an Ed25519 "
-            "key at https://portal.cdp.coinbase.com/",
-            UserWarning,
-            stacklevel=4,
-        )
         return "ES256"
     raise ValueError(
         f"Unsupported private key type: {type(private_key).__name__}. "

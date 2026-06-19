@@ -31,7 +31,7 @@ def get_candles(
     __________
 
     **Read more on the official documentation:** `Get Product Candles
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getcandles>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-product-candles>`_
     """
     endpoint = f"{API_PREFIX}/products/{product_id}/candles"
 
@@ -63,7 +63,7 @@ def get_market_trades(
     __________
 
     **Read more on the official documentation:** `Get Market Trades
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getmarkettrades>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-market-trades>`_
     """
     endpoint = f"{API_PREFIX}/products/{product_id}/ticker"
 

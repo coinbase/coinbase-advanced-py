@@ -30,7 +30,7 @@ def get_futures_balance_summary(self, **kwargs) -> GetFuturesBalanceSummaryRespo
     __________
 
     **Read more on the official documentation:** `Get Futures Balance Summary
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmbalancesummary>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-futures-balance-summary>`_
     """
     endpoint = f"{API_PREFIX}/cfm/balance_summary"
 
@@ -53,7 +53,7 @@ def list_futures_positions(self, **kwargs) -> ListFuturesPositionsResponse:
     __________
 
     **Read more on the official documentation:** `List Futures Positions
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmpositions>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/list-futures-positions>`_
     """
     endpoint = f"{API_PREFIX}/cfm/positions"
 
@@ -76,7 +76,7 @@ def get_futures_position(self, product_id: str, **kwargs) -> GetFuturesPositionR
     __________
 
     **Read more on the official documentation:** `Get Futures Position
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmposition>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-futures-position>`_
     """
     endpoint = f"{API_PREFIX}/cfm/positions/{product_id}"
 
@@ -101,7 +101,7 @@ def schedule_futures_sweep(
     __________
 
     **Read more on the official documentation:** `Schedule Futures Sweep
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_schedulefcmsweep>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/schedule-futures-sweep>`_
     """
     endpoint = f"{API_PREFIX}/cfm/sweeps/schedule"
 
@@ -126,7 +126,7 @@ def list_futures_sweeps(self, **kwargs) -> ListFuturesSweepsResponse:
     __________
 
     **Read more on the official documentation:** `List Futures Sweeps
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmsweeps>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/list-futures-sweeps>`_
     """
     endpoint = f"{API_PREFIX}/cfm/sweeps"
 
@@ -149,7 +149,7 @@ def cancel_pending_futures_sweep(self, **kwargs) -> CancelPendingFuturesSweepRes
     __________
 
     **Read more on the official documentation:** `Cancel Pending Futures Sweep
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_cancelfcmsweep>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/cancel-pending-futures-sweep>`_
     """
     endpoint = f"{API_PREFIX}/cfm/sweeps"
 
@@ -172,7 +172,7 @@ def get_intraday_margin_setting(self, **kwargs) -> GetIntradayMarginSettingRespo
     __________
 
     **Read more on the official documentation:** `Get Intraday Margin Setting
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintradaymarginsetting>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-intraday-margin-setting>`_
     """
     endpoint = f"{API_PREFIX}/cfm/intraday/margin_setting"
 
@@ -197,7 +197,7 @@ def get_current_margin_window(
     __________
 
     **Read more on the official documentation:** `Get Current Margin Window
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getcurrentmarginwindow>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-current-margin-window>`_
     """
 
     endpoint = f"{API_PREFIX}/cfm/intraday/current_margin_window"
@@ -225,7 +225,7 @@ def set_intraday_margin_setting(
     __________
 
     **Read more on the official documentation:** `Set Intraday Margin Setting
-    <https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_setintradaymarginsetting>`_
+    <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/set-intraday-margin-settings>`_
     """
 
     endpoint = f"{API_PREFIX}/cfm/intraday/margin_setting"

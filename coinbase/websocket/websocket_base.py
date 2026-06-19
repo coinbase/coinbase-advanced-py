@@ -146,8 +146,12 @@ class WSBase(APIBase):
                 open_timeout=self.timeout,
                 max_size=self.max_size,
                 user_agent_header=USER_AGENT,
-                extra_headers=headers,
-                ssl=ssl.SSLContext() if self.base_url.startswith("wss://") else None,
+                additional_headers=headers,
+                ssl=(
+                    ssl.create_default_context()
+                    if self.base_url.startswith("wss://")
+                    else None
+                ),
             )
             logger.debug("Successfully connected to %s", self.base_url)
 
@@ -460,7 +464,7 @@ class WSBase(APIBase):
         """
         :meta private:
         """
-        return self.websocket and self.websocket.open
+        return self.websocket and self.websocket.state == websockets.State.OPEN
 
     async def _resubscribe(self):
         """

@@ -1,6 +1,14 @@
 name: Build and Test
 
-on: [push]
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# Cancel superseded runs on the same ref (e.g. new push to a PR branch).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   format-code:
@@ -8,11 +16,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install dependencies and format code
       run: |
-        sudo apt-get install -y make
         pip3 install -r lint_requirements.txt
         make format
 
@@ -27,14 +34,19 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Set up Python environment
-      uses: actions/setup-python@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies and run tests
       run: |

@@ -72,6 +72,7 @@ class RESTBase(APIBase):
         )
         self.rate_limit_headers = rate_limit_headers
         self.session = requests.Session()
+        self._private_key = None
         if verbose:
             logger.setLevel(logging.DEBUG)
 
@@ -252,9 +253,17 @@ class RESTBase(APIBase):
             "Content-Type": "application/json",
             **(
                 {
-                    "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret)}",
+                    "Authorization": f"Bearer {jwt_generator.build_rest_jwt(uri, self.api_key, self.api_secret, private_key=self._get_private_key())}",
                 }
                 if self.is_authenticated
                 else {}
             ),
         }
+
+    def _get_private_key(self):
+        """
+        :meta private:
+        """
+        if self._private_key is None:
+            self._private_key = jwt_generator._load_private_key_for_jwt(self.api_secret)
+        return self._private_key

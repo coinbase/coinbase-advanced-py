@@ -1,8 +1,10 @@
 import unittest
+from unittest.mock import patch
 
 from requests.exceptions import HTTPError
 from requests_mock import Mocker
 
+from coinbase import jwt_generator
 from coinbase.__version__ import __version__
 from coinbase.rest import RESTClient
 
@@ -92,6 +94,19 @@ class RestBaseTest(unittest.TestCase):
                     captured_headers["User-Agent"],
                     "coinbase-advanced-py/" + __version__,
                 )
+
+    def test_authenticated_client_reuses_parsed_private_key(self):
+        client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)
+
+        with patch.object(
+            jwt_generator,
+            "_load_private_key",
+            wraps=jwt_generator._load_private_key,
+        ) as load_private_key:
+            client.set_headers("GET", "/api/v3/brokerage/accounts")
+            client.set_headers("GET", "/api/v3/brokerage/orders")
+
+        self.assertEqual(load_private_key.call_count, 1)
 
     def test_post(self):
         client = RESTClient(api_key=TEST_API_KEY, api_secret=TEST_API_SECRET)

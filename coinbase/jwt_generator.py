@@ -39,17 +39,21 @@ def _algorithm_for(private_key) -> str:
     )
 
 
-def build_jwt(key_var, secret_var, uri=None) -> str:
-    """
-    :meta private:
-    """
+def _load_private_key_for_jwt(secret_var):
     try:
-        private_key = _load_private_key(secret_var)
+        return _load_private_key(secret_var)
     except (ValueError, TypeError) as e:
         raise Exception(
             f"{e}\n"
             "Are you sure you generated your key at https://cloud.coinbase.com/access/api ?"
         )
+
+
+def build_jwt(key_var, secret_var, uri=None, private_key=None) -> str:
+    """
+    :meta private:
+    """
+    private_key = private_key or _load_private_key_for_jwt(secret_var)
 
     jwt_data = {
         "sub": key_var,
@@ -71,7 +75,7 @@ def build_jwt(key_var, secret_var, uri=None) -> str:
     return jwt_token
 
 
-def build_rest_jwt(uri, key_var, secret_var) -> str:
+def build_rest_jwt(uri, key_var, secret_var, private_key=None) -> str:
     """
     **Build REST JWT**
     __________
@@ -88,7 +92,7 @@ def build_rest_jwt(uri, key_var, secret_var) -> str:
     - **key_var (str)** - The API key
     - **secret_var (str)** - The API key secret
     """
-    return build_jwt(key_var, secret_var, uri=uri)
+    return build_jwt(key_var, secret_var, uri=uri, private_key=private_key)
 
 
 def build_ws_jwt(key_var, secret_var) -> str:

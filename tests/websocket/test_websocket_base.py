@@ -458,6 +458,10 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
 
     async def asyncSetUp(self):
         self.messages_queue = asyncio.Queue()
+        self.connection_closed_event = asyncio.Event()
+        self.on_close_mock = unittest.mock.Mock(
+            side_effect=self.connection_closed_event.set
+        )
         self.server = await mock_ws_server.start_mock_server()
 
         def on_message(msg):
@@ -468,6 +472,7 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
             TEST_API_SECRET,
             base_url="ws://localhost:8765",
             on_message=on_message,
+            on_close=self.on_close_mock,
             retry=False,
         )
 
@@ -523,6 +528,27 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resubscribe_2_json["type"], SUBSCRIBE_MESSAGE_TYPE)
         self.assertEqual(resubscribe_2_json["product_ids"], ["BTC-USD"])
         self.assertEqual(resubscribe_2_json["channel"], "heartbeats")
+
+    async def test_reconnect_after_going_away(self):
+        self.ws.retry = True
+
+        await self.ws.open_async()
+        await self.ws.subscribe_async(
+            product_ids=["BTC-USD", "ETH-USD"], channels=["ticker"]
+        )
+        await self.messages_queue.get()
+
+        await self.server.restart_with_going_away()
+
+        await asyncio.wait_for(self.connection_closed_event.wait(), timeout=5)
+        self.on_close_mock.assert_called_once_with()
+        resubscribe = await asyncio.wait_for(self.messages_queue.get(), timeout=5)
+        resubscribe_json = json.loads(resubscribe)
+        self.assertEqual(resubscribe_json["type"], SUBSCRIBE_MESSAGE_TYPE)
+        self.assertEqual(
+            sorted(resubscribe_json["product_ids"]), ["BTC-USD", "ETH-USD"]
+        )
+        self.assertEqual(resubscribe_json["channel"], "ticker")
 
     async def test_reconnect_fail(self):
         # tests that client can catch WSClientConnectionClosedException after failed reconnection

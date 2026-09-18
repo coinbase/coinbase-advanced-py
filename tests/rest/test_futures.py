@@ -182,3 +182,52 @@ class FuturesTest(unittest.TestCase):
             )
 
             self.assertEqual(setting.__dict__, expected_response)
+
+    def test_get_futures_position_none(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/cfm/positions/BTC-USD",
+                json={"position": None},
+            )
+            position_resp = client.get_futures_position("BTC-USD")
+            self.assertIsNone(position_resp.position)
+
+    def test_get_futures_balance_summary_none(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/cfm/balance_summary",
+                json={"balance_summary": None},
+            )
+            resp = client.get_futures_balance_summary()
+            self.assertIsNone(resp.balance_summary)
+
+    def test_list_futures_positions_none(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/cfm/positions",
+                json={"positions": None},
+            )
+            resp = client.list_futures_positions()
+            self.assertIsNone(resp.positions)
+
+    def test_list_futures_sweeps_none(self):
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/cfm/sweeps",
+                json={"sweeps": None},
+            )
+            resp = client.list_futures_sweeps()
+            self.assertIsNone(resp.sweeps)
+

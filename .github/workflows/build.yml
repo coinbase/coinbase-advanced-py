@@ -1,0 +1,59 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# Cancel superseded runs on the same ref (e.g. new push to a PR branch).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format-code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies and format code
+      run: |
+        pip3 install -r lint_requirements.txt
+        make format
+
+        if git diff --quiet; then
+          echo "No code formatting changes detected."
+        else
+          echo "Code formatting changes detected. Please run 'make format' locally and commit the changes."
+          git diff --exit-code
+          exit 1
+        fi
+
+  run-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies and run tests
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip3 install --upgrade pip
+        pip3 install -r requirements.txt
+        pip3 install -r test_requirements.txt
+
+        python -m unittest discover -v

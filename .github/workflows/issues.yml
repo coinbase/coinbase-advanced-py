@@ -1,0 +1,17 @@
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thank you for reporting! If this is an SDK specific issue, we will look into it and get back to you soon. If this is an API related request, report it in our [Advanced API Discord](https://discord.com/channels/1220414409550336183/1220464268743278613) instead (use this [invite link](https://discord.com/invite/cdp) if it\'s your first time accessing the Discord).'
+            })

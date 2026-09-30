@@ -29,6 +29,24 @@ class ProductsTest(unittest.TestCase):
             )
             self.assertEqual(products.__dict__, expected_response)
 
+    def test_get_products_cursor_pagination(self):
+        # 1.8.5: cursor / futures_underlying_type / user_country_code.
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/products",
+                json={"products": []},
+            )
+            client.get_products(
+                limit=2, cursor="next_page_token", user_country_code="US"
+            )
+
+            query = m.request_history[0].query
+            self.assertIn("cursor=next_page_token", query)
+            self.assertIn("user_country_code=us", query)
+
     def test_get_product(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 

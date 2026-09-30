@@ -19,6 +19,9 @@ def get_products(
     expiring_contract_status: Optional[str] = None,
     get_tradability_status: Optional[bool] = False,
     get_all_products: Optional[bool] = False,
+    cursor: Optional[str] = None,
+    futures_underlying_type: Optional[str] = None,
+    user_country_code: Optional[str] = None,
     **kwargs,
 ) -> ListProductsResponse:
     """
@@ -49,6 +52,9 @@ def get_products(
         "expiring_contract_status": expiring_contract_status,
         "get_tradability_status": get_tradability_status,
         "get_all_products": get_all_products,
+        "cursor": cursor,
+        "futures_underlying_type": futures_underlying_type,
+        "user_country_code": user_country_code,
     }
 
     return ListProductsResponse(self.get(endpoint, params=params, **kwargs))

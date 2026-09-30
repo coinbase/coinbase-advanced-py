@@ -2,6 +2,7 @@ import uuid
 from typing import Any, Dict, List, Optional
 
 from coinbase.constants import API_PREFIX
+from coinbase.rest._intx_cutover import intx_migration_hint, is_intx_perp_product
 from coinbase.rest.types.orders_types import (
     CancelOrdersResponse,
     ClosePositionResponse,
@@ -32,6 +33,9 @@ def create_order(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
+    attached_order_configuration: Optional[Dict] = None,
+    prediction_metadata: Optional[Dict] = None,
+    equity_order_metadata: Optional[Dict] = None,
     **kwargs,
 ) -> CreateOrderResponse:
     """
@@ -65,9 +69,17 @@ def create_order(
         "leverage": leverage,
         "margin_type": margin_type,
         "retail_portfolio_id": retail_portfolio_id,
+        "attached_order_configuration": attached_order_configuration,
+        "prediction_metadata": prediction_metadata,
+        "equity_order_metadata": equity_order_metadata,
     }
 
-    return CreateOrderResponse(self.post(endpoint, data=data, **kwargs))
+    with intx_migration_hint(
+        "create_order",
+        "private_buy or private_sell",
+        enabled=is_intx_perp_product(product_id),
+    ):
+        return CreateOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 # Market orders
@@ -1420,7 +1432,13 @@ def trigger_bracket_order_gtd_sell(
     )
 
 
-def get_order(self, order_id: str, **kwargs) -> GetOrderResponse:
+def get_order(
+    self,
+    order_id: str,
+    client_order_id: Optional[str] = None,
+    user_native_currency: Optional[str] = None,
+    **kwargs,
+) -> GetOrderResponse:
     """
     **Get Order**
     _____________
@@ -1439,8 +1457,12 @@ def get_order(self, order_id: str, **kwargs) -> GetOrderResponse:
     <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/get-order>`_
     """
     endpoint = f"{API_PREFIX}/orders/historical/{order_id}"
+    params = {
+        "client_order_id": client_order_id,
+        "user_native_currency": user_native_currency,
+    }
 
-    return GetOrderResponse(self.get(endpoint, **kwargs))
+    return GetOrderResponse(self.get(endpoint, params=params, **kwargs))
 
 
 def list_orders(
@@ -1461,6 +1483,8 @@ def list_orders(
     retail_portfolio_id: Optional[str] = None,
     time_in_forces: Optional[str] = None,
     sort_by: Optional[str] = None,
+    user_native_currency: Optional[str] = None,
+    use_simplified_total_value_calculation: Optional[bool] = None,
     **kwargs,
 ) -> ListOrdersResponse:
     """
@@ -1498,6 +1522,8 @@ def list_orders(
         "retail_portfolio_id": retail_portfolio_id,
         "time_in_forces": time_in_forces,
         "sort_by": sort_by,
+        "user_native_currency": user_native_currency,
+        "use_simplified_total_value_calculation": use_simplified_total_value_calculation,
     }
 
     return ListOrdersResponse(self.get(endpoint, params=params, **kwargs))
@@ -1514,6 +1540,10 @@ def get_fills(
     limit: Optional[int] = None,
     cursor: Optional[str] = None,
     sort_by: Optional[str] = None,
+    order_side: Optional[str] = None,
+    order_types: Optional[List[str]] = None,
+    product_types: Optional[List[str]] = None,
+    asset_filters: Optional[List[str]] = None,
     **kwargs,
 ) -> ListFillsResponse:
     """
@@ -1544,6 +1574,10 @@ def get_fills(
         "limit": limit,
         "cursor": cursor,
         "sort_by": sort_by,
+        "order_side": order_side,
+        "order_types": order_types,
+        "product_types": product_types,
+        "asset_filters": asset_filters,
     }
 
     return ListFillsResponse(self.get(endpoint, params=params, **kwargs))
@@ -1554,6 +1588,10 @@ def edit_order(
     order_id: str,
     size: Optional[str] = None,
     price: Optional[str] = None,
+    stop_price: Optional[str] = None,
+    average_entry_price: Optional[str] = None,
+    attached_order_configuration: Optional[Dict] = None,
+    cancel_attached_order: Optional[bool] = None,
     **kwargs,
 ) -> EditOrderResponse:
     """
@@ -1578,6 +1616,10 @@ def edit_order(
         "order_id": order_id,
         "size": size,
         "price": price,
+        "stop_price": stop_price,
+        "average_entry_price": average_entry_price,
+        "attached_order_configuration": attached_order_configuration,
+        "cancel_attached_order": cancel_attached_order,
     }
 
     return EditOrderResponse(self.post(endpoint, data=data, **kwargs))
@@ -1588,6 +1630,10 @@ def preview_edit_order(
     order_id: str,
     size: Optional[str] = None,
     price: Optional[str] = None,
+    stop_price: Optional[str] = None,
+    average_entry_price: Optional[str] = None,
+    attached_order_configuration: Optional[Dict] = None,
+    cancel_attached_order: Optional[bool] = None,
     **kwargs,
 ) -> EditOrderPreviewResponse:
     """
@@ -1612,6 +1658,10 @@ def preview_edit_order(
         "order_id": order_id,
         "size": size,
         "price": price,
+        "stop_price": stop_price,
+        "average_entry_price": average_entry_price,
+        "attached_order_configuration": attached_order_configuration,
+        "cancel_attached_order": cancel_attached_order,
     }
 
     return EditOrderPreviewResponse(self.post(endpoint, data=data, **kwargs))
@@ -1651,6 +1701,9 @@ def preview_order(
     leverage: Optional[str] = None,
     margin_type: Optional[str] = None,
     retail_portfolio_id: Optional[str] = None,
+    attached_order_configuration: Optional[Dict] = None,
+    prediction_metadata: Optional[Dict] = None,
+    equity_order_metadata: Optional[Dict] = None,
     **kwargs,
 ) -> PreviewOrderResponse:
     """
@@ -1679,9 +1732,15 @@ def preview_order(
         "leverage": leverage,
         "margin_type": margin_type,
         "retail_portfolio_id": retail_portfolio_id,
+        "attached_order_configuration": attached_order_configuration,
+        "prediction_metadata": prediction_metadata,
+        "equity_order_metadata": equity_order_metadata,
     }
 
-    return PreviewOrderResponse(self.post(endpoint, data=data, **kwargs))
+    with intx_migration_hint(
+        "preview_order", None, enabled=is_intx_perp_product(product_id)
+    ):
+        return PreviewOrderResponse(self.post(endpoint, data=data, **kwargs))
 
 
 # Preview market orders
@@ -2921,4 +2980,9 @@ def close_position(
 
     data = {"client_order_id": client_order_id, "product_id": product_id, "size": size}
 
-    return ClosePositionResponse(self.post(endpoint, data=data, **kwargs))
+    with intx_migration_hint(
+        "close_position",
+        "private_close_position",
+        enabled=is_intx_perp_product(product_id),
+    ):
+        return ClosePositionResponse(self.post(endpoint, data=data, **kwargs))

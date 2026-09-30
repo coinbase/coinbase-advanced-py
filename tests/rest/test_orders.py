@@ -1186,6 +1186,110 @@ class OrdersTest(unittest.TestCase):
             )
             self.assertEqual(order.__dict__, expected_response)
 
+    def test_create_order_new_params(self):
+        # 1.8.5: attached_order_configuration / prediction_metadata /
+        # equity_order_metadata are accepted by the live order endpoint.
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders",
+                json={"order_id": "1234"},
+            )
+            client.create_order(
+                "client_order_id_1",
+                "product_id_1",
+                "BUY",
+                {"market_market_ioc": {"quote_size": "1"}},
+                attached_order_configuration={"a": "b"},
+                prediction_metadata={"c": "d"},
+                equity_order_metadata={"e": "f"},
+            )
+
+            captured_json = m.request_history[0].json()
+            self.assertEqual(captured_json["attached_order_configuration"], {"a": "b"})
+            self.assertEqual(captured_json["prediction_metadata"], {"c": "d"})
+            self.assertEqual(captured_json["equity_order_metadata"], {"e": "f"})
+
+    def test_edit_order_new_params(self):
+        # 1.8.5: stop_price / average_entry_price / attached_order_configuration /
+        # cancel_attached_order are accepted by the live edit endpoint.
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "POST",
+                "https://api.coinbase.com/api/v3/brokerage/orders/edit",
+                json={"order_id": "order_id_1"},
+            )
+            client.edit_order(
+                "order_id_1",
+                size="100",
+                price="50",
+                stop_price="45",
+                average_entry_price="48",
+                attached_order_configuration={"a": "b"},
+                cancel_attached_order=True,
+            )
+
+            captured_json = m.request_history[0].json()
+            self.assertEqual(
+                captured_json,
+                {
+                    "order_id": "order_id_1",
+                    "size": "100",
+                    "price": "50",
+                    "stop_price": "45",
+                    "average_entry_price": "48",
+                    "attached_order_configuration": {"a": "b"},
+                    "cancel_attached_order": True,
+                },
+            )
+
+    def test_get_fills_new_filters(self):
+        # 1.8.5: order_side / order_types / product_types / asset_filters.
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/orders/historical/fills",
+                json={"fills": []},
+            )
+            client.get_fills(
+                order_side="BUY",
+                order_types=["LIMIT"],
+                product_types=["SPOT"],
+                asset_filters=["USD"],
+            )
+
+            query = m.request_history[0].query
+            self.assertIn("order_side=buy", query)
+            self.assertIn("order_types=limit", query)
+            self.assertIn("product_types=spot", query)
+            self.assertIn("asset_filters=usd", query)
+
+    def test_get_order_new_params(self):
+        # 1.8.5: client_order_id / user_native_currency query params.
+        client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
+
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api.coinbase.com/api/v3/brokerage/orders/historical/order_id_1",
+                json={"order": {}},
+            )
+            client.get_order(
+                "order_id_1",
+                client_order_id="client_1",
+                user_native_currency="EUR",
+            )
+
+            query = m.request_history[0].query
+            self.assertIn("client_order_id=client_1", query)
+            self.assertIn("user_native_currency=eur", query)
+
     def test_cancel_orders(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 

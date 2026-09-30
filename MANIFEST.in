@@ -1,0 +1,14 @@
+# setup.py reads these at build time, so they must ship in the sdist for a
+# wheel to be buildable from the source distribution.
+include requirements.txt
+include test_requirements.txt
+include lint_requirements.txt
+include pinned_requirements.txt
+include docs_requirements.txt
+include README.md
+include LICENSE.md
+include CHANGELOG.md
+
+# Never ship generator inputs (Deribit specs) or internal scripts.
+prune scripts
+global-exclude *openapi*.json *asyncapi*.json

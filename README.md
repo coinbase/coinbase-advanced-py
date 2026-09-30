@@ -3,8 +3,8 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/license/apache-2-0/)
 [![Code Style](https://img.shields.io/badge/code_style-black-black)](https://black.readthedocs.io/en/stable/)
 
-Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome).
-This SDK also supports easy connection to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview).
+Welcome to the official Coinbase Advanced API Python SDK. This python project was created to allow coders to easily plug into the [Coinbase Advanced API](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/overview).
+This SDK also supports easy connection to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-overview), and to Global Derivatives through the [Deribit-powered gateway](#global-derivatives-clients).
 
 Coinbase Advanced Trade offers a comprehensive API for traders, providing access to real-time market data, order management, and execution. Elevate your trading strategies and develop sophisticated solutions using our powerful tools and features.
 
@@ -20,7 +20,7 @@ pip3 install coinbase-advanced-py
 ___
 ## Coinbase Developer Platform (CDP) API Keys
 
-This SDK uses Cloud Developer Platform (CDP) API keys. To use this SDK, you will need to create a CDP API key and secret by following the instructions [here](https://docs.cdp.coinbase.com/advanced-trade/docs/getting-started).
+This SDK uses Cloud Developer Platform (CDP) API keys. To use this SDK, you will need to create a CDP API key and secret by following the instructions [here](https://docs.cdp.coinbase.com/get-started/authentication/overview).
 Make sure to save your API key and secret in a safe place. You will not be able to retrieve your secret again.
 
 Ed25519 is the recommended key type. The SDK also supports ECDSA for existing keys. The key type is auto-detected and the correct JWT signing algorithm (`EdDSA` or `ES256`) is selected automatically. Accepted formats:
@@ -132,15 +132,15 @@ portfolio = client.create_portfolio(name="TestPortfolio")
 ```
 
 ### Rate Limit Response Headers
-The Advanced API returns useful rate limit information in the response headers as detailed in our [documentation](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-rate-limits#private-endpoints). By initializing the RESTClient with the `rate_limit_headers` field set to True, as shown below, these headers will be appended as fields to the API response body:
+The Advanced API returns useful rate limit information in the response headers as detailed in our [documentation](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api#private-endpoints). By initializing the RESTClient with the `rate_limit_headers` field set to True, as shown below, these headers will be appended as fields to the API response body:
 ```python
 client = RESTClient(api_key=api_key, api_secret=api_secret, rate_limit_headers=True)
 ```
 
 ___
 ## WebSocket API Client
-We offer a WebSocket API client that allows you to connect to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview).
-Refer to the [Advanced Trade WebSocket Channels](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels) page for detailed information on each offered channel.
+We offer a WebSocket API client that allows you to connect to the [Coinbase Advanced Trade WebSocket API](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-overview).
+Refer to the [Advanced Trade WebSocket Channels](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-channels) page for detailed information on each offered channel.
 
 In your code, import the WSClient class and instantiate it. The WSClient requires an API key and secret to be passed in as arguments. You can also use a key file or environment variables as described in the RESTClient instructions above.
 
@@ -170,7 +170,7 @@ def on_open():
 client = WSClient(api_key=api_key, api_secret=api_secret, on_message=on_message, on_open=on_open)
 ```
 ### WebSocket User API Client
-We offer a WebSocket User API client that allows you to connect to the Coinbase Advanced Trade WebSocket [user channel](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#user-channel) and [futures_balance_summary channel](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#futures-balance-summary-channel).
+We offer a WebSocket User API client that allows you to connect to the Coinbase Advanced Trade WebSocket [user channel](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-channels#user-channel) and [futures_balance_summary channel](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-channels#futures-balance-summary-channel).
 
 In your code, import the WSUserClient class instead of WSClient.
 
@@ -313,7 +313,80 @@ In the example, note how we first checked `if ws_object.channel == "ticker"`.
 Since each channel's event field has a unique structure and set of fields, it's important to ensure that the fields we access are actually present in the object.
 For example, if we were to subscribe to the `user` channel and try to access a field that does not exist in it, such as the `tickers` field, we would be met with an error.
 
-Therefore, we urge users to reference our [documentation](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels), which outlines the JSON object that each channel will return.
+Therefore, we urge users to reference our [documentation](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-channels), which outlines the JSON object that each channel will return.
+
+___
+## Global Derivatives Clients
+From October 1, 2026, Global Derivatives on Coinbase Advanced Trade run on a Deribit-powered gateway instead of INTX. The gateway uses JSON-RPC 2.0 over REST and WebSocket. The `coinbase.deribit` package has a client for each, and both use the same CDP API keys as the rest of the SDK. Spot and US Derivatives stay on `RESTClient` and `WSClient`.
+
+Each gateway method is a typed method on the client. `private/buy` becomes `private_buy`. Pass optional parameters by keyword. Typed methods return response objects, so read the payload from `.result`.
+
+### Global Derivatives REST Client
+```python
+from coinbase.deribit import DeribitRetailClient
+
+client = DeribitRetailClient(api_key=api_key, api_secret=api_secret)
+
+ticker = client.public_ticker(instrument_name="BTC_USDC-PERPETUAL")
+print(ticker.result.mark_price)
+
+positions = client.private_get_positions(currency="USDC")
+
+order = client.private_buy(
+    instrument_name="BTC_USDC-PERPETUAL",
+    amount=0.0001,
+    type="limit",
+    price=60000,
+    post_only=True,
+    label="my-order-1",
+)
+print(order.result.order.order_id)
+```
+Public methods work without keys: `DeribitRetailClient()`. To call a gateway method that has no typed wrapper, use `client.call("private/some_method", {...})`.
+
+### Global Derivatives WebSocket Client
+The gateway has two WebSocket hosts, and `DeribitRetailWSClient` picks one based on whether you pass keys:
+
+- Without keys, it connects to the market data host. Subscribe to channels such as `ticker`, `book` and `trades` here.
+- With keys, it connects to the trading host. Use it for `user.*` channels, WebSocket-only methods such as heartbeats and cancel-on-disconnect, and any other RPC.
+
+```python
+from coinbase.deribit import DeribitRetailWSClient
+
+def on_message(data, channel):
+    print(channel, data)
+
+market_data = DeribitRetailWSClient(api_key=None, api_secret=None)
+market_data.open()
+market_data.subscribe(["ticker.BTC_USDC-PERPETUAL.100ms"], on_message)
+
+with DeribitRetailWSClient(api_key=api_key, api_secret=api_secret) as trading:
+    trading.subscribe(["user.orders.BTC_USDC-PERPETUAL.raw"], on_message)
+    trading.private_get_open_orders()
+```
+Like the other clients, `DeribitRetailWSClient` reads `COINBASE_API_KEY` and `COINBASE_API_SECRET` from the environment, so pass `api_key=None, api_secret=None` for a market data client if those are set.
+
+Callbacks run on the client's reader thread, so keep them short and don't call RPC methods from inside them. The client re-authenticates before the token expires. If the connection drops, it reconnects and restores your subscriptions. If the gateway doesn't accept a channel, `subscribe` raises `DeribitSubscriptionError`.
+
+The SDK never resends an order after a connection drops. A call that was in flight raises `DeribitConnectionError`. Give each order a `label`, then check it with `private_get_order_state_by_label` before retrying.
+
+JSON-RPC errors raise `DeribitRPCError` or one of its subclasses: `DeribitRateLimitError`, `DeribitInsufficientFundsError`, `DeribitInvalidParamsError` or `DeribitMatchingQueueFullError`. Authentication failures raise `DeribitAuthError`.
+
+### Migrating from INTX Perpetuals
+The INTX perpetuals methods on `RESTClient` still send requests. When the server rejects one, the SDK logs which Global Derivatives method to use instead, then raises the original `HTTPError`.
+
+| INTX method | Global Derivatives method |
+|---|---|
+| `get_perps_portfolio_summary` | `private_get_account_summary` |
+| `get_perps_portfolio_balances` | `private_get_account_summaries` |
+| `list_perps_positions` | `private_get_positions` |
+| `get_perps_position` | `private_get_position` |
+| `opt_in_or_out_multi_asset_collateral` | `private_change_margin_model` |
+| `allocate_portfolio` | `private_submit_transfer_between_subaccounts` |
+| `create_order` on a `-PERP-INTX` product | `private_buy` or `private_sell` |
+| `close_position` on a `-PERP-INTX` product | `private_close_position` |
+
+Instrument names follow the gateway format, for example `BTC_USDC-PERPETUAL`.
 
 ___
 ## Debugging the Clients
@@ -328,7 +401,7 @@ ___
 ## Authentication
 Authentication of CDP API Keys is handled automatically by the SDK when making a REST request or sending a WebSocket message.
 
-However, if you wish to handle this yourself, you must create a JWT token and attach it to your request as detailed in the API docs [here](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-auth#making-requests). Use the built in `jwt_generator` to create your JWT token. For example:
+However, if you wish to handle this yourself, you must create a JWT token and attach it to your request as detailed in the API docs [here](https://docs.cdp.coinbase.com/get-started/authentication/jwt-authentication). Use the built in `jwt_generator` to create your JWT token. For example:
 ```python
 from coinbase import jwt_generator
 
@@ -354,7 +427,7 @@ api_secret = "-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIV
 
 jwt = jwt_generator.build_ws_jwt(api_key, api_secret)
 ```
-Use this JWT to connect to the Websocket API by setting it in the "jwt" field of your subscription requests. See the docs [here](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-overview#sending-messages-with-cdp-keys) for more details.
+Use this JWT to connect to the Websocket API by setting it in the "jwt" field of your subscription requests. See the docs [here](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-overview#sending-messages-with-cdp-keys) for more details.
 
 ___
 ## Accessing public endpoints without authentication
@@ -385,13 +458,13 @@ client = RESTClient()
 public_products = client.get_public_products()
 print(json.dumps(public_products.to_dict(), indent=2))
 ```
-_Full list of all public REST endpoints [here](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-overview#public-endpoints)_
+_Full list of all public REST endpoints [here](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api#public-endpoints)_
 
-_Rate limit details for REST endpoints [here](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-rate-limits)_
+_Rate limit details for REST endpoints [here](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api)_
 
 ### Websocket Client
 
-In the Websocket client, here is an example subscribing to the [ticker](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels#ticker-channel) channel. 
+In the Websocket client, here is an example subscribing to the [ticker](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-channels#ticker-channel) channel. 
 Unlike the REST client, Websocket channels handle both authenticated and unauthenticated requests. 
 At the moment, most channels in the Websocket client are public and can be used without keys.
 
@@ -413,9 +486,9 @@ client.ticker_unsubscribe(product_ids=["BTC-USD"])
 client.close()
 ```
 
-_Full list of all public Websocket channels [here](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels)_
+_Full list of all public Websocket channels [here](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-channels)_
 
-_Rate limit details for Websocket channels [here](https://docs.cdp.coinbase.com/advanced-trade/docs/ws-rate-limits)_
+_Rate limit details for Websocket channels [here](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/websocket/websocket-rate-limits)_
 
 
 ___

@@ -128,6 +128,8 @@ Futures
 Perpetuals
 ---------------------------
 
+From October 1, 2026, Global Derivatives run on the Deribit-powered gateway instead of INTX. These methods still send the request; when the server rejects it, the SDK logs a migration hint and re-raises the ``HTTPError``. Use ``coinbase.deribit.DeribitRetailClient`` or ``DeribitRetailWSClient`` for Global Derivatives.
+
 .. autofunction:: coinbase.rest.RESTClient.allocate_portfolio
 .. autofunction:: coinbase.rest.RESTClient.get_perps_portfolio_summary
 .. autofunction:: coinbase.rest.RESTClient.list_perps_positions

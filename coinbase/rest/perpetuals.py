@@ -1,4 +1,5 @@
 from coinbase.constants import API_PREFIX
+from coinbase.rest._intx_cutover import intx_migration_hint
 from coinbase.rest.types.perpetuals_types import (
     AllocatePortfolioResponse,
     GetPerpetualsPortfolioSummaryResponse,
@@ -26,10 +27,18 @@ def allocate_portfolio(
 
     __________
 
+    **Global Derivatives:** From October 1, 2026, Global Derivatives run on the
+    Deribit-powered gateway instead of INTX.
+    The request is still sent. If the server rejects it, the SDK logs a migration
+    hint and re-raises the ``HTTPError``. Isolated margin lives in a managed subaccount:
+    use ``private_submit_transfer_between_subaccounts`` on
+    ``coinbase.deribit.DeribitRetailClient`` instead.
+
+    __________
+
     **Read more on the official documentation:** `Allocate Portfolio
     <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/allocate-portfolio>`_
     """
-
     endpoint = f"{API_PREFIX}/intx/allocate"
 
     data = {
@@ -39,7 +48,10 @@ def allocate_portfolio(
         "currency": currency,
     }
 
-    return AllocatePortfolioResponse(self.post(endpoint, data=data, **kwargs))
+    with intx_migration_hint(
+        "allocate_portfolio", "private_submit_transfer_between_subaccounts"
+    ):
+        return AllocatePortfolioResponse(self.post(endpoint, data=data, **kwargs))
 
 
 def get_perps_portfolio_summary(
@@ -59,12 +71,23 @@ def get_perps_portfolio_summary(
 
     __________
 
+    **Global Derivatives:** From October 1, 2026, Global Derivatives run on the
+    Deribit-powered gateway instead of INTX.
+    The request is still sent. If the server rejects it, the SDK logs a migration
+    hint and re-raises the ``HTTPError``. Use ``private_get_account_summary`` on
+    ``coinbase.deribit.DeribitRetailClient`` instead.
+
+    __________
+
     **Read more on the official documentation:** `Get Perpetuals Portfolio Summary
     <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/get-perpetuals-portfolio-summary>`_
     """
     endpoint = f"{API_PREFIX}/intx/portfolio/{portfolio_uuid}"
 
-    return GetPerpetualsPortfolioSummaryResponse(self.get(endpoint, **kwargs))
+    with intx_migration_hint(
+        "get_perps_portfolio_summary", "private_get_account_summary"
+    ):
+        return GetPerpetualsPortfolioSummaryResponse(self.get(endpoint, **kwargs))
 
 
 def list_perps_positions(
@@ -84,12 +107,21 @@ def list_perps_positions(
 
     __________
 
+    **Global Derivatives:** From October 1, 2026, Global Derivatives run on the
+    Deribit-powered gateway instead of INTX.
+    The request is still sent. If the server rejects it, the SDK logs a migration
+    hint and re-raises the ``HTTPError``. Use ``private_get_positions`` on
+    ``coinbase.deribit.DeribitRetailClient`` instead.
+
+    __________
+
     **Read more on the official documentation:** `List Perpetuals Positions
     <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/list-perpetuals-positions>`_
     """
     endpoint = f"{API_PREFIX}/intx/positions/{portfolio_uuid}"
 
-    return ListPerpetualsPositionsResponse(self.get(endpoint, **kwargs))
+    with intx_migration_hint("list_perps_positions", "private_get_positions"):
+        return ListPerpetualsPositionsResponse(self.get(endpoint, **kwargs))
 
 
 def get_perps_position(
@@ -109,12 +141,21 @@ def get_perps_position(
 
     __________
 
+    **Global Derivatives:** From October 1, 2026, Global Derivatives run on the
+    Deribit-powered gateway instead of INTX.
+    The request is still sent. If the server rejects it, the SDK logs a migration
+    hint and re-raises the ``HTTPError``. Use ``private_get_position`` on
+    ``coinbase.deribit.DeribitRetailClient`` instead.
+
+    __________
+
     **Read more on the official documentation:** `Get Perpetuals Positions
     <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/get-perpetuals-position>`_
     """
     endpoint = f"{API_PREFIX}/intx/positions/{portfolio_uuid}/{symbol}"
 
-    return GetPerpetualsPositionResponse(self.get(endpoint, **kwargs))
+    with intx_migration_hint("get_perps_position", "private_get_position"):
+        return GetPerpetualsPositionResponse(self.get(endpoint, **kwargs))
 
 
 def get_perps_portfolio_balances(
@@ -134,12 +175,23 @@ def get_perps_portfolio_balances(
 
     __________
 
+    **Global Derivatives:** From October 1, 2026, Global Derivatives run on the
+    Deribit-powered gateway instead of INTX.
+    The request is still sent. If the server rejects it, the SDK logs a migration
+    hint and re-raises the ``HTTPError``. Use ``private_get_account_summaries`` on
+    ``coinbase.deribit.DeribitRetailClient`` instead.
+
+    __________
+
     **Read more on the official documentation:** `Get Portfolio Balances
     <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/get-portfolio-balances>`_
     """
     endpoint = f"{API_PREFIX}/intx/balances/{portfolio_uuid}"
 
-    return GetPortfolioBalancesResponse(self.get(endpoint, **kwargs))
+    with intx_migration_hint(
+        "get_perps_portfolio_balances", "private_get_account_summaries"
+    ):
+        return GetPortfolioBalancesResponse(self.get(endpoint, **kwargs))
 
 
 def opt_in_or_out_multi_asset_collateral(
@@ -159,10 +211,17 @@ def opt_in_or_out_multi_asset_collateral(
 
     __________
 
+    **Global Derivatives:** From October 1, 2026, Global Derivatives run on the
+    Deribit-powered gateway instead of INTX.
+    The request is still sent. If the server rejects it, the SDK logs a migration
+    hint and re-raises the ``HTTPError``. Use ``private_change_margin_model`` on
+    ``coinbase.deribit.DeribitRetailClient`` instead.
+
+    __________
+
     **Read more on the official documentation:** `Opt In or Out of Multi Asset Collateral
     <https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/perpetuals/opt-in-or-out>`_
     """
-
     endpoint = f"{API_PREFIX}/intx/multi_asset_collateral"
 
     data = {
@@ -170,6 +229,9 @@ def opt_in_or_out_multi_asset_collateral(
         "multi_asset_collateral_enabled": multi_asset_collateral_enabled,
     }
 
-    return OptInOutMultiAssetCollateralResponse(
-        self.post(endpoint, data=data, **kwargs)
-    )
+    with intx_migration_hint(
+        "opt_in_or_out_multi_asset_collateral", "private_change_margin_model"
+    ):
+        return OptInOutMultiAssetCollateralResponse(
+            self.post(endpoint, data=data, **kwargs)
+        )

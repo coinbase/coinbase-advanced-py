@@ -66,3 +66,8 @@ coverage.xml
 .hypothesis/
 .python-version
 test.py
+# Deribit Retail OpenAPI/AsyncAPI specs: generator input only, never committed.
+# See scripts/generate_deribit.py (--spec-dir / DERIBIT_SPEC_DIR).
+scripts/deribit_specs/
+*openapi*.json
+*asyncapi*.json

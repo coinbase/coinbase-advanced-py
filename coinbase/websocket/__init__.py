@@ -87,7 +87,7 @@ class WSUserClient(WSBase):
     - **api_key | Optional (str)** - The API key
     - **api_secret | Optional (str)** - The API key secret
     - **key_file | Optional (IO | str)** - Path to API key file or file-like object
-    - **base_url | (str)** - The websocket base url. Default set to "wss://advanced-trade-ws.coinbase.com"
+    - **base_url | (str)** - The websocket base url. Default set to "wss://advanced-trade-ws-user.coinbase.com"
     - **timeout | Optional (int)** - Set timeout in seconds for REST requests
     - **max_size | Optional (int)** - Max size in bytes for messages received. Default set to (10 * 1024 * 1024)
     - **on_message | Optional (Callable[[str], None])** - Function called when a message is received

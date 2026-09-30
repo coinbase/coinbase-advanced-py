@@ -84,6 +84,9 @@ def get_public_products(
     contract_expiry_type: Optional[str] = None,
     expiring_contract_status: Optional[str] = None,
     get_all_products: bool = False,
+    cursor: Optional[str] = None,
+    futures_underlying_type: Optional[str] = None,
+    user_country_code: Optional[str] = None,
     **kwargs,
 ) -> ListProductsResponse:
     """
@@ -119,6 +122,9 @@ def get_public_products(
         "contract_expiry_type": contract_expiry_type,
         "expiring_contract_status": expiring_contract_status,
         "get_all_products": get_all_products,
+        "cursor": cursor,
+        "futures_underlying_type": futures_underlying_type,
+        "user_country_code": user_country_code,
     }
 
     return ListProductsResponse(

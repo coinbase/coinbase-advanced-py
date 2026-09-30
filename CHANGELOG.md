@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.0rc1] - 2026-SEP-30
+
+Release candidate. Install with `pip install --pre coinbase-advanced-py`.
+
+From October 1, 2026, Global Derivatives run on a Deribit-powered gateway instead of INTX. See the [Global Derivatives overview](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/guides/derivatives/overview) for the migration details.
+
+### Added
+- `coinbase.deribit` with `DeribitRetailClient` (REST) and `DeribitRetailWSClient` (WebSocket) for Global Derivatives. Both use your existing CDP API keys. See the README for usage.
+
+### Changed
+- Requires Python 3.10 or newer. Python 3.8 and 3.9 users get 1.8.4.
+- When an INTX perpetuals call on `RESTClient` fails, the SDK logs the Global Derivatives method to use instead.
+
 ## [1.8.4] - 2026-JUN-19
 
 ### Changed

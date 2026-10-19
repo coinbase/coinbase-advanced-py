@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 import os
-import ssl
 import threading
 import time
 from multiprocessing import AuthenticationError
@@ -147,7 +146,6 @@ class WSBase(APIBase):
                 max_size=self.max_size,
                 user_agent_header=USER_AGENT,
                 extra_headers=headers,
-                ssl=ssl.SSLContext() if self.base_url.startswith("wss://") else None,
             )
             logger.debug("Successfully connected to %s", self.base_url)
 

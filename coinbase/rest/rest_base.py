@@ -62,6 +62,12 @@ class RESTBase(APIBase):
         verbose: Optional[bool] = False,
         rate_limit_headers: Optional[bool] = False,
     ):
+        if base_url is not None:
+            base_url = (
+                base_url.replace("https://", "")
+                .replace("http://", "")
+                .rstrip("/")
+            )
         super().__init__(
             api_key=api_key,
             api_secret=api_secret,

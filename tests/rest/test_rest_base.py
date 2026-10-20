@@ -220,3 +220,46 @@ class RestBaseTest(unittest.TestCase):
 
             with self.assertRaises(HTTPError):
                 client.get("/api/v3/brokerage/accounts")
+
+    def test_base_url_normalization_with_scheme(self):
+        client = RESTClient(
+            api_key=TEST_API_KEY,
+            api_secret=TEST_API_SECRET,
+            base_url="https://api-sandbox.coinbase.com/",
+        )
+        self.assertEqual(client.base_url, "api-sandbox.coinbase.com")
+
+        expected_response = {"status": "ok"}
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api-sandbox.coinbase.com/api/v3/brokerage/accounts",
+                json=expected_response,
+            )
+            response = client.get("/api/v3/brokerage/accounts")
+            self.assertEqual(response, expected_response)
+            captured_request = m.request_history[0]
+            self.assertEqual(
+                captured_request.url,
+                "https://api-sandbox.coinbase.com/api/v3/brokerage/accounts",
+            )
+            self.assertTrue(captured_request.headers["Authorization"].startswith("Bearer "))
+
+    def test_base_url_normalization_without_scheme(self):
+        client = RESTClient(
+            api_key=TEST_API_KEY,
+            api_secret=TEST_API_SECRET,
+            base_url="api-sandbox.coinbase.com",
+        )
+        self.assertEqual(client.base_url, "api-sandbox.coinbase.com")
+
+        expected_response = {"status": "ok"}
+        with Mocker() as m:
+            m.request(
+                "GET",
+                "https://api-sandbox.coinbase.com/api/v3/brokerage/accounts",
+                json=expected_response,
+            )
+            response = client.get("/api/v3/brokerage/accounts")
+            self.assertEqual(response, expected_response)
+

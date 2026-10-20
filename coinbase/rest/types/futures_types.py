@@ -8,8 +8,11 @@ from coinbase.rest.types.common_types import Amount
 class GetFuturesBalanceSummaryResponse(BaseResponse):
     def __init__(self, response: dict):
         if "balance_summary" in response:
-            self.balance_summary: Optional[FCMBalanceSummary] = FCMBalanceSummary(
-                **response.pop("balance_summary")
+            balance_summary = response.pop("balance_summary")
+            self.balance_summary: Optional[FCMBalanceSummary] = (
+                FCMBalanceSummary(**balance_summary)
+                if balance_summary is not None
+                else None
             )
         super().__init__(**response)
 
@@ -18,9 +21,12 @@ class GetFuturesBalanceSummaryResponse(BaseResponse):
 class ListFuturesPositionsResponse(BaseResponse):
     def __init__(self, response: dict):
         if "positions" in response:
-            self.positions: Optional[List[FCMPosition]] = [
-                FCMPosition(**position) for position in response.pop("positions")
-            ]
+            positions = response.pop("positions")
+            self.positions: Optional[List[FCMPosition]] = (
+                [FCMPosition(**position) for position in positions]
+                if positions is not None
+                else None
+            )
         super().__init__(**response)
 
 
@@ -28,8 +34,11 @@ class ListFuturesPositionsResponse(BaseResponse):
 class GetFuturesPositionResponse(BaseResponse):
     def __init__(self, response: dict):
         if "position" in response:
-            self.position: Optional[FCMPosition] = FCMPosition(
-                **response.pop("position")
+            position = response.pop("position")
+            self.position: Optional[FCMPosition] = (
+                FCMPosition(**position)
+                if position is not None
+                else None
             )
         super().__init__(**response)
 
@@ -46,9 +55,12 @@ class ScheduleFuturesSweepResponse(BaseResponse):
 class ListFuturesSweepsResponse(BaseResponse):
     def __init__(self, response: dict):
         if "sweeps" in response:
-            self.sweeps: List[FCMSweep] = [
-                FCMSweep(**sweep) for sweep in response.pop("sweeps")
-            ]
+            sweeps = response.pop("sweeps")
+            self.sweeps: Optional[List[FCMSweep]] = (
+                [FCMSweep(**sweep) for sweep in sweeps]
+                if sweeps is not None
+                else None
+            )
         super().__init__(**response)
 
 

@@ -107,6 +107,7 @@ class WSBase(APIBase):
         self.subscriptions = {}
         self._background_exception = None
         self._retrying = False
+        self._closing = False
 
     def open(self) -> None:
         """
@@ -135,6 +136,7 @@ class WSBase(APIBase):
         Open the websocket client connection asynchronously.
         """
         self._ensure_websocket_not_open()
+        self._closing = False
 
         headers = self._set_headers()
 
@@ -198,6 +200,7 @@ class WSBase(APIBase):
         self._ensure_websocket_open()
 
         logger.debug("Closing connection to %s", self.base_url)
+        self._closing = True
         try:
             await self.websocket.close()
             self.websocket = None
@@ -208,6 +211,7 @@ class WSBase(APIBase):
             if self.on_close:
                 self.on_close()
         except (websockets.exceptions.WebSocketException, OSError) as wse:
+            self._closing = False
             logger.error("Failed to close WebSocket connection: %s", wse)
             raise WSClientException("Failed to close WebSocket connection.") from wse
 
@@ -506,6 +510,28 @@ class WSBase(APIBase):
                     self.on_message(message)
             except websockets.exceptions.ConnectionClosedOK as cco:
                 logger.debug("Connection closed (OK): %s", cco)
+                close_code = getattr(cco.rcvd, "code", cco.rcvd)
+                if close_code == 1001 and not self._closing:
+                    if self.on_close:
+                        self.on_close()
+
+                    if self.retry:
+                        self._retrying = True
+                        try:
+                            logger.debug("Retrying connection after Going Away closure")
+                            await self._retry_connection()
+                            self._retrying = False
+                            continue
+                        except WSClientException:
+                            logger.error(
+                                "Connection closed with Going Away status. Retry attempts failed."
+                            )
+                            self._background_exception = WSClientConnectionClosedException(
+                                "Connection closed with Going Away status. Retry attempts failed."
+                            )
+                            self.subscriptions = {}
+                            self._retrying = False
+                            self._retry_count = 0
                 break
             except websockets.exceptions.ConnectionClosedError as cce:
                 logger.error("Connection closed (ERROR): %s", cce)

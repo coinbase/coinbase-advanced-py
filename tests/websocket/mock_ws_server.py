@@ -50,13 +50,23 @@ class MockWebSocketServer:
         await asyncio.sleep(1)  # Short delay to ensure the port is freed up
         await self.start()
 
+    async def restart_with_going_away(self):
+        await self.trigger_connection_going_away()
+        await self.stop()
+        await asyncio.sleep(1)  # Short delay to ensure the port is freed up
+        await self.start()
+
     async def trigger_connection_closed_error(self):
+        await self.trigger_connection_closed(4000, "Abnormal closure")
+
+    async def trigger_connection_going_away(self):
+        await self.trigger_connection_closed(1001, "Going away")
+
+    async def trigger_connection_closed(self, code, reason):
         WebSocketTask = namedtuple("WebSocketTask", ["ws", "task"])
 
         tasks = [
-            WebSocketTask(
-                ws, asyncio.create_task(ws.close(code=4000, reason="Abnormal closure"))
-            )
+            WebSocketTask(ws, asyncio.create_task(ws.close(code=code, reason=reason)))
             for ws in self.active_websockets
         ]
         await asyncio.gather(*(task.task for task in tasks))

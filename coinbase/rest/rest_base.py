@@ -58,7 +58,7 @@ class RESTBase(APIBase):
         api_secret: Optional[str] = os.getenv(API_SECRET_ENV_KEY),
         key_file: Optional[Union[IO, str]] = None,
         base_url=BASE_URL,
-        timeout: Optional[int] = None,
+        timeout: Optional[int] = 10,
         verbose: Optional[bool] = False,
         rate_limit_headers: Optional[bool] = False,
     ):
@@ -223,7 +223,7 @@ class RESTBase(APIBase):
             params=params,
             json=data,
             headers=headers,
-            timeout=self.timeout,
+            timeout=self.timeout if self.timeout is not None else 10,
         )
         handle_exception(response)  # Raise an HTTPError for bad responses
 

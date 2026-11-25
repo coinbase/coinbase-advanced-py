@@ -31,6 +31,7 @@ setup(
     url="https://github.com/coinbase/coinbase-advanced-py",
     keywords=["Coinbase", "Advanced Trade", "API", "Advanced API"],
     packages=find_packages(exclude=("tests",)),
+    package_data={"coinbase": ["py.typed"]},
     install_requires=[req for req in requirements],
     extras_require={
         "test": [test_req for test_req in test_requirements],

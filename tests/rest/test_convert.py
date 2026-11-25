@@ -3,11 +3,22 @@ import unittest
 from requests_mock import Mocker
 
 from coinbase.rest import RESTClient
+from coinbase.rest.types.convert_types import ConvertTradePaymentMethod
 
 from ..constants import TEST_API_KEY, TEST_API_SECRET
 
 
 class ConvertTest(unittest.TestCase):
+    def test_payment_method_preserves_network_and_identifier(self):
+        identifier = {"address": "example"}
+        for fields in (
+            {"network": "example-network", "identifier": identifier},
+            {"identifier": identifier},
+            {"network": "example-network"},
+        ):
+            with self.subTest(fields=fields):
+                self.assertEqual(ConvertTradePaymentMethod(**fields).to_dict(), fields)
+
     def test_create_convert_quote(self):
         client = RESTClient(TEST_API_KEY, TEST_API_SECRET)
 

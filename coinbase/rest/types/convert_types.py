@@ -99,7 +99,7 @@ class ConvertTradePaymentMethod(BaseResponse):
         if "network" in kwargs:
             self.network: Optional[str] = kwargs.pop("network")
         if "identifier" in kwargs:
-            self.network: Optional[Dict[str, Any]] = kwargs.pop("identifier")
+            self.identifier: Optional[Dict[str, Any]] = kwargs.pop("identifier")
         super().__init__(**kwargs)
 
 

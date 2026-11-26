@@ -11,6 +11,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  installed-typing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install setuptools wheel mypy==2.4.1 -r requirements.txt
+      - run: bash tests/typing/check-installed.sh
+
   format-code:
     runs-on: ubuntu-latest
 

@@ -257,6 +257,8 @@ If you only want to run for 5 seconds, you can use `sleep_with_exception_check`:
 client.sleep_with_exception_check(sleep=5)
 ```
 
+If `on_message` raises an exception, the client logs the traceback and stops processing messages. In a polling loop (including in a notebook), use `client.sleep_with_exception_check(0.1)` in place of `time.sleep(0.1)` so the waiting code can catch `WSClientException`. Its `__cause__` is the original callback exception.
+
 Note that if the automatic reconnection fails after the retry limit is reached, a `WSClientConnectionClosedException` will be raised.
 
 If you wish to implement your own reconnection logic, you can catch the `WSClientConnectionClosedException` and handle it appropriately. For example:

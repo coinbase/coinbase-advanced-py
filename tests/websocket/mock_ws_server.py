@@ -5,7 +5,7 @@ import websockets
 
 
 class MockWebSocketServer:
-    def __init__(self, host="localhost", port=8765):
+    def __init__(self, host="127.0.0.1", port=0):
         self.start_server = None
         self.host = host
         self.port = port
@@ -29,6 +29,7 @@ class MockWebSocketServer:
     async def start(self):
         self.start_server = self.initialize_server()
         self.server = await self.start_server
+        self.port = self.server.sockets[0].getsockname()[1]
 
     async def stop(self):
         WebSocketTask = namedtuple("WebSocketTask", ["ws", "task"])

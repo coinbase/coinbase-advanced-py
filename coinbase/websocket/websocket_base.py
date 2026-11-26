@@ -502,8 +502,6 @@ class WSBase(APIBase):
         while self._is_websocket_open():
             try:
                 message = await self.websocket.recv()
-                if self.on_message:
-                    self.on_message(message)
             except websockets.exceptions.ConnectionClosedOK as cco:
                 logger.debug("Connection closed (OK): %s", cco)
                 break
@@ -543,6 +541,20 @@ class WSBase(APIBase):
                     f"Exception in message handler: {e}"
                 )
                 break
+            else:
+                if self.on_message:
+                    try:
+                        self.on_message(message)
+                    except Exception as exc:
+                        logger.exception("Exception in on_message callback")
+                        try:
+                            error_message = f"Exception in message handler: {exc}"
+                        except Exception:
+                            error_message = "Exception in on_message callback"
+                        error = WSClientException(error_message)
+                        error.__cause__ = exc
+                        self._background_exception = error
+                        break
 
     def _build_subscription_message(
         self, product_ids: List[str], channel: str, message_type: str, public: bool

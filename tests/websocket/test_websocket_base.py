@@ -6,7 +6,11 @@ from unittest.mock import AsyncMock, patch
 import websockets
 
 from coinbase.constants import SUBSCRIBE_MESSAGE_TYPE, UNSUBSCRIBE_MESSAGE_TYPE
-from coinbase.websocket import WSClient, WSClientConnectionClosedException
+from coinbase.websocket import (
+    WSClient,
+    WSClientConnectionClosedException,
+    WSClientException,
+)
 
 from ..constants import TEST_API_KEY, TEST_API_SECRET
 from . import mock_ws_server
@@ -78,6 +82,55 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
 
         with self.assertRaises(Exception):
             self.ws.unsubscribe(product_ids=["BTC-USD"], channels=["ticker"])
+
+    @patch("websockets.connect", new_callable=AsyncMock)
+    async def test_on_message_exception_reaches_checker(self, mock_connect):
+        class UnformattableError(Exception):
+            def __str__(self):
+                raise ValueError("formatting failed")
+
+        mock_connect.return_value = self.mock_websocket
+        errors = (
+            RuntimeError("Stop"),
+            UnformattableError(),
+            websockets.ConnectionClosedOK(None, None),
+        )
+        for error in errors:
+            with self.subTest(error=type(error).__name__):
+                self.mock_websocket.recv.reset_mock()
+                self.mock_websocket.recv.side_effect = ["update", "next update"]
+                self.on_message_mock.reset_mock()
+                self.on_message_mock.side_effect = error
+                with self.assertLogs("coinbase.WSClient", level="ERROR") as log:
+                    await self.ws.open_async()
+                    try:
+                        await self.ws._task
+                        self.on_message_mock.assert_called_once_with("update")
+                        self.mock_websocket.recv.assert_awaited_once()
+                        self.assertTrue(
+                            any(
+                                r.exc_info and r.exc_info[1] is error
+                                for r in log.records
+                            )
+                        )
+                        with self.assertRaises(WSClientException) as raised:
+                            self.ws.sleep_with_exception_check(0)
+                        self.assertIs(raised.exception.__cause__, error)
+                        self.ws.raise_background_exception()
+                    finally:
+                        await self.ws.close_async()
+
+    @patch("websockets.connect", new_callable=AsyncMock)
+    async def test_on_message_cancellation_propagates(self, mock_connect):
+        mock_connect.return_value = self.mock_websocket
+        self.on_message_mock.side_effect = asyncio.CancelledError()
+        await self.ws.open_async()
+        try:
+            with self.assertRaises(asyncio.CancelledError):
+                await self.ws._task
+            self.ws.raise_background_exception()
+        finally:
+            await self.ws.close_async()
 
     def test_err_unopened(self):
         # assert you cannot close an unopened websocket client
@@ -466,7 +519,7 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
         self.ws = WSClient(
             TEST_API_KEY,
             TEST_API_SECRET,
-            base_url="ws://localhost:8765",
+            base_url=f"ws://{self.server.host}:{self.server.port}",
             on_message=on_message,
             retry=False,
         )
@@ -489,7 +542,9 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
 
         # Check for background exceptions
         with self.assertRaises(WSClientConnectionClosedException):
-            await self.ws.run_forever_with_exception_check_async()
+            await asyncio.wait_for(
+                self.ws.run_forever_with_exception_check_async(), timeout=5
+            )
 
     async def test_reconnect(self):
         # tests that client can automatically reconnect after a WSClientConnectionClosedException
@@ -539,9 +594,12 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
         await self.ws.subscribe_async(product_ids=["BTC-USD"], channels=["heartbeats"])
         await self.messages_queue.get()
 
-        with self.assertRaises(WSClientConnectionClosedException):
-            # disconnect and restart the server
-            await self.server.restart_with_error()
-
-            # assert that client throws exception if it cannot reconnect
-            await self.ws.run_forever_with_exception_check_async()
+        with patch(
+            "websockets.connect", new=AsyncMock(side_effect=ConnectionRefusedError())
+        ) as reconnect:
+            await self.server.trigger_connection_closed_error()
+            with self.assertRaises(WSClientConnectionClosedException):
+                await asyncio.wait_for(
+                    self.ws.run_forever_with_exception_check_async(), timeout=5
+                )
+            reconnect.assert_awaited_once()

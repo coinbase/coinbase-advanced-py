@@ -509,7 +509,7 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
         self.ws = WSClient(
             TEST_API_KEY,
             TEST_API_SECRET,
-            base_url="ws://localhost:8765",
+            base_url=f"ws://{self.server.host}:{self.server.port}",
             on_message=on_message,
             retry=False,
         )
@@ -532,7 +532,9 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
 
         # Check for background exceptions
         with self.assertRaises(WSClientConnectionClosedException):
-            await self.ws.run_forever_with_exception_check_async()
+            await asyncio.wait_for(
+                self.ws.run_forever_with_exception_check_async(), timeout=5
+            )
 
     async def test_reconnect(self):
         # tests that client can automatically reconnect after a WSClientConnectionClosedException
@@ -582,9 +584,12 @@ class WSDisconnectionTests(unittest.IsolatedAsyncioTestCase):
         await self.ws.subscribe_async(product_ids=["BTC-USD"], channels=["heartbeats"])
         await self.messages_queue.get()
 
-        with self.assertRaises(WSClientConnectionClosedException):
-            # disconnect and restart the server
-            await self.server.restart_with_error()
-
-            # assert that client throws exception if it cannot reconnect
-            await self.ws.run_forever_with_exception_check_async()
+        with patch(
+            "websockets.connect", new=AsyncMock(side_effect=ConnectionRefusedError())
+        ) as reconnect:
+            await self.server.trigger_connection_closed_error()
+            with self.assertRaises(WSClientConnectionClosedException):
+                await asyncio.wait_for(
+                    self.ws.run_forever_with_exception_check_async(), timeout=5
+                )
+            reconnect.assert_awaited_once()

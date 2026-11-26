@@ -85,8 +85,17 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
 
     @patch("websockets.connect", new_callable=AsyncMock)
     async def test_on_message_exception_reaches_checker(self, mock_connect):
+        class UnformattableError(Exception):
+            def __str__(self):
+                raise ValueError("formatting failed")
+
         mock_connect.return_value = self.mock_websocket
-        for error in (RuntimeError("Stop"), websockets.ConnectionClosedOK(None, None)):
+        errors = (
+            RuntimeError("Stop"),
+            UnformattableError(),
+            websockets.ConnectionClosedOK(None, None),
+        )
+        for error in errors:
             with self.subTest(error=type(error).__name__):
                 self.mock_websocket.recv.reset_mock()
                 self.mock_websocket.recv.side_effect = ["update", "next update"]
@@ -96,19 +105,20 @@ class WSBaseTest(unittest.IsolatedAsyncioTestCase):
                     await self.ws.open_async()
                     try:
                         await self.ws._task
+                        self.on_message_mock.assert_called_once_with("update")
+                        self.mock_websocket.recv.assert_awaited_once()
+                        self.assertTrue(
+                            any(
+                                r.exc_info and r.exc_info[1] is error
+                                for r in log.records
+                            )
+                        )
+                        with self.assertRaises(WSClientException) as raised:
+                            self.ws.sleep_with_exception_check(0)
+                        self.assertIs(raised.exception.__cause__, error)
+                        self.ws.raise_background_exception()
                     finally:
                         await self.ws.close_async()
-
-                self.on_message_mock.assert_called_once_with("update")
-                self.mock_websocket.recv.assert_awaited_once()
-                self.assertTrue(
-                    any(r.exc_info and r.exc_info[1] is error for r in log.records)
-                )
-                with self.assertRaises(WSClientException) as raised:
-                    self.ws.sleep_with_exception_check(0)
-                self.assertIn(str(error), str(raised.exception))
-                self.assertIs(raised.exception.__cause__, error)
-                self.ws.raise_background_exception()
 
     @patch("websockets.connect", new_callable=AsyncMock)
     async def test_on_message_cancellation_propagates(self, mock_connect):

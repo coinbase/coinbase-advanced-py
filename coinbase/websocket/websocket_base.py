@@ -547,9 +547,11 @@ class WSBase(APIBase):
                         self.on_message(message)
                     except Exception as exc:
                         logger.exception("Exception in on_message callback")
-                        error = WSClientException(
-                            f"Exception in message handler: {exc}"
-                        )
+                        try:
+                            error_message = f"Exception in message handler: {exc}"
+                        except Exception:
+                            error_message = "Exception in on_message callback"
+                        error = WSClientException(error_message)
                         error.__cause__ = exc
                         self._background_exception = error
                         break
